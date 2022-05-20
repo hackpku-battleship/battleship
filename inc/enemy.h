@@ -17,12 +17,13 @@ public:
     float hp;
     float gentime, dutime, livetime;
     float x, y, r;
-    Enemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
+    Texture2D tex;
+    Enemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r, char* filename);
     virtual std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager);
     float getX();
     float getY();
     float getR();
-    virtual void draw() {}
+    void draw();
     bool isalive();
     void hit();
 };

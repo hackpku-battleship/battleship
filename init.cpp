@@ -200,7 +200,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new DEnemy(100, time, 30, x, y, 10));
+            enemys->addEnemy(new DEnemy(100, time, 30, x, y, 10, "source/lion.png"));
         }
 
         auto _bullets = enemys->updateTime(time, enemyBullets);

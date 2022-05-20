@@ -2,7 +2,8 @@
 #include "Vector2Basic.h"
 #include <iostream>
 
-SimpleEnemy::SimpleEnemy(float _hp, float _gentime, float _livetime, float _x, float _y, float _r) : Enemy(_hp, _gentime, _livetime, _x, _y, _r), rotatep(0.0) {}
+SimpleEnemy::SimpleEnemy(float _hp, float _gentime, float _livetime, float _x, float _y, float _r, char* filename) :
+    Enemy(_hp, _gentime, _livetime, _x, _y, _r, filename), rotatep(0.0) {}
 
 std::vector<Bullet *> SimpleEnemy::getBullet(float nowTime, BulletManager *creater)
 {

@@ -2,7 +2,8 @@
 #include "bullet.h"
 #include "Vector2Basic.h"
 
-DEnemy::DEnemy(float _hp, float _genTime, float _livetime, float _x, float _y, float _r) : Enemy(_hp, _genTime, _livetime, _x, _y, _r) {}
+DEnemy::DEnemy(float _hp, float _genTime, float _livetime, float _x, float _y, float _r, char* filename) :
+ Enemy(_hp, _genTime, _livetime, _x, _y, _r, filename) {}
 std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager)
 {
     std::vector<Bullet *> ret;
@@ -65,8 +66,4 @@ std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager)
     //*/
     dutime = dtime;
     return ret;
-}
-void DEnemy::draw()
-{
-    DrawCircleV((Vector2){x, y}, r, PURPLE);
 }
