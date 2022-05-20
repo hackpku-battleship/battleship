@@ -4,3 +4,4 @@ main.code-workspace
 Makefile.Android
 *.exe
 obj
+log
