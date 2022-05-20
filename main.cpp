@@ -24,7 +24,7 @@ int main(void)
         ClearBackground(RAYWHITE);
 
         if(IsKeyDown(KEY_X)){
-            playerBullets.addBullet(new basicBullet(time, 3, player.getPosition(), {(1.*rand()/RAND_MAX-0.5)*2,(1.*rand()/RAND_MAX-0.5)*2}));
+            playerBullets.addBullet(new basicBullet(time, 5, player.getPosition(), {(1.*rand()/RAND_MAX-0.5)*100,(1.*rand()/RAND_MAX-0.5)*100}));
         }
 
         player.Draw();
