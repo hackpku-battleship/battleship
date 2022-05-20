@@ -5,6 +5,7 @@
 #include "bullet.h"
 #include "basicBullet.h"
 #include "fishBullet.h"
+#include "accbullet.h"
 
 class Enemy
 {

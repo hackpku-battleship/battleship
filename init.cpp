@@ -92,8 +92,6 @@ int Game::loop(int screenWidth, int screenHeight)
     BulletManager *enemyBullets = new BulletManager();
     EnemyManager *enemys = new EnemyManager();
 
-    bool flag = 0;
-
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_P) ) {
@@ -111,11 +109,6 @@ int Game::loop(int screenWidth, int screenHeight)
         }
         float time = GetTime();
 
-        if (flag == 0)
-        {
-            enemys->addEnemy(new SimpleEnemy(5, time, 20, 400, 50, 5));
-            flag = 1;
-        }
         player->Update(time);
         player->Move();
         BeginDrawing();
@@ -127,9 +120,15 @@ int Game::loop(int screenWidth, int screenHeight)
             playerBullets->addBullet(new basicBullet(time, 5, player->getPosition(), {(1. * rand() / RAND_MAX - 0.5) * 100, (1. * rand() / RAND_MAX - 0.5) * 100}));
         }
 
-        auto bullets = enemys->updateTime(time);
+        if (IsKeyPressed(KEY_U)) {
+            float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
+            float y = 100;
+            enemys->addEnemy(new DEnemy(100, time, 30, x, y, 10));
+        }
+
+        auto _bullets = enemys->updateTime(time);
         enemys->draw();
-        for (auto b : bullets)
+        for (auto b : _bullets)
             enemyBullets->addBullet(b);
 
         checkPlayerHit(player, enemyBullets, time);
