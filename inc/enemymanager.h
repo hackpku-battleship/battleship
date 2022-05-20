@@ -13,6 +13,8 @@ public:
     }
     std::vector<Bullet*> updateTime(float nowTime);
     void draw();
+    std::vector<Enemy *> getEnemys();
+    void setEnemys(std::vector<Enemy *>);
 };
 
 #endif

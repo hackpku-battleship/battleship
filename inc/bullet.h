@@ -17,8 +17,10 @@ public:
     virtual float updateTime(float, Vector2);
     bool checkAlive(float);
     virtual bool inScreen(int, int)=0;
-    virtual void Draw()=0;
-    virtual bool checkBox(Vector2, float)=0;
+    virtual void Draw() = 0;
+    virtual bool checkBox(Vector2, float) = 0;
 };
+
+// bullet manager
 
 #endif
