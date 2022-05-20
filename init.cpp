@@ -175,10 +175,10 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
-        player->Check(time);
-        if (IsKeyDown(KEY_Z)) { // 放技能
-            player->useskill(time);
-        }
+        //player->Check(time);
+        //if (IsKeyDown(KEY_Z)) { // 放技能
+        //    player->useskill(time);
+        //}
         if (IsKeyDown(KEY_X))
         {
             static float playerLasttime = 0.0;

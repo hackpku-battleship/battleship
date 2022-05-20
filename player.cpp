@@ -21,7 +21,8 @@ Player::Player(Vector2 position, float radius, int hp, float speed, float minY, 
 }
 
 Player::~Player() {
-    delete prot;
+    if (prot != nullptr)
+        delete prot;
 }
 
 void Player::Hit(float nowTime)
@@ -62,8 +63,8 @@ void Player::Move()
 
 void Player::Draw()
 {
-    if (prot != nullptr)
-        prot->Draw(position, radius);
+    //if (prot != nullptr)
+    //    prot->Draw(position, radius);
     DrawCircleV(position, radius, MAROON);
 }
 
