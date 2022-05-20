@@ -16,7 +16,7 @@ int Init::loop(int screenWidth, int screenHeight) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnText1) { // 进入游戏界面
-            return Game::loop(screenWidth, screenHeight);
+            return Init::choose(screenWidth, screenHeight);
         } else if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnText2) { // 进入说明界面
             int ret = Inst::loop(screenWidth, screenHeight);
             if (!ret) return 0;
@@ -31,7 +31,36 @@ int Init::loop(int screenWidth, int screenHeight) {
     return 0;
 }
 
-int Game::loop(int screenWidth, int screenHeight) {
+int Init::choose(int screenWidth, int screenHeight) {
+    const char hint[50] = {"Choose your hero :"};
+    const char msg[4][50] = {"Hero1", "Hero2", "Hero3", "Back"};
+    float Bott = screenHeight - 200;
+    bool MouseOn[4];
+    Rectangle msgBox[4] = {{ 300, Bott, 180,50 }
+                          ,{ 700, Bott, 180,50 }
+                          ,{ 1100, Bott, 180,50 }
+                          ,{ 1400, Bott+40, 100,30 }}; 
+    while (!WindowShouldClose()) {
+        ClearBackground(RAYWHITE);
+        for (int i = 0; i < 4; i++)
+            MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
+        for (int i = 0; i < 4; i++)
+            if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                if (i == 3) return Init::loop(screenWidth, screenHeight);
+                else return Game::loop(screenWidth, screenHeight, i);
+        }
+        BeginDrawing();
+        DrawText(hint,  10, 10, 40, BLACK);
+        for (int i = 0; i < 4; i++) {
+            // DrawRectangleRec(msgBox[i], LIGHTGRAY);
+            DrawText(msg[i], msgBox[i].x, msgBox[i].y, i == 3? 30 :60, MouseOn[i] ? RED : BLACK);
+        }
+        EndDrawing();  
+    }
+    return 0;
+}
+
+int Game::loop(int screenWidth, int screenHeight, int kind) {
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
     while (!WindowShouldClose()) {
@@ -42,7 +71,7 @@ int Game::loop(int screenWidth, int screenHeight) {
                 case 0: //退出
                     return 0;
                 case 1: //重新开始
-                    return Game::loop(screenWidth, screenHeight);
+                    return Init::choose(screenWidth, screenHeight);
                 case 2: //返回菜单
                     return Init::loop(screenWidth, screenHeight);
                 default:
@@ -105,6 +134,7 @@ int Pause::loop(int screenWidth, int screenHeight) {
             DrawText(msg[i],  Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
         }
         EndDrawing();
+        if (IsKeyPressed(KEY_P) ) return 3;
     }
     return 0;
 }
@@ -126,7 +156,7 @@ int Over::loop(int screenWidth, int screenHeight) {
             if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 if (i == 2) return 0;
                 else if(i == 1) return Init::loop(screenWidth, screenHeight);
-                else return Game::loop(screenWidth, screenHeight);
+                else return Init::choose(screenWidth, screenHeight);
             }
         BeginDrawing();
         for (int i = 0; i < 3; i++) {
