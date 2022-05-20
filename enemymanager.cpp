@@ -14,11 +14,6 @@ std::vector<Bullet *> EnemyManager::updateTime(float nowTime)
     return ret;
 }
 
-void EnemyManager::addEnemy(Enemy *pe)
-{
-    enemys.push_back(pe);
-}
-
 void EnemyManager::draw()
 {
     for (auto it : enemys)
