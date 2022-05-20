@@ -10,7 +10,7 @@ public:
     float gentime, dutime;
     float x, y, r;
     Enemy(float _hp, float _genTime, float _x, float _y, float _r);
-    virtual std::vector<Bullet> getBullet(float nowTime);
+    virtual std::vector<Bullet*> getBullet(float nowTime);
     float getX();
     float getY();
     float getR();
