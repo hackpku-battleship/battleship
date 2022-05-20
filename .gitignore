@@ -5,3 +5,4 @@ Makefile.Android
 game.exe
 obj
 *.exe
+log
