@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include "bullet.h"
 
+basicBullet a;
+
 int main(void){
     const int screenWidth = 800;
     const int screenHeight = 600;
@@ -12,7 +14,7 @@ int main(void){
 
             ClearBackground(RAYWHITE);
             
-
+ 
 
 
         EndDrawing();
