@@ -36,46 +36,12 @@ public:
 struct BulletManager
 {
     std::vector<Bullet *> bullets;
-    void addBullet(Bullet *x) { bullets.push_back(x); }
-    void updateTime(double nowTime)
-    {
-        for (int i = 0; i < bullets.size(); ++i)
-        {
-            if (!bullets[i]->checkAlive(nowTime))
-            {
-                bullets.erase(bullets.begin() + i);
-                --i;
-            }
-            else
-                bullets[i]->updateTime(nowTime);
-        }
-    }
-    void DrawAllBullets()
-    {
-        for (Bullet *p : bullets)
-        {
-            p->Draw();
-        }
-    }
-    bool checkBox(Vector2 x, double r)
-    {
-        for (Bullet *p : bullets)
-            if (p->checkBox(x, r))
-                return true;
-        return false;
-    }
-    bool checkHit(Vector2 x, double r)
-    {
-        bool ret = false;
-        std::vector<Bullet *> rem;
-        for (Bullet *p : bullets)
-            if (p->checkBox(x, r))
-                ret = true;
-            else
-                rem.push_back(p);
-        bullets = rem;
-        return ret;
-    }
+    void addBullet(Bullet *x);
+    void updateTime(double nowTime);
+    void DrawAllBullets();
+    bool checkBox(Vector2 x, double r);
+    std::vector<Bullet *> getBullets();
+    void setBullets(std::vector<Bullet *> v);
 };
 
 #endif

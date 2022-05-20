@@ -4,42 +4,48 @@
 #include <vector>
 #include "bullet.h"
 
-class Enemy {
+class Enemy
+{
 public:
     float hp;
     float gentime, dutime, livetime;
     float x, y, r;
     Enemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    virtual std::vector<Bullet*> getBullet(float nowTime);
+    virtual std::vector<Bullet *> getBullet(float nowTime);
     float getX();
     float getY();
     float getR();
     virtual void draw() {}
     bool isalive();
+    void hit();
 };
 
-class EnemyManager {
+class EnemyManager
+{
 public:
-    std::vector<Enemy*> enemys;
-    void addEnemy(Enemy* pe) {
-        enemys.push_back(pe);
-    }
-    std::vector<Bullet*> updateTime(float nowTime);
+    std::vector<Enemy *> enemys;
+    void addEnemy(Enemy *pe);
+    std::vector<Bullet *> updateTime(float nowTime);
+    std::vector<Enemy *> getEnemys();
+    void setEnemys(std::vector<Enemy *>);
     void draw();
 };
 
-class SimpleEnemy : public Enemy {
+class SimpleEnemy : public Enemy
+{
     float rotatep;
+
 public:
     SimpleEnemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    std::vector<Bullet*> getBullet(float nowTime);
+    std::vector<Bullet *> getBullet(float nowTime);
     void draw();
 };
 
-class DEnemy:public Enemy {
+class DEnemy : public Enemy
+{
 public:
     DEnemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    std::vector<Bullet*> getBullet(float nowTime);
+    std::vector<Bullet *> getBullet(float nowTime);
     void draw();
 };
 #endif
