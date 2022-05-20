@@ -1,4 +1,4 @@
-#include "enemy.h"
+#include "enemymanager.h"
 
 std::vector<Bullet *> EnemyManager::updateTime(float nowTime, BulletManager *manager)
 {
@@ -12,11 +12,6 @@ std::vector<Bullet *> EnemyManager::updateTime(float nowTime, BulletManager *man
             ret.insert(ret.end(), _a.begin(), _a.end());
     }
     return ret;
-}
-
-void EnemyManager::addEnemy(Enemy *pe)
-{
-    enemys.push_back(pe);
 }
 
 void EnemyManager::draw()

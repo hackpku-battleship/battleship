@@ -1,4 +1,4 @@
-#include "enemy.h"
+#include "simpleenemy.h"
 #include "Vector2Basic.h"
 #include <iostream>
 

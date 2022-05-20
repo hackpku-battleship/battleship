@@ -7,6 +7,7 @@
 #include "fishBullet.h"
 #include "splitBullet.h"
 #include "bulletManager.h"
+#include "accbullet.h"
 
 class Enemy
 {
@@ -22,34 +23,5 @@ public:
     virtual void draw() {}
     bool isalive();
     void hit();
-};
-
-class EnemyManager
-{
-public:
-    std::vector<Enemy *> enemys;
-    void addEnemy(Enemy *pe);
-    std::vector<Bullet *> updateTime(float nowTime, BulletManager *manager);
-    std::vector<Enemy *> getEnemys();
-    void setEnemys(std::vector<Enemy *>);
-    void draw();
-};
-
-class SimpleEnemy : public Enemy
-{
-    float rotatep;
-
-public:
-    SimpleEnemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager);
-    void draw();
-};
-
-class DEnemy : public Enemy
-{
-public:
-    DEnemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager);
-    void draw();
 };
 #endif

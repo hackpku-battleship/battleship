@@ -6,6 +6,9 @@
 #include "basicBullet.h"
 #include "bulletManager.h"
 #include "enemy.h"
+#include "enemymanager.h"
+#include "simpleenemy.h"
+#include "denemy.h"
 
 int Init::loop(int screenWidth, int screenHeight)
 {
@@ -26,7 +29,13 @@ int Init::loop(int screenWidth, int screenHeight)
         ClearBackground(RAYWHITE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnText1)
         { // 进入游戏界面
-            return Game::loop(screenWidth, screenHeight);
+            return Init::choose(screenWidth, screenHeight);
+        }
+        else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnText2)
+        { // 进入说明界面
+            int ret = Inst::loop(screenWidth, screenHeight);
+            if (!ret)
+                return 0;
         }
         else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnText2)
         { // 进入说明界面
@@ -77,7 +86,39 @@ void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
     playerBullets->setBullets(bullets);
 }
 
-int Game::loop(int screenWidth, int screenHeight)
+int Init::choose(int screenWidth, int screenHeight)
+{
+    const char hint[50] = {"Choose your hero :"};
+    const char msg[4][50] = {"Hero1", "Hero2", "Hero3", "Back"};
+    float Bott = screenHeight - 200;
+    bool MouseOn[4];
+    Rectangle msgBox[4] = {{300, Bott, 180, 50}, {700, Bott, 180, 50}, {1100, Bott, 180, 50}, {1400, Bott + 40, 100, 30}};
+    while (!WindowShouldClose())
+    {
+        ClearBackground(RAYWHITE);
+        for (int i = 0; i < 4; i++)
+            MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
+        for (int i = 0; i < 4; i++)
+            if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                if (i == 3)
+                    return Init::loop(screenWidth, screenHeight);
+                else
+                    return Game::loop(screenWidth, screenHeight, i);
+            }
+        BeginDrawing();
+        DrawText(hint, 10, 10, 40, BLACK);
+        for (int i = 0; i < 4; i++)
+        {
+            // DrawRectangleRec(msgBox[i], LIGHTGRAY);
+            DrawText(msg[i], msgBox[i].x, msgBox[i].y, i == 3 ? 30 : 60, MouseOn[i] ? RED : BLACK);
+        }
+        EndDrawing();
+    }
+    return 0;
+}
+
+int Game::loop(int screenWidth, int screenHeight, int kind)
 {
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
@@ -89,8 +130,6 @@ int Game::loop(int screenWidth, int screenHeight)
     BulletManager *enemyBullets = new BulletManager();
     EnemyManager *enemys = new EnemyManager();
 
-    bool flag = 0;
-
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_P))
@@ -101,7 +140,7 @@ int Game::loop(int screenWidth, int screenHeight)
             case 0: //退出
                 return 0;
             case 1: //重新开始
-                return Game::loop(screenWidth, screenHeight);
+                return Init::choose(screenWidth, screenHeight);
             case 2: //返回菜单
                 return Init::loop(screenWidth, screenHeight);
             default:
@@ -110,11 +149,6 @@ int Game::loop(int screenWidth, int screenHeight)
         }
         float time = GetTime();
 
-        if (flag == 0)
-        {
-            enemys->addEnemy(new SimpleEnemy(5, time, 20, 400, 50, 5));
-            flag = 1;
-        }
         player->Update(time);
         player->Move();
         BeginDrawing();
@@ -126,9 +160,16 @@ int Game::loop(int screenWidth, int screenHeight)
             playerBullets->addBullet(new basicBullet(time, 5, player->getPosition(), {(1. * rand() / RAND_MAX - 0.5) * 100, (1. * rand() / RAND_MAX - 0.5) * 100}));
         }
 
-        auto bullets = enemys->updateTime(time, enemyBullets);
+        if (IsKeyPressed(KEY_U))
+        {
+            float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
+            float y = 100;
+            enemys->addEnemy(new DEnemy(100, time, 30, x, y, 10));
+        }
+
+        auto _bullets = enemys->updateTime(time, enemyBullets);
         enemys->draw();
-        for (auto b : bullets)
+        for (auto b : _bullets)
             enemyBullets->addBullet(b);
 
         checkPlayerHit(player, enemyBullets, time);
@@ -201,6 +242,8 @@ int Pause::loop(int screenWidth, int screenHeight)
             DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
         }
         EndDrawing();
+        if (IsKeyPressed(KEY_P))
+            return 3;
     }
     return 0;
 }
@@ -226,7 +269,7 @@ int Over::loop(int screenWidth, int screenHeight)
                 else if (i == 1)
                     return Init::loop(screenWidth, screenHeight);
                 else
-                    return Game::loop(screenWidth, screenHeight);
+                    return Init::choose(screenWidth, screenHeight);
             }
         BeginDrawing();
         for (int i = 0; i < 3; i++)
