@@ -3,6 +3,8 @@
 
 #include <vector>
 #include "bullet.h"
+#include "basicBullet.h"
+#include "fishBullet.h"
 
 class Enemy {
 public:

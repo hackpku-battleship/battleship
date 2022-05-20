@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "player.h"
 #include "bullet.h"
+#include "basicBullet.h"
+#include "bulletManager.h"
 #include "enemy.h"
 
 int Init::loop(int screenWidth, int screenHeight) {
@@ -72,15 +74,15 @@ int Game::loop(int screenWidth, int screenHeight) {
         for (auto b : bullets)
             enemyBullets->addBullet(b);
 
-        bool hit = enemyBullets->checkHit(player->getPosition(), player->getRadius());
+        bool hit = enemyBullets->checkBox(player->getPosition(), player->getRadius());
         if (hit)
             player->Hit(time);
 
         player->Draw();
         playerHPBar->Draw(player->getHP());
-        playerBullets->updateTime(time);
+        playerBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
         playerBullets->DrawAllBullets();
-        enemyBullets->updateTime(time);
+        enemyBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
         enemyBullets->DrawAllBullets();
 
         DrawText(TextFormat("%.5lf", time), 10, 10, 20, RED);
