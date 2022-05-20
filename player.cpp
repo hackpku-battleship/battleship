@@ -65,8 +65,8 @@ void Player::Move(float deltatime)
 
 void Player::Draw()
 {
-    //if (prot != nullptr)
-    //    prot->Draw(position, radius);
+    if (prot != nullptr)
+        prot->Draw(position, radius);
     DrawCircleV(position, radius, MAROON);
 }
 
