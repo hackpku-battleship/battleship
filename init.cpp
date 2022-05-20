@@ -51,6 +51,19 @@ int Game::loop(int screenWidth, int screenHeight) {
 
     while (!WindowShouldClose())
     {
+        if (IsKeyPressed(KEY_P) ) {
+            int ret = Pause::loop(screenWidth, screenHeight);
+            switch (ret) {
+                case 0: //退出
+                    return 0;
+                case 1: //重新开始
+                    return Game::loop(screenWidth, screenHeight);
+                case 2: //返回菜单
+                    return Init::loop(screenWidth, screenHeight);
+                default:
+                    break;
+            }
+        }
         float time = GetTime();
 
         if (flag == 0)
