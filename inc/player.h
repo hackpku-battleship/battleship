@@ -17,13 +17,14 @@ class Player
     const float speed;
     const float minY;
     const float hitlessTime;
+    const float lowspeed;
     float lastHitTime = -1e300;
     bool canHit = true;
 
 public:
-    Player(Vector2 position, float radius, int hp, float speed, float minY, float hitlessTime);
+    Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float hitlessTime);
     void Update(float nowTime);
-    void Move();
+    void Move(float deltatime);
     void Draw();
     void Hit(float nowTime);
     int getHP();
