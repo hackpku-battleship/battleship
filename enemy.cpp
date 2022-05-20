@@ -5,7 +5,7 @@ Enemy::Enemy(float _hp, float _gentime, float _livetime, float _x, float _y, flo
     // std::cerr << "livetime:" << livetime << std::endl;
 }
 
-std::vector<Bullet *> Enemy::getBullet(float nowtime)
+std::vector<Bullet *> Enemy::getBullet(float nowtime, BulletManager *manager)
 {
     return std::vector<Bullet *>();
 }
