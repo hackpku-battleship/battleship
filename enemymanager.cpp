@@ -1,11 +1,11 @@
 #include "enemy.h"
 
-std::vector<Bullet *> EnemyManager::updateTime(float nowTime)
+std::vector<Bullet *> EnemyManager::updateTime(float nowTime, BulletManager *manager)
 {
     std::vector<Bullet *> ret;
     for (int i = 0; i < enemys.size(); i++)
     {
-        auto _a = enemys[i]->getBullet(nowTime);
+        auto _a = enemys[i]->getBullet(nowTime, manager);
         if (enemys[i]->isalive() == 0)
             enemys.erase(enemys.begin() + i);
         else

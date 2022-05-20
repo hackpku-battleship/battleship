@@ -93,17 +93,19 @@ int Game::loop(int screenWidth, int screenHeight)
 
     while (!WindowShouldClose())
     {
-        if (IsKeyPressed(KEY_P) ) {
+        if (IsKeyPressed(KEY_P))
+        {
             int ret = Pause::loop(screenWidth, screenHeight);
-            switch (ret) {
-                case 0: //退出
-                    return 0;
-                case 1: //重新开始
-                    return Game::loop(screenWidth, screenHeight);
-                case 2: //返回菜单
-                    return Init::loop(screenWidth, screenHeight);
-                default:
-                    break;
+            switch (ret)
+            {
+            case 0: //退出
+                return 0;
+            case 1: //重新开始
+                return Game::loop(screenWidth, screenHeight);
+            case 2: //返回菜单
+                return Init::loop(screenWidth, screenHeight);
+            default:
+                break;
             }
         }
         float time = GetTime();
@@ -124,7 +126,7 @@ int Game::loop(int screenWidth, int screenHeight)
             playerBullets->addBullet(new basicBullet(time, 5, player->getPosition(), {(1. * rand() / RAND_MAX - 0.5) * 100, (1. * rand() / RAND_MAX - 0.5) * 100}));
         }
 
-        auto bullets = enemys->updateTime(time);
+        auto bullets = enemys->updateTime(time, enemyBullets);
         enemys->draw();
         for (auto b : bullets)
             enemyBullets->addBullet(b);
@@ -203,29 +205,34 @@ int Pause::loop(int screenWidth, int screenHeight)
     return 0;
 }
 
-int Over::loop(int screenWidth, int screenHeight) {
+int Over::loop(int screenWidth, int screenHeight)
+{
     const char msg[3][50] = {"New Game", "Return to menu", "Quit"};
     float Mid = screenWidth / 2.0f - 200;
-    
-    Rectangle msgBox[3] = {{ Mid, screenHeight / 2.0f - 100, 300,50 }
-                          ,{ Mid, screenHeight / 2.0f + 0, 480,50 }
-                          ,{ Mid, screenHeight / 2.0f + 100, 130,50 } };
-    bool MouseOn[3]; 
 
-    while (!WindowShouldClose()) {
+    Rectangle msgBox[3] = {{Mid, screenHeight / 2.0f - 100, 300, 50}, {Mid, screenHeight / 2.0f + 0, 480, 50}, {Mid, screenHeight / 2.0f + 100, 130, 50}};
+    bool MouseOn[3];
+
+    while (!WindowShouldClose())
+    {
         ClearBackground(RAYWHITE);
         for (int i = 0; i < 3; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
         for (int i = 0; i < 3; i++)
-            if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                if (i == 2) return 0;
-                else if(i == 1) return Init::loop(screenWidth, screenHeight);
-                else return Game::loop(screenWidth, screenHeight);
+            if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                if (i == 2)
+                    return 0;
+                else if (i == 1)
+                    return Init::loop(screenWidth, screenHeight);
+                else
+                    return Game::loop(screenWidth, screenHeight);
             }
         BeginDrawing();
-        for (int i = 0; i < 3; i++) {
-            //DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i],  Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
+        for (int i = 0; i < 3; i++)
+        {
+            // DrawRectangleRec(msgBox[i], LIGHTGRAY);
+            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
         }
         EndDrawing();
     }
