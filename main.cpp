@@ -1,6 +1,6 @@
 #include "raylib.h"
-#include "bullet.h"
 #include "init.h"
+#include <cstring>
 
 //class basicBullet a;
 
@@ -9,18 +9,8 @@ int main(void){
     const int screenHeight = 900;
     
     InitWindow(screenWidth, screenHeight, "raylib [core] example - custom frame control");
-    while (!WindowShouldClose()) {
-
-        BeginDrawing();
-
-            ClearBackground(RAYWHITE);
-            
- 
-
-
-        EndDrawing();
-    }
-
+    SetTargetFPS(60);
+    Init::loop(screenWidth, screenHeight);
     CloseWindow();
     return 0;
 }
