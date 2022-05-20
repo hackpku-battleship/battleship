@@ -16,7 +16,6 @@ int main(void)
 
         ClearBackground(RAYWHITE);
         player.Draw();
-
         EndDrawing();
     }
 
