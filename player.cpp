@@ -1,8 +1,6 @@
 #include "player.h"
 #include "raylib.h"
 
-#define MAXLP 5 //最大技能释放次数
-#define PROT_LIMITTIME 5
 
 PlayerHPBar::PlayerHPBar(float x, float y, float radius, float delta)
     : x(x), y(y), radius(radius), delta(delta)
@@ -111,8 +109,8 @@ Prot::Prot(float _StartTime):StartTime(_StartTime),LimitTime(PROT_LIMITTIME) {
 }
 
 void Prot::Draw(Vector2 p, float r) {
-    Rectangle tmp = {p.x - r - 10, p.y - r - 10, 40, 5};
-    DrawRectangleRec(tmp, GREEN);
+    //Rectangle tmp = {p.x - r - 10, p.y - r - 10, 40, 5};
+    DrawRectangleRec(PROT_REC, GREEN);
 }
 
 void Prot::Hit() {

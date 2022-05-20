@@ -22,6 +22,7 @@ public:
     bool inScreen(int, int);
     void Draw();
     bool checkBox(Vector2, float);
+    bool checkProt(Vector2, float);
 };
 
 // bullet manager
