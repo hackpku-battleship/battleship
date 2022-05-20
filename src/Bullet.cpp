@@ -2,11 +2,16 @@
 #include "bullet.h"
 
 class Bullet{
-    double genTime; // 子弹的生成时间
+    float genTime; // 子弹的生成时间
 public:
-    Bullet(){
-        genTime = getTime();
+    Bullet(float nowTime){
+        genTime = nowTime;
     }
-    virtual double Draw(double time);
+    float updateTime(float nowTime){
+        float delta=nowTime-genTime;
+        genTime=nowTime;
+        return delta;
+    }
+    virtual void Draw();
     virtual bool checkBox();
 };
