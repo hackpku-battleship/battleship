@@ -2,6 +2,7 @@
 #include <bits/stdc++.h>
 #include "bullet.h"
 #include "player.h"
+#include "enemy.h"
 
 int main(void)
 {
@@ -14,10 +15,18 @@ int main(void)
     SetTargetFPS(60);
 
     BulletManager playerBullets;
+    EnemyManager enemys;
+
+    bool flag = 0;
 
     while (!WindowShouldClose())
     {
         float time = GetTime();
+
+        if (flag == 0) {
+            enemys.addEnemy(new SimpleEnemy(100.0, time, 20, 400, 50, 5));
+            flag = 1;
+        }
 
         player.Move();
         BeginDrawing();
@@ -28,6 +37,10 @@ int main(void)
         {
             playerBullets.addBullet(new basicBullet(time, 5, player.getPosition(), {(1. * rand() / RAND_MAX - 0.5) * 100, (1. * rand() / RAND_MAX - 0.5) * 100}));
         }
+        
+        auto bullets = enemys.updateTime(time);
+        enemys.draw();
+        for (auto b: bullets) playerBullets.addBullet(b);
 
         player.Draw();
         playerHPBar.Draw(player.getHP());

@@ -1,15 +1,25 @@
-#include "simpleenemy.h"
+#include "enemy.h"
+#include <iostream>
 
-SimpleEnemy::SimpleEnemy(float _hp, float _gentime, float _x, float _y, float _r):
-    Enemy(_hp, _gentime, _x, _y, _r) {}
+SimpleEnemy::SimpleEnemy(float _hp, float _gentime, float _livetime, float _x, float _y, float _r):
+    Enemy(_hp, _gentime, _livetime, _x, _y, _r) {}
 
 std::vector<Bullet*> SimpleEnemy::getBullet(float nowTime) {
     float dtime = nowTime - gentime;
     std::vector<Bullet*> ret;
-    if (dutime <= 0.5 && dtime >= 0.5) {
-        Bullet *b = new basicBullet(nowTime, 100.0, (Vector2){x, y}, (Vector2){0, 10});
-
+    //std::cerr << (int)dtime << " " << (int)dutime << std::endl;
+    if ((int)dtime - (int)dutime >= 1) {
+        //std::cerr << "ret" << std::endl;
+        float dx = 1.0, dy = 0.0;
+        for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 16) {
+            Bullet *b = new basicBullet(nowTime, 100.0, (Vector2){x, y}, (Vector2){cos(alpha), sin(alpha)});
+            ret.push_back(b);
+        }
     }
     dutime = dtime;
     return ret;
+}
+
+void SimpleEnemy::draw() {
+    DrawCircleV((Vector2){x, y}, r, BLUE);
 }
