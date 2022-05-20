@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include "bullet.h"
 
-class basicBullet: Bullet{
+/*class basicBullet: Bullet{
 public:
     basicBullet(){
         Bullet();
@@ -12,4 +12,4 @@ public:
     bool checkBox(){
 
     }
-};
+};*/

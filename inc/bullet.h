@@ -1,3 +1,6 @@
+#ifndef BULLET_H
+#define BULLET_H
+
 class Bullet{
     double genTime; // 子弹的生成时间
 public:
@@ -12,3 +15,5 @@ public:
     double Draw(double);
     bool checkBox();
 };
+
+#endif
