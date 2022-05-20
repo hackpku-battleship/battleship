@@ -8,7 +8,7 @@ struct BulletManager;
 
 class Bullet{
 public:
-    float genTime, lifeTime; // 子弹的生成时间
+    float genTime, lifeTime, lastTime; // 子弹的生成时间
     BulletManager* from;
 public:
     Bullet(float, float);

@@ -1,14 +1,27 @@
 #include "raylib.h"
 
-class Player
+class PlayerHPBar
 {
-    Vector2 position = {400, 600};
-    int hp = 5;
-    const float speed = 50;
-    const float minY = 300;
+    float x, y, radius, delta;
 
 public:
-    Vector2 getPosition();
+    PlayerHPBar(float x, float y, float radius, float delta);
+    void Draw(int hp);
+};
+
+class Player
+{
+    Vector2 position;
+    float radius;
+    int hp;
+    const float speed;
+    const float minY;
+
+public:
+    Player(Vector2 position, float radius, int hp, float speed, float minY);
     void Move();
     void Draw();
+    int getHP();
+    Vector2 getPosition();
+    float getRadius();
 };
