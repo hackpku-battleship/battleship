@@ -9,6 +9,7 @@
 #include "enemymanager.h"
 #include "simpleenemy.h"
 #include "denemy.h"
+#include "Vector2Basic.h"
 
 int Init::loop(int screenWidth, int screenHeight)
 {
@@ -147,7 +148,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind) {
 
         if (IsKeyDown(KEY_X))
         {
-            playerBullets->addBullet(new basicBullet(time, 5, player->getPosition(), {(1. * rand() / RAND_MAX - 0.5) * 100, (1. * rand() / RAND_MAX - 0.5) * 100}));
+            static float playerLasttime = 0.0;
+            if (time - playerLasttime > 0.05) {
+                for (float bias = -100; bias <= 100; bias += 20) {
+                    playerBullets->addBullet(new basicBullet(time, 5, player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -300}));
+                }
+                playerLasttime = time;
+            }
         }
 
         if (IsKeyPressed(KEY_U)) {
