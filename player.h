@@ -8,6 +8,7 @@ class Player
     const float minY = 300;
 
 public:
+    Vector2 getPosition();
     void Move();
     void Draw();
 };

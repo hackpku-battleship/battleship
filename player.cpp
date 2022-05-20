@@ -27,3 +27,5 @@ void Player::Draw()
     for (int i = 0; i < hp; i++)
         DrawCircleV({20.0f + 20.0f * i, (float)GetScreenHeight() - 20}, 10, MAROON);
 }
+
+Vector2 Player::getPosition(){return position;}

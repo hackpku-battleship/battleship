@@ -1,10 +1,13 @@
 #include "raylib.h"
 #include "bullet.h"
 #include "Vector2Basic.h"
+#include <bits/stdc++.h>
 
-basicBullet::basicBullet(float nowTime, Vector2 startPosition, Vector2 velocity):
-        Bullet(nowTime),position(startPosition), velocity(velocity)
-{}
+basicBullet::basicBullet(float nowTime, float lifeTime, Vector2 startPosition, Vector2 velocity):
+        Bullet(nowTime, lifeTime),position(startPosition), velocity(velocity)
+{
+    radius=5;
+}
 float basicBullet::updateTime(float nowTime){
     float deltaTime=Bullet::updateTime(nowTime);
     position = position + deltaTime * velocity;
@@ -13,6 +16,6 @@ float basicBullet::updateTime(float nowTime){
 void basicBullet::Draw(){
     DrawCircleV(position, 5, RED);
 }
-bool basicBullet::checkBox(){
-    return 0;
+bool basicBullet::checkBox(Vector2 center, float rad){
+    return CheckCollisionCircles(position, radius, center, rad);
 }
