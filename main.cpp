@@ -6,7 +6,8 @@ int main(void)
 {
     const int screenWidth = 800;
     const int screenHeight = 600;
-    Player player;
+    Player player({400, 600}, 10, 5, 50, 300);
+    PlayerHPBar playerHPBar(10, screenHeight - 20, 10, 25);
     InitWindow(screenWidth, screenHeight, "raylib [core] example - custom frame control");
     SetTargetFPS(60);
     while (!WindowShouldClose())
@@ -16,6 +17,7 @@ int main(void)
 
         ClearBackground(RAYWHITE);
         player.Draw();
+        playerHPBar.Draw(player.getHP());
         EndDrawing();
     }
 

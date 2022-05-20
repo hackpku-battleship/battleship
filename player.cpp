@@ -1,6 +1,22 @@
 #include "player.h"
 #include "raylib.h"
 
+PlayerHPBar::PlayerHPBar(float x, float y, float radius, float delta)
+    : x(x), y(y), radius(radius), delta(delta)
+{
+}
+
+void PlayerHPBar::Draw(int hp)
+{
+    for (int i = 0; i < hp; i++)
+        DrawCircleV({x + delta * i, y}, radius, MAROON);
+}
+
+Player::Player(Vector2 position, float radius, int hp, float speed, float minY)
+    : position(position), radius(radius), hp(hp), speed(speed), minY(minY)
+{
+}
+
 void Player::Move()
 {
     if (IsKeyDown(KEY_UP))
@@ -23,7 +39,20 @@ void Player::Move()
 
 void Player::Draw()
 {
-    DrawCircleV(position, 10, MAROON);
-    for (int i = 0; i < hp; i++)
-        DrawCircleV({20.0f + 20.0f * i, (float)GetScreenHeight() - 20}, 10, MAROON);
+    DrawCircleV(position, radius, MAROON);
+}
+
+int Player::getHP()
+{
+    return hp;
+}
+
+Vector2 Player::getPosition()
+{
+    return position;
+}
+
+float Player::getRadius()
+{
+    return radius;
 }
