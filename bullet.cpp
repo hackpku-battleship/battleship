@@ -1,12 +1,12 @@
 #include "raylib.h"
 #include "bullet.h"
 
-/*class Bullet{
-    double genTime; // 子弹的生成时间
-public:
-    Bullet(){
-        genTime = getTime();
-    }
-    virtual double Draw(double time);
-    virtual bool checkBox();
-};*/
+Bullet::Bullet(float nowTime, float lifeTime): genTime(nowTime), lifeTime(lifeTime){}
+float Bullet::updateTime(float nowTime){
+    float delta=nowTime-genTime;
+    return delta;
+}
+bool Bullet::checkAlive(float nowTime){
+    std::cerr<<nowTime<<' '<<genTime+lifeTime<<std::endl;
+    return genTime+lifeTime>nowTime;
+}
