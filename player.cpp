@@ -1,6 +1,9 @@
 #include "player.h"
 #include "raylib.h"
 
+#define MAXLP 5 //最大技能释放次数
+#define PROT_LIMITTIME 5
+
 PlayerHPBar::PlayerHPBar(float x, float y, float radius, float delta)
     : x(x), y(y), radius(radius), delta(delta)
 {
@@ -12,9 +15,13 @@ void PlayerHPBar::Draw(int hp)
         DrawCircleV({x + delta * i, y}, radius, MAROON);
 }
 
-Player::Player(Vector2 position, float radius, int hp, float speed, float minY, float hitlessTime)
-    : position(position), radius(radius), hp(hp), speed(speed), minY(minY), hitlessTime(hitlessTime)
+Player::Player(Vector2 position, float radius, int hp, float speed, float minY, float hitlessTime, int kind)
+    : position(position), radius(radius), hp(hp), speed(speed), minY(minY), hitlessTime(hitlessTime), kind(kind),lp(MAXLP),prot(nullptr)
 {
+}
+
+Player::~Player() {
+    delete prot;
 }
 
 void Player::Hit(float nowTime)
@@ -55,6 +62,8 @@ void Player::Move()
 
 void Player::Draw()
 {
+    if (prot != nullptr)
+        prot->Draw(position, radius);
     DrawCircleV(position, radius, MAROON);
 }
 
@@ -71,4 +80,34 @@ Vector2 Player::getPosition()
 float Player::getRadius()
 {
     return radius;
+}
+
+void Player::Check(float nowTime) {
+    if (prot != nullptr && prot->Check(nowTime)) {
+        delete prot;
+        prot = nullptr;
+    }
+}
+
+void Player::useskill(float nowTime) {
+    if (kind == 0) {
+        if(prot == nullptr && lp > 0)
+            lp--,prot = new Prot(nowTime);
+    }
+}
+
+Prot::Prot(float _StartTime):StartTime(_StartTime),LimitTime(PROT_LIMITTIME) {
+}
+
+void Prot::Draw(Vector2 p, float r) {
+    Rectangle tmp = {p.x - r - 10, p.y - r - 10, 40, 5};
+    DrawRectangleRec(tmp, GREEN);
+}
+
+void Prot::Hit() {
+
+}
+
+bool Prot::Check(float nowTime) {
+    return nowTime - StartTime >= LimitTime;
 }

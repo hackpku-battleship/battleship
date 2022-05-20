@@ -123,7 +123,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
 
-    Player *player = new Player({400, 600}, 10, 5, 10, 100, 2);
+    Player *player = new Player({400, 600}, 10, 5, 10, 100, 2, kind);
     PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
 
     BulletManager *playerBullets = new BulletManager();
@@ -154,7 +154,10 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
-
+        player->Check(time);
+        if (IsKeyDown(KEY_Z)) { // 放技能
+            player->useskill(time);
+        }
         if (IsKeyDown(KEY_X))
         {
             playerBullets->addBullet(new basicBullet(time, 5, player->getPosition(), {(1. * rand() / RAND_MAX - 0.5) * 100, (1. * rand() / RAND_MAX - 0.5) * 100}));
