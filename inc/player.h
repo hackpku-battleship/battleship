@@ -29,4 +29,6 @@ public:
     int getHP();
     Vector2 getPosition();
     float getRadius();
+    bool getcanHit();
+    void setPosition(Vector2 newPosition);
 };

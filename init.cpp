@@ -11,6 +11,8 @@
 #include "denemy.h"
 #include "Vector2Basic.h"
 
+const Vector2 initPlayerPosition = {400, 900};
+
 int Init::loop(int screenWidth, int screenHeight)
 {
     const char msg1[50] = "Start Game";
@@ -57,13 +59,21 @@ int Init::loop(int screenWidth, int screenHeight)
 void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
 {
     auto bullets = enemyBullets->getBullets();
+    bool flag = 0;
     for (int i = 0; i < bullets.size(); i++)
-        if (bullets[i]->checkBox(player->getPosition(), player->getRadius()))
+        if (player->getcanHit() && bullets[i]->checkBox(player->getPosition(), player->getRadius()))
         {
             player->Hit(nowTime);
-            bullets.erase(bullets.begin() + i);
+            player->setPosition(initPlayerPosition);
+            flag = 1;
             break;
         }
+    if (flag) {
+        for (int i = 0; i < bullets.size(); i++) {
+            delete bullets[i];
+        }
+        bullets.erase(bullets.begin(), bullets.end());
+    }
     enemyBullets->setBullets(bullets);
 }
 
@@ -124,7 +134,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
 
-    Player *player = new Player({400, 600}, 10, 5, 10, 100, 2);
+    Player *player = new Player(initPlayerPosition, 10, 5, 10, 100, 2);
     PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
 
     BulletManager *playerBullets = new BulletManager();
@@ -150,6 +160,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
                 break;
             }
         }
+
+        if (player->getHP() <= 0) return Over::loop(screenWidth, screenHeight);
         time += GetFrameTime();
 
         player->Update(time);

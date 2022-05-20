@@ -72,3 +72,11 @@ float Player::getRadius()
 {
     return radius;
 }
+
+bool Player::getcanHit() {
+    return canHit;
+}
+
+void Player::setPosition(Vector2 newPosition) {
+    position = newPosition;
+}
