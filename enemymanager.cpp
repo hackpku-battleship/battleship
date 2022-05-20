@@ -1,4 +1,4 @@
-#include "enemy.h"
+#include "enemymanager.h"
 
 std::vector<Bullet*> EnemyManager::updateTime(float nowTime) {
     std::vector<Bullet*> ret;

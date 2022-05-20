@@ -1,4 +1,4 @@
-#include "enemy.h"
+#include "denemy.h"
 #include "bullet.h"
 
 DEnemy::DEnemy(float _hp, float _genTime, float _livetime, float _x, float _y, float _r) :

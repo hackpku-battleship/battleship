@@ -6,6 +6,9 @@
 #include "basicBullet.h"
 #include "bulletManager.h"
 #include "enemy.h"
+#include "enemymanager.h"
+#include "simpleenemy.h"
+#include "denemy.h"
 
 int Init::loop(int screenWidth, int screenHeight) {
     const char msg1[50] = "Start Game";

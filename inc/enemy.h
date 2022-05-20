@@ -19,29 +19,4 @@ public:
     virtual void draw() {}
     bool isalive();
 };
-
-class EnemyManager {
-public:
-    std::vector<Enemy*> enemys;
-    void addEnemy(Enemy* pe) {
-        enemys.push_back(pe);
-    }
-    std::vector<Bullet*> updateTime(float nowTime);
-    void draw();
-};
-
-class SimpleEnemy : public Enemy {
-    float rotatep;
-public:
-    SimpleEnemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    std::vector<Bullet*> getBullet(float nowTime);
-    void draw();
-};
-
-class DEnemy:public Enemy {
-public:
-    DEnemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    std::vector<Bullet*> getBullet(float nowTime);
-    void draw();
-};
 #endif
