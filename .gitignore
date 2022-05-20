@@ -4,4 +4,5 @@ main.code-workspace
 Makefile.Android
 game.exe
 obj
+*.exe
 log
