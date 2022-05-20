@@ -1,7 +1,7 @@
 #include "raylib.h"
-#include "src/bullet.h"
+#include "bullet.h"
 
-basicBullet a;
+basicBullet a(114514,{19,19},{8,10});
 
 int main(void){
     const int screenWidth = 800;

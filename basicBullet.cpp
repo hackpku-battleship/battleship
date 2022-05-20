@@ -3,10 +3,8 @@
 #include "Vector2Basic.h"
 
 basicBullet::basicBullet(float nowTime, Vector2 startPosition, Vector2 velocity):
-        position(startPosition), velocity(velocity)
-{
-    Bullet(nowTime);
-}
+        Bullet(nowTime),position(startPosition), velocity(velocity)
+{}
 float basicBullet::updateTime(float nowTime){
     float deltaTime=Bullet::updateTime(nowTime);
     position = position + deltaTime * velocity;
@@ -16,5 +14,5 @@ void basicBullet::Draw(){
     DrawCircleV(position, 5, RED);
 }
 bool basicBullet::checkBox(){
-
+    return 0;
 }
