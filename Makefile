@@ -359,9 +359,9 @@ OBJ_DIR = ./obj
 CFLAGS += -I./inc/
 SRC = $(wildcard *.cpp)
 INC = $(wildcard inc/*.h)
-#$(info $(INC))
-OBJS = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
-#OBJS ?= main.cpp
+#OBJS = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+OBJS = $(patsubst %.cpp,obj/%.o,$(SRC))
+#$(info $(OBJS))
 
 # For Android platform we call a custom Makefile.Android
 ifeq ($(PLATFORM),PLATFORM_ANDROID)
@@ -384,7 +384,8 @@ $(PROJECT_NAME): $(OBJS)
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)
 #%.o: %.c
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+#$(info $(OBJ_DIR))
+obj/%.o: %.cpp
 	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
 
 # Clean everything
