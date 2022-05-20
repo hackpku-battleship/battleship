@@ -27,6 +27,12 @@ struct BulletManager{
             if(p->checkBox(x,r))return true;
         return false;
     }
+    std::vector<Bullet*> getBullets() {
+        return bullets;
+    }
+    void setBullets(std::vector<Bullet*> v) {
+        bullets=v;
+    }
 };
 
 #endif
