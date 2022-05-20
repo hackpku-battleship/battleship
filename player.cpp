@@ -12,9 +12,25 @@ void PlayerHPBar::Draw(int hp)
         DrawCircleV({x + delta * i, y}, radius, MAROON);
 }
 
-Player::Player(Vector2 position, float radius, int hp, float speed, float minY)
-    : position(position), radius(radius), hp(hp), speed(speed), minY(minY)
+Player::Player(Vector2 position, float radius, int hp, float speed, float minY, float hitlessTime)
+    : position(position), radius(radius), hp(hp), speed(speed), minY(minY), hitlessTime(hitlessTime)
 {
+}
+
+void Player::Hit(float nowTime)
+{
+    if (canHit)
+    {
+        hp -= 1;
+        canHit = false;
+        lastHitTime = nowTime;
+    }
+}
+
+void Player::Update(float nowTime)
+{
+    if (nowTime - lastHitTime > hitlessTime)
+        canHit = true;
 }
 
 void Player::Move()

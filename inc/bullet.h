@@ -6,10 +6,12 @@
 
 struct BulletManager;
 
-class Bullet{
+class Bullet
+{
 public:
     float genTime, lifeTime, lastTime; // 子弹的生成时间
-    BulletManager* from;
+    BulletManager *from;
+
 public:
     Bullet(float, float);
     virtual float updateTime(float, Vector2);
