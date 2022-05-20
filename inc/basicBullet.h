@@ -7,6 +7,7 @@
 
 struct BulletManager;
 
+//普通匀速弹，指定初始方向和速度
 class basicBullet: public Bullet{
     Vector2 velocity;
 public:

@@ -7,6 +7,7 @@
 
 struct BulletManager;
 
+//追踪弹，追踪玩家位置
 class fishBullet: public Bullet{
     Vector2 angle;
     float velocity, angleV;

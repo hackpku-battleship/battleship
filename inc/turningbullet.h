@@ -2,7 +2,7 @@
 #define TURNINGBULLET_H
 
 #include "bullet.h"
-
+//转向弹，一段时间之后速度方向改变，需要传入两个速度
 class TurningBullet : public Bullet {
 public:
     Vector2 vel1, vel2;

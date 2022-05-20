@@ -61,13 +61,16 @@ void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
     auto bullets = enemyBullets->getBullets();
     bool flag = 0;
     for (int i = 0; i < bullets.size(); i++)
+        //检测是否碰撞，当无敌时不考虑是否被Hit
         if (player->getcanHit() && bullets[i]->checkBox(player->getPosition(), player->getRadius()))
         {
             player->Hit(nowTime);
+            //将玩家置为初始位置
             player->setPosition(initPlayerPosition);
             flag = 1;
             break;
         }
+    //当发生Hit时
     if (flag) {
         for (int i = 0; i < bullets.size(); i++) {
             delete bullets[i];
@@ -86,10 +89,13 @@ void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
         for (int j = 0; j < bullets.size(); j++)
             if (bullets[j]->checkBox({enemys[i]->getX(), enemys[i]->getY()}, enemys[i]->getR()))
             {
+                delete bullets[j];
                 bullets.erase(bullets.begin() + j);
                 enemys[i]->hit();
-                if (!enemys[i]->isalive())
+                if (!enemys[i]->isalive()) {
+                    delete enemys[i];
                     enemys.erase(enemys.begin() + i);
+                }
                 break;
             }
     }
