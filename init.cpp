@@ -10,6 +10,8 @@
 #include "simpleenemy.h"
 #include "denemy.h"
 #include "Vector2Basic.h"
+#include <queue>
+#include "stages.h"
 
 const Vector2 initPlayerPosition = {400, 900};
 
@@ -151,8 +153,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     BulletManager *playerBullets = new BulletManager();
     BulletManager *enemyBullets = new BulletManager();
     EnemyManager *enemys = new EnemyManager();
+    
+    std::queue<std::pair<float, Enemy*> > enemyQueue;
 
     float time = 0.0;
+
+    const int MAX_STAGE = 1;
+    int stagecnt = 0;
 
     while (!WindowShouldClose())
     {
@@ -176,6 +183,18 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         float deltatime = GetFrameTime();
         time += deltatime;
 
+        if (stagecnt < MAX_STAGE && enemys->isEmpty()) {
+            stagecnt++;
+            std::cerr << stagecnt << std::endl;
+            getStage(stagecnt, time, enemyQueue);
+        }
+
+        while (!enemyQueue.empty() && enemyQueue.front().first <= time) {
+            enemys->addEnemy(enemyQueue.front().second);
+            enemyQueue.pop();
+        }
+        //*/
+
         player->Update(time);
         player->Move(deltatime);
         BeginDrawing();
@@ -198,12 +217,14 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
             }
         }
 
+        /*
         if (IsKeyPressed(KEY_U))
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new DEnemy(100, time, 30, x, y, 10, "source/lion.png"));
+            enemys->addEnemy(new DEnemy(100, time, 30, x, y, 50, "source/lion.png"));
         }
+        //*/
 
         auto _bullets = enemys->updateTime(time, enemyBullets);
         enemys->draw();

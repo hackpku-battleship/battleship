@@ -32,3 +32,7 @@ void EnemyManager::setEnemys(std::vector<Enemy *> v)
 {
     enemys = v;
 }
+
+bool EnemyManager::isEmpty() {
+    return enemys.empty();
+}

@@ -17,6 +17,7 @@ public:
     void draw();
     std::vector<Enemy *> getEnemys();
     void setEnemys(std::vector<Enemy *>);
+    bool isEmpty();
 };
 
 #endif

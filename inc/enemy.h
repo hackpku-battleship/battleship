@@ -16,9 +16,10 @@ class Enemy
 public:
     float hp;
     float gentime, dutime, livetime;
-    float x, y, r;
+    Vector2 pos;
+    float r;
     Texture2D tex;
-    Enemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r, char* filename);
+    Enemy(float _hp, float _genTime, float livetime, Vector2 pos, float _r, char* filename);
     virtual std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager);
     float getX();
     float getY();
