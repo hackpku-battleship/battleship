@@ -1,14 +1,15 @@
 #include "raylib.h"
 #include "bullet.h"
+#include "init.h"
 
 //class basicBullet a;
 
 int main(void){
-    const int screenWidth = 800;
-    const int screenHeight = 600;
+    const int screenWidth = 1600;
+    const int screenHeight = 900;
     
     InitWindow(screenWidth, screenHeight, "raylib [core] example - custom frame control");
-    while (!WindowShouldClose()){
+    while (!WindowShouldClose()) {
 
         BeginDrawing();
 
