@@ -147,7 +147,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     const double FastSpeed = 500;
     const double SlowSpeed = 200;
 
-    Player *player = new Player(initPlayerPosition, 10, 5, FastSpeed, SlowSpeed, 100, 2, kind);
+    Player *player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 100, 2, kind);
     PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
 
     BulletManager *playerBullets = new BulletManager();
@@ -185,7 +185,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
 
         if (stagecnt < MAX_STAGE && enemys->isEmpty()) {
             stagecnt++;
-            std::cerr << stagecnt << std::endl;
+            //std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
         }
 
@@ -220,7 +220,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
                 for (float bias = -100; bias <= 100; bias += 20) {
                     playerBullets->addBullet(
                         new basicBullet(time, 5, RED, 5, 
-                            player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -300}));
+                            player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -400}));
                 }
                 playerLasttime = time;
             }

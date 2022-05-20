@@ -5,7 +5,8 @@
 
 class bakaDirect : public Enemy {
 public:
-    bakaDirect(float _hp, float _genTime, float livetime, Vector2 pos, float _r, char* filename);
+    Vector2 vel;
+    bakaDirect(float _hp, float _genTime, float livetime, Vector2 pos, float _r, char* filename, Vector2 vel);
     std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager);
 };
 

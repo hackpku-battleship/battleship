@@ -5,5 +5,6 @@
 
 float getrand(float l, float r);
 int getInterval(float l, float r, float interval);
+bool inPeriod(float interval, float mid, float dtime);
 
 #endif
