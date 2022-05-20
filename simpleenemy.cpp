@@ -9,10 +9,10 @@ std::vector<Bullet*> SimpleEnemy::getBullet(float nowTime) {
     float dtime = nowTime - gentime;
     std::vector<Bullet*> ret;
     //std::cerr << (int)dtime << " " << (int)dutime << std::endl;
-    if ((int)(dtime * 1) - (int)(dutime * 1)>= 1) {
-        //std::cerr << "ret" << std::endl;
-        //float dx = 1.0, dy = 0.0;
-        rotatep += 1.0 * rand() / RAND_MAX * PI / 128.0;
+    if ((int)dtime - (int)dutime >= 1) {
+        ret.push_back(new fishBullet(nowTime, 30.0, (Vector2){x,y}, 300, 0.02));
+    }
+    if ((int)dtime * 2 - (int)dutime * 2>= 1) {
         for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 16) {
             Vector2 f = {cos(alpha + rotatep), sin(alpha + rotatep)};
             Bullet *b = new basicBullet(nowTime, 15.0, (Vector2){x, y} + 10.0f * f, 50.0f * f);

@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "player.h"
 #include "bullet.h"
+#include "basicBullet.h"
+#include "bulletManager.h"
 #include "enemy.h"
 
 int Init::loop(int screenWidth, int screenHeight)
@@ -91,6 +93,19 @@ int Game::loop(int screenWidth, int screenHeight)
 
     while (!WindowShouldClose())
     {
+        if (IsKeyPressed(KEY_P) ) {
+            int ret = Pause::loop(screenWidth, screenHeight);
+            switch (ret) {
+                case 0: //退出
+                    return 0;
+                case 1: //重新开始
+                    return Game::loop(screenWidth, screenHeight);
+                case 2: //返回菜单
+                    return Init::loop(screenWidth, screenHeight);
+                default:
+                    break;
+            }
+        }
         float time = GetTime();
 
         if (flag == 0)
@@ -119,9 +134,9 @@ int Game::loop(int screenWidth, int screenHeight)
 
         player->Draw();
         playerHPBar->Draw(player->getHP());
-        playerBullets->updateTime(time);
+        playerBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
         playerBullets->DrawAllBullets();
-        enemyBullets->updateTime(time);
+        enemyBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
         enemyBullets->DrawAllBullets();
 
         DrawText(TextFormat("%.5lf", time), 10, 10, 20, RED);
@@ -182,6 +197,35 @@ int Pause::loop(int screenWidth, int screenHeight)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
             DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
+        }
+        EndDrawing();
+    }
+    return 0;
+}
+
+int Over::loop(int screenWidth, int screenHeight) {
+    const char msg[3][50] = {"New Game", "Return to menu", "Quit"};
+    float Mid = screenWidth / 2.0f - 200;
+    
+    Rectangle msgBox[3] = {{ Mid, screenHeight / 2.0f - 100, 300,50 }
+                          ,{ Mid, screenHeight / 2.0f + 0, 480,50 }
+                          ,{ Mid, screenHeight / 2.0f + 100, 130,50 } };
+    bool MouseOn[3]; 
+
+    while (!WindowShouldClose()) {
+        ClearBackground(RAYWHITE);
+        for (int i = 0; i < 3; i++)
+            MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
+        for (int i = 0; i < 3; i++)
+            if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                if (i == 2) return 0;
+                else if(i == 1) return Init::loop(screenWidth, screenHeight);
+                else return Game::loop(screenWidth, screenHeight);
+            }
+        BeginDrawing();
+        for (int i = 0; i < 3; i++) {
+            //DrawRectangleRec(msgBox[i], LIGHTGRAY);
+            DrawText(msg[i],  Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
         }
         EndDrawing();
     }

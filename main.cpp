@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include <bits/stdc++.h>
-#include "bullet.h"
+#include "basicBullet.h"
+#include "fishBullet.h"
+#include "bulletManager.h"
 #include "player.h"
 #include "enemy.h"
 #include "init.h"
