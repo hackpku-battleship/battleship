@@ -20,9 +20,9 @@ class Pause {
 public:
     static int loop(int, int);
 };
-/*
+
 class Over {
 public:
     static int loop(int, int);
-};*/
+};
 #endif

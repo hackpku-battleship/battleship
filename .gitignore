@@ -3,5 +3,5 @@ resources
 main.code-workspace
 Makefile.Android
 *.exe
-source
+game.exe
 obj
