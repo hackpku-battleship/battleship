@@ -7,3 +7,8 @@ float Bullet::updateTime(float nowTime){
     lastTime=nowTime;
     return delta;
 }
+
+bool Bullet::checkAlive(float nowTime){
+    std::cerr<<nowTime<<' '<<genTime+lifeTime<<std::endl;
+    return genTime+lifeTime>nowTime;
+}
