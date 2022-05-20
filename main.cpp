@@ -1,22 +1,21 @@
 #include "raylib.h"
 #include "bullet.h"
+#include "player.h"
 
-basicBullet a(114514,{19,19},{8,10});
-
-int main(void){
+int main(void)
+{
     const int screenWidth = 800;
     const int screenHeight = 600;
-    
+    Player player;
     InitWindow(screenWidth, screenHeight, "raylib [core] example - custom frame control");
-    while (!WindowShouldClose()){
-
+    SetTargetFPS(60);
+    while (!WindowShouldClose())
+    {
+        player.Move();
         BeginDrawing();
 
-            ClearBackground(RAYWHITE);
-            
- 
-
-
+        ClearBackground(RAYWHITE);
+        player.Draw();
         EndDrawing();
     }
 
