@@ -1,4 +1,6 @@
 #include "player.h"
+#include "bullet.h"
+#include "bulletManager.h"
 #include "raylib.h"
 
 
@@ -14,7 +16,7 @@ void PlayerHPBar::Draw(int hp)
 }
 
 Player::Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float hitlessTime, int kind)
-    : position(position), radius(radius), hp(hp), speed(speed), lowspeed(lowspeed), minY(minY), hitlessTime(hitlessTime), kind(kind),lp(MAXLP),prot(nullptr)
+    : position(position), radius(radius), hp(hp), speed(speed), lowspeed(lowspeed), minY(minY), hitlessTime(hitlessTime), kind(kind),lp(MAXLP),prot(nullptr),Lastt(-2.0)
 {
 }
 
@@ -90,10 +92,19 @@ void Player::Check(float nowTime) {
     }
 }
 
-void Player::useskill(float nowTime) {
+bool Player::useskill(float nowTime) {
     if (kind == 0) {
-        if(prot == nullptr && lp > 0)
+        if(prot == nullptr && lp > 0) {
             lp--,prot = new Prot(nowTime);
+            return 1;
+        } 
+        return 0;
+    } else if (kind == 1) {
+        if (lp == 0) return 0;
+        if (nowTime - Lastt > LASTOFRING) {Lastt = nowTime, lp --;}
+        return 1; 
+    } else {
+        
     }
 }
 

@@ -201,8 +201,17 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
 
         ClearBackground(RAYWHITE);
         player->Check(time);
-        if (IsKeyDown(KEY_Z)) { // 放技能
+        if (IsKeyDown(KEY_Z))  // 放技能
             player->useskill(time);
+        if (kind == 1 && time - player->Lastt < LASTOFRING) {
+            DrawRing(player->getPosition(),BOOMSCOPE - 2, BOOMSCOPE, 0.f, 360.f, 1, RED); 
+            auto bullets = enemyBullets->getBullets();
+            for (int i = 0; i < bullets.size(); i++)
+                if (bullets[i]->checkBox(player->getPosition(), BOOMSCOPE)) {
+                    delete bullets[i];
+                    bullets.erase(bullets.begin() + i);
+                }
+            enemyBullets->setBullets(bullets);
         }
         if (IsKeyDown(KEY_X))
         {
