@@ -3,11 +3,13 @@
 
 #include "enemy.h"
 
-class SimpleEnemy : public Enemy {
+class SimpleEnemy : public Enemy
+{
     float rotatep;
+
 public:
     SimpleEnemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    std::vector<Bullet*> getBullet(float nowTime);
+    std::vector<Bullet *> getBullet(float nowTime, BulletManager *creater);
     void draw();
 };
 #endif

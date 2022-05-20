@@ -10,6 +10,6 @@ float Bullet::updateTime(float nowTime, Vector2 playerPosition){
 }
 
 bool Bullet::checkAlive(float nowTime){
-    std::cerr<<nowTime<<' '<<genTime+lifeTime<<std::endl;
+    //std::cerr<<nowTime<<' '<<genTime+lifeTime<<std::endl;
     return genTime+lifeTime>nowTime;
 }
