@@ -26,16 +26,18 @@ class Player
     const float speed;
     const float minY;
     const float hitlessTime;
+    const float lowspeed;
     float lastHitTime = -1e300;
     bool canHit = true;
     int kind;
     int lp;
     Prot *prot;
 public:
-    Player(Vector2 position, float radius, int hp, float speed, float minY, float hitlessTime, int kind);
+    Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float hitlessTime, int kind);
     ~Player();
+    
     void Update(float nowTime);
-    void Move();
+    void Move(float deltatime);
     void Draw();
     void Hit(float nowTime);
     void useskill(float nowTime);

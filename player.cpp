@@ -15,8 +15,8 @@ void PlayerHPBar::Draw(int hp)
         DrawCircleV({x + delta * i, y}, radius, MAROON);
 }
 
-Player::Player(Vector2 position, float radius, int hp, float speed, float minY, float hitlessTime, int kind)
-    : position(position), radius(radius), hp(hp), speed(speed), minY(minY), hitlessTime(hitlessTime), kind(kind),lp(MAXLP),prot(nullptr)
+Player::Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float hitlessTime, int kind)
+    : position(position), radius(radius), hp(hp), speed(speed), lowspeed(lowspeed), minY(minY), hitlessTime(hitlessTime), kind(kind),lp(MAXLP),prot(nullptr)
 {
 }
 
@@ -41,16 +41,18 @@ void Player::Update(float nowTime)
         canHit = true;
 }
 
-void Player::Move()
+void Player::Move(float deltatime)
 {
+    float currentSpeed = speed;
+    if (IsKeyDown(KEY_LEFT_SHIFT)) currentSpeed = lowspeed;
     if (IsKeyDown(KEY_UP))
-        position.y -= speed;
+        position.y -= currentSpeed * deltatime;
     if (IsKeyDown(KEY_DOWN))
-        position.y += speed;
+        position.y += currentSpeed * deltatime;
     if (IsKeyDown(KEY_LEFT))
-        position.x -= speed;
+        position.x -= currentSpeed * deltatime;
     if (IsKeyDown(KEY_RIGHT))
-        position.x += speed;
+        position.x += currentSpeed * deltatime;
     if (position.y < minY)
         position.y = minY;
     if (position.y > GetScreenHeight())

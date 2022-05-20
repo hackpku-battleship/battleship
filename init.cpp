@@ -140,7 +140,10 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
 
-    Player *player = new Player(initPlayerPosition, 10, 5, 10, 100, 2, kind);
+    const double FastSpeed = 500;
+    const double SlowSpeed = 200;
+
+    Player *player = new Player(initPlayerPosition, 10, 5, FastSpeed, SlowSpeed, 100, 2, kind);
     PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
 
     BulletManager *playerBullets = new BulletManager();
@@ -168,10 +171,11 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         }
 
         if (player->getHP() <= 0) return Over::loop(screenWidth, screenHeight);
-        time += GetFrameTime();
+        float deltatime = GetFrameTime();
+        time += deltatime;
 
         player->Update(time);
-        player->Move();
+        player->Move(deltatime);
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
