@@ -361,7 +361,6 @@ SRC = $(wildcard *.cpp)
 INC = $(wildcard inc/*.h)
 #$(info $(INC))
 OBJS = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
-$(info $(OBJS))
 #OBJS ?= main.cpp
 
 # For Android platform we call a custom Makefile.Android
