@@ -96,6 +96,14 @@ void Player::useskill(float nowTime) {
     }
 }
 
+bool Player::getcanHit() {
+    return canHit;
+}
+
+void Player::setPosition(Vector2 newPosition) {
+    position = newPosition;
+}
+
 Prot::Prot(float _StartTime):StartTime(_StartTime),LimitTime(PROT_LIMITTIME) {
 }
 
@@ -111,3 +119,4 @@ void Prot::Hit() {
 bool Prot::Check(float nowTime) {
     return nowTime - StartTime >= LimitTime;
 }
+

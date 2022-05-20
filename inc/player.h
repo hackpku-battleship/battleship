@@ -43,5 +43,7 @@ public:
     void Check(float nowTime); //判断盾是否消失
     Vector2 getPosition();
     float getRadius();
+    bool getcanHit();
+    void setPosition(Vector2 newPosition);
 };
 

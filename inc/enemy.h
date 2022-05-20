@@ -2,12 +2,14 @@
 #define ENEMY_H
 
 #include <vector>
+#include "utils.h"
 #include "bullet.h"
 #include "basicBullet.h"
 #include "fishBullet.h"
 #include "splitBullet.h"
 #include "bulletManager.h"
 #include "accbullet.h"
+#include "turningbullet.h"
 
 class Enemy
 {

@@ -9,6 +9,9 @@
 #include "enemymanager.h"
 #include "simpleenemy.h"
 #include "denemy.h"
+#include "Vector2Basic.h"
+
+const Vector2 initPlayerPosition = {400, 900};
 
 int Init::loop(int screenWidth, int screenHeight)
 {
@@ -56,13 +59,24 @@ int Init::loop(int screenWidth, int screenHeight)
 void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
 {
     auto bullets = enemyBullets->getBullets();
+    bool flag = 0;
     for (int i = 0; i < bullets.size(); i++)
-        if (bullets[i]->checkBox(player->getPosition(), player->getRadius()))
+        //检测是否碰撞，当无敌时不考虑是否被Hit
+        if (player->getcanHit() && bullets[i]->checkBox(player->getPosition(), player->getRadius()))
         {
             player->Hit(nowTime);
-            bullets.erase(bullets.begin() + i);
+            //将玩家置为初始位置
+            player->setPosition(initPlayerPosition);
+            flag = 1;
             break;
         }
+    //当发生Hit时
+    if (flag) {
+        for (int i = 0; i < bullets.size(); i++) {
+            delete bullets[i];
+        }
+        bullets.erase(bullets.begin(), bullets.end());
+    }
     enemyBullets->setBullets(bullets);
 }
 
@@ -75,10 +89,13 @@ void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
         for (int j = 0; j < bullets.size(); j++)
             if (bullets[j]->checkBox({enemys[i]->getX(), enemys[i]->getY()}, enemys[i]->getR()))
             {
+                delete bullets[j];
                 bullets.erase(bullets.begin() + j);
                 enemys[i]->hit();
-                if (!enemys[i]->isalive())
+                if (!enemys[i]->isalive()) {
+                    delete enemys[i];
                     enemys.erase(enemys.begin() + i);
+                }
                 break;
             }
     }
@@ -123,12 +140,14 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
 
-    Player *player = new Player({400, 600}, 10, 5, 10, 100, 2, kind);
+    Player *player = new Player(initPlayerPosition, 10, 5, 10, 100, 2, kind);
     PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
 
     BulletManager *playerBullets = new BulletManager();
     BulletManager *enemyBullets = new BulletManager();
     EnemyManager *enemys = new EnemyManager();
+
+    float time = 0.0;
 
     while (!WindowShouldClose())
     {
@@ -147,7 +166,9 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
                 break;
             }
         }
-        float time = GetTime();
+
+        if (player->getHP() <= 0) return Over::loop(screenWidth, screenHeight);
+        time += GetFrameTime();
 
         player->Update(time);
         player->Move();
@@ -160,7 +181,15 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         }
         if (IsKeyDown(KEY_X))
         {
-            playerBullets->addBullet(new basicBullet(time, 5, player->getPosition(), {(1. * rand() / RAND_MAX - 0.5) * 100, (1. * rand() / RAND_MAX - 0.5) * 100}));
+            static float playerLasttime = 0.0;
+            if (time - playerLasttime > 0.05) {
+                for (float bias = -100; bias <= 100; bias += 20) {
+                    playerBullets->addBullet(
+                        new basicBullet(time, 5, RED, 5, 
+                            player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -300}));
+                }
+                playerLasttime = time;
+            }
         }
 
         if (IsKeyPressed(KEY_U))
