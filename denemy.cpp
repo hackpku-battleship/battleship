@@ -10,11 +10,15 @@ std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager)
     FOR_INTERVAL(dutime, dtime, 0.4) {
         //std::cerr << dtime << " " << dutime << std::endl;
         for (int i = -4; i <= 4; i++) {
-            Bullet *b = new basicBullet(nowTime, 15, (Vector2){x + i * 50, y + 30}, (Vector2){0, 50});
+            Bullet *b = new basicBullet(nowTime, 15, PINK, 2, (Vector2){x + i * 50, y + 30}, (Vector2){0, 50});
             ret.push_back(b);
-            b = new accBullet(nowTime, 15, (Vector2){x + i * 50, y + 30}, (Vector2){i * 5, 10}, (Vector2){(float)i * 5, 120});
+            b = new accBullet(nowTime, 15, PINK, 2, (Vector2){x + i * 50, y + 30}, (Vector2){i * 5, 10}, (Vector2){(float)i * 5, 120});
             ret.push_back(b);
         }
+    }
+    FOR_INTERVAL(dutime, dtime, 2) {
+        Bullet *b = new fishBullet(nowTime, 5, PURPLE, 10, (Vector2){x, y + 50}, 300, 0.02);
+        ret.push_back(b);
     }
     /*
     FOR_INTERVAL(dutime, dtime, 0.2) {
@@ -40,7 +44,7 @@ std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager)
             for (float beta = 0.0; beta <= PI * 2; beta += PI / 8) {
                 Vector2 f1 = {cos(alpha), sin(alpha)};
                 Vector2 f2 = {cos(beta), sin(beta)};
-                Bullet *b = new TurningBullet(nowTime, 10, (Vector2){x,y} + f1, 300 * f1, 50 * f2, 1 + randtime);
+                Bullet *b = new TurningBullet(nowTime, 10, GREEN, 4, (Vector2){x,y} + f1, 300 * f1, 50 * f2, 1 + randtime);
                 ret.push_back(b);
             }
         }

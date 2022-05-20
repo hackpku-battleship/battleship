@@ -131,6 +131,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     BulletManager *enemyBullets = new BulletManager();
     EnemyManager *enemys = new EnemyManager();
 
+    float time = 0.0;
+
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_P))
@@ -148,7 +150,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
                 break;
             }
         }
-        float time = GetTime();
+        time += GetFrameTime();
 
         player->Update(time);
         player->Move();
@@ -161,7 +163,9 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
             static float playerLasttime = 0.0;
             if (time - playerLasttime > 0.05) {
                 for (float bias = -100; bias <= 100; bias += 20) {
-                    playerBullets->addBullet(new basicBullet(time, 5, player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -300}));
+                    playerBullets->addBullet(
+                        new basicBullet(time, 5, RED, 5, 
+                            player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -300}));
                 }
                 playerLasttime = time;
             }

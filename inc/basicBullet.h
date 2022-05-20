@@ -8,10 +8,9 @@
 struct BulletManager;
 
 class basicBullet: public Bullet{
-    Vector2 position, velocity;
-    float radius;
+    Vector2 velocity;
 public:
-    basicBullet(float, float, Vector2, Vector2);
+    basicBullet(float nowTime, float liveTime, Color col, float radius, Vector2 _pos, Vector2 _velocity);
     float updateTime(float, Vector2);
     void Draw();
     bool checkBox(Vector2, float);

@@ -1,9 +1,10 @@
 #include "turningbullet.h"
 #include "Vector2Basic.h"
 
-TurningBullet::TurningBullet(float nowTime, float liveTime, Vector2 _pos, Vector2 _vel1, Vector2 _vel2, float _turnTime) :
-    Bullet(nowTime, liveTime), pos(_pos), vel1(_vel1), vel2{_vel2}, turntime(_turnTime) {
-        radius = 6;
+TurningBullet::TurningBullet(float nowTime, float liveTime, Color col, 
+                            float radius, Vector2 _pos, Vector2 _vel1, 
+                            Vector2 _vel2, float _turnTime) :
+    Bullet(nowTime, liveTime, col, radius, _pos), vel1(_vel1), vel2{_vel2}, turntime(_turnTime) {
     }
 float TurningBullet::updateTime(float nowTime, Vector2 playerpos) {
     float delta = Bullet::updateTime(nowTime, playerpos);
