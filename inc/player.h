@@ -5,6 +5,8 @@
 #define MAXLP 5 //最大技能释放次数
 #define PROT_LIMITTIME 5
 #define PROT_REC {p.x - r - 10, p.y - r - 10, 40, 5}
+#define BOOMSCOPE 200
+#define LASTOFRING 2
 
 class PlayerHPBar
 {
@@ -37,6 +39,7 @@ class Player
     bool canHit = true;
     int kind;
     int lp;
+    float Lastt;
     
 public:
     Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float hitlessTime, int kind);
@@ -46,7 +49,7 @@ public:
     void Move(float deltatime);
     void Draw();
     void Hit(float nowTime);
-    void useskill(float nowTime);
+    bool useskill(float nowTime);
     int getHP();
     void Check(float nowTime); //判断盾是否消失
     Vector2 getPosition();
