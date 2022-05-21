@@ -211,6 +211,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
+
+        DrawLine(1000, 0, 1000, 900, BLACK);
         player->Check(time);
         atk->Check(screenWidth, screenHeight);
         if (IsKeyDown(KEY_Z)) // 放技能
