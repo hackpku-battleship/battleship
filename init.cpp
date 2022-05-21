@@ -169,7 +169,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     float playerLasttime = 0.0;
 
     const int MAX_STAGE = 3;
-    int stagecnt = 2;
+    int stagecnt = 0;
 
     while (!WindowShouldClose())
     {
@@ -194,8 +194,11 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         float deltatime = GetFrameTime();
         time += deltatime;
 
-        if (stagecnt < MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty() && enemyQueue.empty())
+        if (stagecnt <= MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty() && enemyQueue.empty())
         {
+            if (stagecnt == MAX_STAGE) {
+                return Win::loop(screenWidth, screenHeight);
+            }
             stagecnt++;
             // std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
@@ -367,6 +370,42 @@ int Over::loop(int screenWidth, int screenHeight)
             }
         BeginDrawing();
         DrawText(gg, Mid - 40, 200, 80, RED);
+        for (int i = 0; i < 3; i++)
+        {
+            // DrawRectangleRec(msgBox[i], LIGHTGRAY);
+            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
+        }
+        EndDrawing();
+    }
+    return 0;
+}
+
+int Win::loop(int screenWidth, int screenHeight)
+{
+    const char msg[3][50] = {"New Game", "Return to menu", "Quit"};
+    const char allclear[50] = {"All clear!"};
+    float Mid = screenWidth / 2.0f - 200;
+
+    Rectangle msgBox[3] = {{Mid, screenHeight / 2.0f - 100, 300, 50}, {Mid, screenHeight / 2.0f + 0, 480, 50}, {Mid, screenHeight / 2.0f + 100, 130, 50}};
+    bool MouseOn[3];
+
+    while (!WindowShouldClose())
+    {
+        ClearBackground(RAYWHITE);
+        for (int i = 0; i < 3; i++)
+            MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
+        for (int i = 0; i < 3; i++)
+            if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                if (i == 2)
+                    return 0;
+                else if (i == 1)
+                    return Init::loop(screenWidth, screenHeight);
+                else
+                    return Init::choose(screenWidth, screenHeight);
+            }
+        BeginDrawing();
+        DrawText(allclear, Mid - 40, 200, 80, RED);
         for (int i = 0; i < 3; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
