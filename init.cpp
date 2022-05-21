@@ -27,7 +27,7 @@ void Gif::Load(std::string path) {
     for (int i = 0; i < totalframe; i++) {
         std::string tmp = "source/" + path + "/" + path + "-" + std::to_string(i) + ".png";
         Image png = LoadImage(tmp.c_str());
-        //ImageResize(&png, W, H);
+        ImageResize(&png, 1600, 900);
 
         src.push_back(LoadTextureFromImage(png));
         UnloadImage(png);
@@ -142,8 +142,8 @@ int Init::loop(int screenWidth, int screenHeight)
                 return 0;
         }
         // 初始界面
-        auto col1 = mouseOnText1 ? RED : BLACK;
-        auto col2 = mouseOnText2 ? RED : BLACK;
+        auto col1 = mouseOnText1 ? PINK : WHITE;
+        auto col2 = mouseOnText2 ? PINK : WHITE;
         Img::gif->Draw(0,0);
         DrawText(msg1, Mid, screenHeight / 2.0f - 100, 60, col1);
         DrawText(msg2, Mid, screenHeight / 2.0f + 50, 60, col2);
@@ -222,6 +222,7 @@ int Init::choose(int screenWidth, int screenHeight)
     while (!WindowShouldClose())
     {
         UpdateMusicStream(Mus::openMusic);
+        Img::gif->Draw(0, 0);
         ClearBackground(RAYWHITE);
         for (int i = 0; i < 4; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
@@ -241,11 +242,11 @@ int Init::choose(int screenWidth, int screenHeight)
         DrawTexture(Img::t1, 150, 100 , RAYWHITE);
         DrawTexture(Img::t2, 550, 100 , RAYWHITE);
         DrawTexture(Img::t3, 950, 100 , RAYWHITE);
-        DrawText(hint, 10, 10, 40, BLACK);
+        DrawText(hint, 10, 10, 40, WHITE);
         for (int i = 0; i < 4; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], msgBox[i].x, msgBox[i].y, i == 3 ? 30 : 60, MouseOn[i] ? RED : BLACK);
+            DrawText(msg[i], msgBox[i].x, msgBox[i].y, i == 3 ? 30 : 60, MouseOn[i] ? RED : WHITE);
         }
         EndDrawing();
     }
@@ -261,6 +262,7 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
     while (!WindowShouldClose())
     {
         UpdateMusicStream(Mus::openMusic);
+        Img::gif->Draw(0, 0);
         for (int i = 0; i < 4; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
         for (int i = 0; i < 4; i++)
@@ -278,11 +280,11 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
             }
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText(hint, 10, 10, 40, BLACK);
+        DrawText(hint, 10, 10, 40, WHITE);
         for (int i = 0; i < 4; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], msgBox[i].x, msgBox[i].y, 50, MouseOn[i] ? RED : BLACK);
+            DrawText(msg[i], msgBox[i].x, msgBox[i].y, 50, MouseOn[i] ? RED : WHITE);
         }
         EndDrawing();
     }
@@ -468,8 +470,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 
         DrawText(TextFormat("FPS: %.0lf", 1 / GetFrameTime()), 10, 10, 20, RED);
 
-        DrawText(TextFormat("STAGE %d", stagecnt), 1020, 10, 40, BLACK);
-        DrawText(TextFormat("enemy destroyed: %d", destroyedEnemy), 1020, 50, 20, BLACK);
+        DrawText(TextFormat("STAGE %d", stagecnt), 1020, 10, 40, WHITE);
+        DrawText(TextFormat("enemy destroyed: %d", destroyedEnemy), 1020, 50, 20, WHITE);
 
         EndDrawing();
     }
@@ -555,7 +557,7 @@ int Pause::loop(int screenWidth, int screenHeight)
         for (int i = 0; i < 4; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
+            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : WHITE);
         }
         EndDrawing();
         if (IsKeyPressed(KEY_P))
@@ -605,7 +607,7 @@ int Over::loop(int screenWidth, int screenHeight)
         for (int i = 0; i < 3; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
+            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : WHITE);
         }
         EndDrawing();
     }
@@ -653,7 +655,7 @@ int Win::loop(int screenWidth, int screenHeight)
         for (int i = 0; i < 3; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
+            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : WHITE);
         }
         EndDrawing();
     }
