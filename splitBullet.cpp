@@ -3,10 +3,9 @@
 #include "Vector2Basic.h"
 #include <bits/stdc++.h>
 
-splitBullet::splitBullet(float nowTime, float lifeTime, Color col, float radius,
-                         Vector2 startPosition, Vector2 velocity,
-                         std::vector<Bullet *> bullets, BulletManager *creater) : Bullet(nowTime, lifeTime, col, radius, startPosition),
-                                                                                  velocity(velocity), bullets(bullets), creater(creater)
+splitBullet::splitBullet(float nowTime, float lifeTime, BulletManager *creater, Color col, float radius,
+                         Vector2 startPosition, Vector2 velocity, std::vector<Bullet *> bullets) : Bullet(nowTime, lifeTime, creater, col, radius, startPosition),
+                                                                                                   velocity(velocity), bullets(bullets)
 {
     // radius = 15;
 }
@@ -28,6 +27,6 @@ splitBullet::~splitBullet()
     {
         bullet->genTime = bullet->lastTime = genTime + lifeTime;
         bullet->Move(pos);
-        creater->addBullet(bullet);
+        from->addBullet(bullet);
     }
 }

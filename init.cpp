@@ -14,6 +14,8 @@
 #include "stages.h"
 
 const Vector2 initPlayerPosition = {400, 900};
+const int playgroundWidth = 1000;
+const int playgroundHeight = 900;
 
 int Init::loop(int screenWidth, int screenHeight)
 {
@@ -150,15 +152,14 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
 
-    const double FastSpeed = 500;
-    const double SlowSpeed = 200;
+    const int FastSpeed = 500, SlowSpeed = 200;
 
-    Player *player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 100, 2, kind, "source/lion.png");
     PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
-
+    auto atk = std::make_shared<class Atk>(50);
     BulletManager *playerBullets = new BulletManager();
     BulletManager *enemyBullets = new BulletManager();
     EnemyManager *enemys = new EnemyManager();
+    Player *player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 100, 1000, 2, kind);
 
     std::queue<std::pair<float, Enemy *>> enemyQueue;
 
@@ -190,28 +191,33 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         float deltatime = GetFrameTime();
         time += deltatime;
 
-        if (stagecnt < MAX_STAGE && enemys->isEmpty())
+        if (stagecnt < MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty())
         {
             stagecnt++;
             // std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
         }
 
-        /*while (!enemyQueue.empty() && enemyQueue.front().first <= time)
+        while (!enemyQueue.empty() && enemyQueue.front().first <= time)
         {
             enemys->addEnemy(enemyQueue.front().second);
             enemyQueue.pop();
-        }*/
-        //*/
+        }
 
         player->Update(time);
         player->Move(deltatime);
+        if (kind == 2)
+            atk->Move(deltatime);
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
         player->Check(time);
+        atk->Check(screenWidth, screenHeight);
         if (IsKeyDown(KEY_Z)) // 放技能
-            player->useskill(time);
+            if (player->useskill(time) && kind == 2)
+            {
+                atk->Add(Vector2{player->getPosition().x, player->getPosition().y - player->getRadius()});
+            }
         if (kind == 1 && time - player->Lastt < LASTOFRING)
         {
             DrawRing(player->getPosition(), BOOMSCOPE - 2, BOOMSCOPE, 0.f, 360.f, 1, RED);
@@ -232,7 +238,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
                 for (float bias = -100; bias <= 100; bias += 20)
                 {
                     playerBullets->addBullet(
-                        new basicBullet(time, 5, RED, 5,
+                        new basicBullet(time, 5, enemyBullets, RED, 5,
                                         player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -400}));
                 }
                 playerLasttime = time;
@@ -248,29 +254,25 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         }
         //*/
 
-        if (IsKeyPressed(KEY_I))
-        {
-            float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
-            float y = 100;
-            enemys->addEnemy(new SimpleEnemy(100, time, 30, {x, y}, 10, "source/lion.png"));
-        }
-
-        auto _bullets = enemys->updateTime(time, enemyBullets);
+        auto _bullets = enemys->updateTime(time, enemyBullets, player->getPosition());
         enemys->draw();
         for (auto b : _bullets)
             enemyBullets->addBullet(b);
-
+        atk->HitBullet(enemyBullets);
         checkPlayerHit(player, enemyBullets, time);
         checkEnemysHit(enemys, playerBullets);
 
         player->Draw();
+        atk->Draw();
         playerHPBar->Draw(player->getHP());
-        playerBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
+        playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
-        enemyBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
+        enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         enemyBullets->DrawAllBullets();
 
-        DrawText(TextFormat("%.5lf", time), 10, 10, 20, RED);
+        // std::cerr<<enemyBullets->getBullets().size()<<std::endl;
+
+        DrawText(TextFormat("FPS: %.0lf", 1 / GetFrameTime()), 10, 10, 20, RED);
 
         EndDrawing();
     }
@@ -339,6 +341,7 @@ int Pause::loop(int screenWidth, int screenHeight)
 int Over::loop(int screenWidth, int screenHeight)
 {
     const char msg[3][50] = {"New Game", "Return to menu", "Quit"};
+    const char gg[50] = {"Game Over!"};
     float Mid = screenWidth / 2.0f - 200;
 
     Rectangle msgBox[3] = {{Mid, screenHeight / 2.0f - 100, 300, 50}, {Mid, screenHeight / 2.0f + 0, 480, 50}, {Mid, screenHeight / 2.0f + 100, 130, 50}};
@@ -360,6 +363,7 @@ int Over::loop(int screenWidth, int screenHeight)
                     return Init::choose(screenWidth, screenHeight);
             }
         BeginDrawing();
+        DrawText(gg, Mid - 40, 200, 80, RED);
         for (int i = 0; i < 3; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);

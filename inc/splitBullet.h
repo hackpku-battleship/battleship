@@ -11,13 +11,12 @@
 class splitBullet : public Bullet
 {
     Vector2 velocity;
-    BulletManager *creater;
     float dutime;
     float speed;
     std::vector<Bullet *> bullets;
 
 public:
-    splitBullet(float nowTime, float lifeTime, Color col, float radius, Vector2 startPosition, Vector2 velocity, std::vector<Bullet *> bullets, BulletManager *creater);
+    splitBullet(float nowTime, float lifeTime, BulletManager *from, Color col, float radius, Vector2 startPosition, Vector2 velocity, std::vector<Bullet *> bullets);
     ~splitBullet();
     float updateTime(float, Vector2);
 };

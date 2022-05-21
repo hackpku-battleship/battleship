@@ -7,7 +7,7 @@ Enemy::Enemy(float _hp, float _gentime, float _livetime, Vector2 _pos, float _r,
     // std::cerr << "livetime:" << livetime << std::endl;
 }
 
-std::vector<Bullet *> Enemy::getBullet(float nowtime, BulletManager *manager)
+std::vector<Bullet *> Enemy::getBullet(float nowtime, BulletManager *manager, Vector2 playerPosition)
 {
     return std::vector<Bullet *>();
 }

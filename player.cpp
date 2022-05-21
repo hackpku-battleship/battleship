@@ -14,10 +14,10 @@ void PlayerHPBar::Draw(int hp)
         DrawCircleV({x + delta * i, y}, radius, MAROON);
 }
 
-Player::Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float hitlessTime, int kind, char *filename)
-    : position(position), radius(radius), hp(hp), speed(speed), lowspeed(lowspeed), minY(minY), hitlessTime(hitlessTime), kind(kind), lp(MAXLP), prot(nullptr), Lastt(-2.0)
+Player::Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float maxX, float hitlessTime, int kind)
+    : position(position), radius(radius), hp(hp), speed(speed), lowspeed(lowspeed), minY(minY), maxX(maxX), hitlessTime(hitlessTime), kind(kind),lp(MAXLP),prot(nullptr),Lastt(-2.0)
 {
-    texture = LoadTexture(filename);
+    //texture = LoadTexture(filename);
 }
 
 Player::~Player()
@@ -61,8 +61,8 @@ void Player::Move(float deltatime)
         position.y = GetScreenHeight();
     if (position.x < 0)
         position.x = 0;
-    if (position.x > GetScreenWidth())
-        position.x = GetScreenWidth();
+    if (position.x > maxX)
+        position.x = maxX;
 }
 
 void Player::Draw()
@@ -112,19 +112,14 @@ bool Player::useskill(float nowTime)
             return 1;
         }
         return 0;
-    }
-    else if (kind == 1)
-    {
-        if (lp == 0)
-            return 0;
-        if (nowTime - Lastt > LASTOFRING)
-        {
-            Lastt = nowTime, lp--;
-        }
+    } else if (kind == 1) {
+        if (lp == 0) return 0;
+        if (nowTime - Lastt > LASTOFRING) {Lastt = nowTime, lp --;}
+        return 1; 
+    } else {
+        if (lp ==0 || nowTime -Lastt < BALLCD) return 0;
+        lp --, Lastt = nowTime;
         return 1;
-    }
-    else
-    {
     }
 }
 
@@ -142,9 +137,7 @@ Prot::Prot(float _StartTime) : StartTime(_StartTime), LimitTime(PROT_LIMITTIME)
 {
 }
 
-void Prot::Draw(Vector2 p, float r)
-{
-    // Rectangle tmp = {p.x - r - 10, p.y - r - 10, 40, 5};
+void Prot::Draw(Vector2 p, float r) {
     DrawRectangleRec(PROT_REC, GREEN);
 }
 
@@ -155,4 +148,45 @@ void Prot::Hit()
 bool Prot::Check(float nowTime)
 {
     return nowTime - StartTime >= LimitTime;
+}
+
+Atk::Atk(float _R):R(_R),Speed(FOOTBALLSP) {
+}
+
+void Atk::Draw() {
+    for (auto i : Ps)
+        DrawCircleV(i, R, PINK);
+}
+
+void Atk::HitBullet(BulletManager * enemyBullets) {
+    auto bullets = enemyBullets->getBullets();
+    for (auto j : Ps)
+        for (int i = 0; i < bullets.size(); i++)
+            if (bullets[i]->checkBox(j, R)) {
+                delete bullets[i];
+                bullets.erase(bullets.begin() + i);
+            }
+    enemyBullets->setBullets(bullets);
+}
+
+void Atk::HitEnemy() {
+    //todo : 碰到敌人, 敌人掉血, （技能消失？）
+}
+
+void Atk::Check(int screenWidth, int screenHeight ) { //判断是否出界
+    for (auto i = Ps.begin(); i != Ps.end(); i++) {
+        auto j = *i;
+        if (j.x < - R || j.y < -R || j.x > screenWidth + R || j.y > screenHeight + R )
+            Ps.erase(i);
+    }
+}
+
+void Atk::Move(float deltatime) {
+    for (auto i = Ps.begin(); i != Ps.end(); i++)
+        (*i).y -= Speed * deltatime;
+}
+
+void Atk::Add(Vector2 pos) {
+    pos.y -= R;
+    Ps.push_back(pos);
 }

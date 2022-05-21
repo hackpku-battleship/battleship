@@ -9,7 +9,7 @@ public:
     float spinrate;
     float lastalpha;
     spinEnemy(float _hp, float _genTime, float livetime, Vector2 pos, float _r, char* filename, Vector2 vel, float spinrate);
-    std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager);
+    std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager, Vector2 playerPosition);
 };
 
 #endif

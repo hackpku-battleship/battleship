@@ -1,11 +1,11 @@
 #include "enemymanager.h"
 
-std::vector<Bullet *> EnemyManager::updateTime(float nowTime, BulletManager *manager)
+std::vector<Bullet *> EnemyManager::updateTime(float nowTime, BulletManager *manager, Vector2 playerPosition)
 {
     std::vector<Bullet *> ret;
     for (int i = 0; i < enemys.size(); i++)
     {
-        auto _a = enemys[i]->getBullet(nowTime, manager);
+        auto _a = enemys[i]->getBullet(nowTime, manager, playerPosition);
         if (enemys[i]->isalive() == 0) {
             delete enemys[i];
             enemys.erase(enemys.begin() + i);

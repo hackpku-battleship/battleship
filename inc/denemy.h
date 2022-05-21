@@ -7,7 +7,7 @@ class DEnemy : public Enemy
 {
 public:
     DEnemy(float _hp, float _genTime, float livetime, Vector2 pos, float _r, char* filename);
-    std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager);
+    std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager, Vector2 playerPosition);
 };
 
 #endif

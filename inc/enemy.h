@@ -6,10 +6,12 @@
 #include "bullet.h"
 #include "basicBullet.h"
 #include "fishBullet.h"
+#include "eldenBullet.h"
 #include "splitBullet.h"
 #include "bulletManager.h"
 #include "accbullet.h"
 #include "turningbullet.h"
+#include "tracebullet.h"
 
 class Enemy
 {
@@ -20,7 +22,7 @@ public:
     float r;
     Texture2D tex;
     Enemy(float _hp, float _genTime, float livetime, Vector2 pos, float _r, char* filename);
-    virtual std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager);
+    virtual std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager, Vector2 playerPosition);
     float getX();
     float getY();
     float getR();

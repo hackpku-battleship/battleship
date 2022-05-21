@@ -1,8 +1,10 @@
 #include "raylib.h"
 #include "bullet.h"
 #include "player.h"
+#include "bulletManager.h"
 
-Bullet::Bullet(float nowTime, float lifeTime, Color _col, float _radius, Vector2 _pos) : genTime(nowTime), lifeTime(lifeTime), lastTime(nowTime), col(_col), radius(_radius), pos(_pos) {}
+Bullet::Bullet(float nowTime, float lifeTime, BulletManager* from, Color _col, float _radius, Vector2 _pos): 
+genTime(nowTime), lifeTime(lifeTime), lastTime(nowTime), col(_col), radius(_radius), pos(_pos), from(from){}
 
 float Bullet::updateTime(float nowTime, Vector2 playerPosition)
 {
@@ -16,9 +18,8 @@ bool Bullet::checkAlive(float nowTime)
     // std::cerr<<nowTime<<' '<<genTime+lifeTime<<std::endl;
     return genTime + lifeTime > nowTime;
 }
-
-void Bullet::Draw()
-{
+Bullet::~Bullet(){}
+void Bullet::Draw(){
     DrawCircleV(pos, radius, col);
 }
 bool Bullet::checkBox(Vector2 center, float rad)
@@ -37,7 +38,4 @@ void Bullet::Move(Vector2 dir)
 {
     pos.x = pos.x + dir.x;
     pos.y = pos.y + dir.y;
-}
-Bullet::~Bullet()
-{
 }

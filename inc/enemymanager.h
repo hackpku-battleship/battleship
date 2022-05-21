@@ -13,7 +13,7 @@ public:
     {
         enemys.push_back(pe);
     }
-    std::vector<Bullet *> updateTime(float nowTime, BulletManager *manager);
+    std::vector<Bullet *> updateTime(float nowTime, BulletManager *manager, Vector2 playerPosition);
     void draw();
     std::vector<Enemy *> getEnemys();
     void setEnemys(std::vector<Enemy *>);
