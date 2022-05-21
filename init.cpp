@@ -193,8 +193,8 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
 
 int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 {
-    Image Bgimage = LoadImage("source/1.png");
-    Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
+    //Image Bgimage = LoadImage("source/1.png");
+    Texture2D Bgtexture = LoadTexture("source/bg-ps.png");
 
     const int FastSpeed = 500, SlowSpeed = 200;
 
@@ -204,7 +204,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
     BulletManager *playerBullets = new BulletManager();
     BulletManager *enemyBullets = new BulletManager();
     EnemyManager *enemys = new EnemyManager();
-    Player *player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 100, 1000, 2, kind);
+    Player *player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 510, 1000, 2, kind);
 
     std::queue<std::pair<float, Enemy *> > enemyQueue;
 
@@ -260,8 +260,18 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
-
+        //draw background
         DrawLine(1000, 0, 1000, 900, BLACK);
+        {
+            int frameWidth = Bgtexture.width;
+            int frameHeight = Bgtexture.height;
+            std::cerr << frameHeight << " " << frameWidth << std::endl;
+            Rectangle sourceRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
+            Rectangle destRec = { 0.0, 0.0, 1000, 900};
+            Vector2 origin = {0, 0};
+            DrawTexturePro(Bgtexture, sourceRec, destRec, origin, 0.0, WHITE);
+        }
+
         player->Check(time);
         atk->Check(screenWidth, screenHeight);
         if (IsKeyDown(KEY_Z)) // 放技能
@@ -426,7 +436,7 @@ int Over::loop(int screenWidth, int screenHeight)
 int Win::loop(int screenWidth, int screenHeight)
 {
     const char msg[3][50] = {"New Game", "Return to menu", "Quit"};
-    const char allclear[50] = {"All clear!"};
+    const char allclear[50] = {"All clean!"};
     float Mid = screenWidth / 2.0f - 200;
 
     Rectangle msgBox[3] = {{Mid, screenHeight / 2.0f - 100, 300, 50}, {Mid, screenHeight / 2.0f + 0, 480, 50}, {Mid, screenHeight / 2.0f + 100, 130, 50}};
