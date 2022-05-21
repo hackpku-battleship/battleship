@@ -74,6 +74,12 @@ void Img::Init() {
         UnloadImage(png2);
         UnloadImage(png3);
     }
+    BeginDrawing();
+        //DrawLine(0, 450, 1600, 450, BLACK);
+        //DrawLine(800, 0, 800, 900, BLACK);
+        ClearBackground(RAYWHITE);
+        DrawText("Loading..", 10, 10, 80, BLACK);
+    EndDrawing();
     {
         Image pg3 = LoadImage("source/marisa.png");
         Image pg1 = LoadImage("source/yuka.png");
@@ -89,10 +95,22 @@ void Img::Init() {
         ky = LoadTextureFromImage(png1);
         UnloadImage(png1);
     }
+    BeginDrawing();
+        //DrawLine(0, 450, 1600, 450, BLACK);
+        //DrawLine(800, 0, 800, 900, BLACK);
+        ClearBackground(RAYWHITE);
+        DrawText("Loading...", 10, 10, 80, BLACK);
+    EndDrawing();
     {
         gif = std::make_shared<Gif> (18);
         gif->Load("initbg");
     }
+    BeginDrawing();
+        //DrawLine(0, 450, 1600, 450, BLACK);
+        //DrawLine(800, 0, 800, 900, BLACK);
+        ClearBackground(RAYWHITE);
+        DrawText("Loading....", 10, 10, 80, BLACK);
+    EndDrawing();
 }
 
 void Img::Release() {

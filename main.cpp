@@ -15,6 +15,12 @@ int main(void)
     const int screenHeight = 900;
     InitWindow(screenWidth, screenHeight, "Battleship Shooting");
 
+    BeginDrawing();
+        //DrawLine(0, 450, 1600, 450, BLACK);
+        //DrawLine(800, 0, 800, 900, BLACK);
+        DrawText("Loading", 10, 10, 80, BLACK);
+    EndDrawing();
+
     InitAudioDevice();
     Mus::openMusic = LoadMusicStream("source/th10_01.mp3");
     Mus::stageMusics[0] = LoadMusicStream("source/th12_02.mp3");
@@ -23,6 +29,13 @@ int main(void)
     Mus::stageMusics[3] = LoadMusicStream("source/th10_13.mp3");
     Mus::endMusic = LoadMusicStream("source/th10_18.mp3");
     Mus::killedMusic = LoadMusicStream("source/killed-short.mp3");
+
+    BeginDrawing();
+        //DrawLine(0, 450, 1600, 450, BLACK);
+        //DrawLine(800, 0, 800, 900, BLACK);
+        ClearBackground(RAYWHITE);
+        DrawText("Loading.", 10, 10, 80, BLACK);
+    EndDrawing();
 
     Img::Init();
 
@@ -37,7 +50,7 @@ int main(void)
     UnloadMusicStream(Mus::killedMusic);
 
     Img::Release();
-    
+
     CloseAudioDevice(); 
     CloseWindow();
     return 0;
