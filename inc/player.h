@@ -7,25 +7,27 @@
 #include "enemymanager.h"
 #define MAXLP 5 //最大技能释放次数
 #define PROT_LIMITTIME 5
-#define PROT_REC {p.x - 40 - 10, p.y - 40 - 10, 100, 8}
+#define PROT_REC {p.x - 52, p.y - 80, 104, 35}
 #define BOOMSCOPE 200
 #define LASTOFRING 0.2
-#define FOOTBALLSP 300
+#define FOOTBALLSP 500
 #define BALLCD 0.5
 #define BALLATTACK 30
 
-class PlayerHPBar
+class PlayerBar
 {
     float x, y, radius, delta;
+    Color col;
 
 public:
-    PlayerHPBar(float x, float y, float radius, float delta);
+    PlayerBar(float x, float y, float radius, float delta, Color col);
     void Draw(int hp);
 };
 
 class Prot
 {
     float StartTime, LimitTime;
+    Texture2D tex;
 
 public:
     Prot(float _StartTime);
@@ -74,6 +76,7 @@ public:
     void Hit(float nowTime);
     bool useskill(float nowTime);
     int getHP();
+    int getLP();
     void Check(float nowTime); //判断盾是否消失
     Vector2 getPosition();
     float getRadius();

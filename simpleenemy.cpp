@@ -18,15 +18,15 @@ std::vector<Bullet *> SimpleEnemy::getBullet(float nowTime, BulletManager *creat
             int t0=rand()%2;
             int t=rand()%4;
             if(t0){
-                if(t!=0) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {200,80}, 1, {200, 920}, "source/soccer80.png"));
-                if(t!=1) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {400,80}, 1, {400, 920}, "source/soccer80.png"));
-                if(t!=2) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {600,80}, 1, {600, 920}, "source/soccer80.png"));
-                if(t!=3) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {800,80}, 1, {800, 920}, "source/soccer80.png"));
+                if(t!=0) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 95, {200,80}, 1, {200, 920}, "source/soccer80.png"));
+                if(t!=1) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 95, {400,80}, 1, {400, 920}, "source/soccer80.png"));
+                if(t!=2) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 95, {600,80}, 1, {600, 920}, "source/soccer80.png"));
+                if(t!=3) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 95, {800,80}, 1, {800, 920}, "source/soccer80.png"));
             }else{
-                ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {200,80}, 1.0, {200, 920}, "source/soccer80.png"));
-                ret.push_back(new soccerBullet(nowTime, 2.0, creater, BLANK, 80, {400,80}, 1.5, {400, 920}, "source/soccer80.png"));
-                ret.push_back(new soccerBullet(nowTime, 2.5, creater, BLANK, 80, {600,80}, 2.0, {600, 920}, "source/soccer80.png"));
-                ret.push_back(new soccerBullet(nowTime, 3.0, creater, BLANK, 80, {800,80}, 2.5, {800, 920}, "source/soccer80.png"));
+                ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 95, {200,80}, 1.0, {200, 920}, "source/soccer80.png"));
+                ret.push_back(new soccerBullet(nowTime, 2.0, creater, BLANK, 95, {400,80}, 1.5, {400, 920}, "source/soccer80.png"));
+                ret.push_back(new soccerBullet(nowTime, 2.5, creater, BLANK, 95, {600,80}, 2.0, {600, 920}, "source/soccer80.png"));
+                ret.push_back(new soccerBullet(nowTime, 3.0, creater, BLANK, 95, {800,80}, 2.5, {800, 920}, "source/soccer80.png"));
             }
         }
         current^=1;

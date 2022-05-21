@@ -46,12 +46,6 @@ int Init::loop(int screenWidth, int screenHeight)
             if (!ret)
                 return 0;
         }
-        else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnText2)
-        { // 进入说明界面
-            int ret = Inst::loop(screenWidth, screenHeight);
-            if (!ret)
-                return 0;
-        }
         // 初始界面
         auto col1 = mouseOnText1 ? RED : BLACK;
         auto col2 = mouseOnText2 ? RED : BLACK;
@@ -150,13 +144,14 @@ int Init::choose(int screenWidth, int screenHeight)
                 if (i == 3)
                     return Init::loop(screenWidth, screenHeight);
                 else
-                    return Game::loop(screenWidth, screenHeight, i);
+                    return Init::choose_stage(screenWidth, screenHeight, i);
+                    //return Game::loop(screenWidth, screenHeight, i , 0);
             }
         BeginDrawing();
-        //ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
-        DrawTexture(h1, 150, 100 , RAYWHITE);
-        DrawTexture(h2, 550, 100 , RAYWHITE);
-        DrawTexture(h3, 950, 100 , RAYWHITE);
+        // ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
+        DrawTexture(h1, 150, 100, RAYWHITE);
+        DrawTexture(h2, 550, 100, RAYWHITE);
+        DrawTexture(h3, 950, 100, RAYWHITE);
         DrawText(hint, 10, 10, 40, BLACK);
         for (int i = 0; i < 4; i++)
         {
@@ -168,14 +163,46 @@ int Init::choose(int screenWidth, int screenHeight)
     return 0;
 }
 
-int Game::loop(int screenWidth, int screenHeight, int kind)
+int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
+    const char hint[50] = {"Choose the Level :"};
+    const char msg[4][50] = {"Lv1", "Lv2", "Lv3", "Back"};
+    float Mid = screenHeight / 2 - 100;
+    bool MouseOn[4];
+    Rectangle msgBox[4] = {{Mid, 200, 100, 50}, {Mid, 400, 100, 50}, {Mid, 600, 100, 50}, {Mid, 800, 100, 50}};
+    while (!WindowShouldClose())
+    {
+        for (int i = 0; i < 4; i++)
+            MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
+        for (int i = 0; i < 4; i++)
+            if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                if (i == 3)
+                    return Init::choose(screenWidth, screenHeight);
+                else
+                    return Game::loop(screenWidth, screenHeight, kind, i);
+            }
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        DrawText(hint, 10, 10, 40, BLACK);
+        for (int i = 0; i < 4; i++)
+        {
+            //DrawRectangleRec(msgBox[i], LIGHTGRAY);
+            DrawText(msg[i], msgBox[i].x, msgBox[i].y,  50, MouseOn[i] ? RED : BLACK);
+        }
+        EndDrawing();
+    }
+    return 0;
+}
+
+int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 {
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
 
     const int FastSpeed = 500, SlowSpeed = 200;
 
-    PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
+    PlayerBar *playerHPBar = new PlayerBar(10, screenHeight - 20, 10, 25, MAROON);
+    PlayerBar *playerLPBar = new PlayerBar(10, screenHeight - 50, 10, 25, BLUE);
     auto atk = std::make_shared<class Atk>(50);
     BulletManager *playerBullets = new BulletManager();
     BulletManager *enemyBullets = new BulletManager();
@@ -188,7 +215,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     float playerLasttime = 0.0;
 
     const int MAX_STAGE = 3;
-    int stagecnt = 2, destroyedEnemy = 0;
+    int stagecnt = stage, destroyedEnemy = 0;
 
     while (!WindowShouldClose())
     {
@@ -215,7 +242,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
 
         if (stagecnt <= MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty() && enemyQueue.empty())
         {
-            if (stagecnt == MAX_STAGE) {
+            if (stagecnt == MAX_STAGE)
+            {
                 return Win::loop(screenWidth, screenHeight);
             }
             stagecnt++;
@@ -275,7 +303,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new PredictEnemy(100, time, 20, {x, y}, 10, "source/lion.png"));
+            enemys->addEnemy(new PredictEnemy(100, time, 60, {x, y}, 10, "source/lion.png"));
         }
 
         auto _bullets = enemys->updateTime(time, enemyBullets, player->getPosition());
@@ -290,6 +318,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         player->Draw();
         atk->Draw();
         playerHPBar->Draw(player->getHP());
+        playerLPBar->Draw(player->getLP());
         playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
         enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
@@ -301,7 +330,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
 
 
         DrawText(TextFormat("STAGE %d", stagecnt), 1020, 10, 40, BLACK);
-        DrawText(TextFormat("enemy destroyed: ", destroyedEnemy), 1020, 50, 20, BLACK);
+        DrawText(TextFormat("enemy destroyed: %d", destroyedEnemy), 1020, 50, 20, BLACK);
 
         EndDrawing();
     }

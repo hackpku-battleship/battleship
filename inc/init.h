@@ -5,11 +5,12 @@ class Init {
 public:
     static int loop(int, int);
     static int choose(int, int);
+    static int choose_stage(int, int, int);
 };
 
 class Game {
 public:
-    static int loop(int, int, int);
+    static int loop(int, int, int, int);
 };
 
 class Inst {
