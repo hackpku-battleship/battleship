@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "raylib.h"
+#include <memory>
 
 class Init {
 public:
@@ -38,11 +39,12 @@ public:
 
 class Gif {
     std::vector<Texture2D> src;
-    int W, H, currentframe, totalframe; 
+    int currentframe, totalframe; 
 public:
-    Gif(int _W, int _H, int _totalframe);
+    Gif(int _totalframe);
     void Load(std::string path);
     void Draw(int X, int Y);
+    ~Gif();
 };
 
 namespace Mus {
@@ -54,6 +56,7 @@ extern Music killedMusic;
 
 namespace Img {
     extern Texture2D t1, t2, t3, h1, h2, h3, ky;
+    extern std::shared_ptr<Gif> gif;
     void Init();
     void Release();
 }

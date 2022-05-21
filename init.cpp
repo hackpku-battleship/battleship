@@ -20,7 +20,7 @@ const Vector2 initPlayerPosition = {400, 900};
 const int playgroundWidth = 1000;
 const int playgroundHeight = 900;
 
-Gif::Gif(int _W, int _H, int _T):W(_W), H(_H),totalframe(_T),currentframe(0){
+Gif::Gif(int _T):totalframe(_T),currentframe(0){
 }
 
 void Gif::Load(std::string path) {
@@ -39,6 +39,13 @@ void Gif::Draw(int X, int Y) {
     currentframe = (currentframe + 1 ) % (totalframe*10);
 }
 
+Gif::~Gif() {
+    for (auto it: src) {
+        UnloadTexture(it);
+    }
+    return;
+}
+
 Music Mus::openMusic;
 Music Mus::stageMusics[4];
 Music Mus::endMusic;
@@ -50,6 +57,7 @@ Texture2D Img::h1;
 Texture2D Img::h2;
 Texture2D Img::h3;
 Texture2D Img::ky;
+std::shared_ptr<Gif> Img::gif;
 
 void Img::Init() {
     {
@@ -81,7 +89,10 @@ void Img::Init() {
         ky = LoadTextureFromImage(png1);
         UnloadImage(png1);
     }
-
+    {
+        gif = std::make_shared<Gif> (18);
+        gif->Load("initbg");
+    }
 }
 
 void Img::Release() {
@@ -92,6 +103,8 @@ void Img::Release() {
     UnloadTexture(h2);
     UnloadTexture(h3);
     UnloadTexture(ky);
+    //gif->release();
+    //delete gif;
 }
 
 int LastPlayedMusic = -1;
@@ -103,8 +116,6 @@ int Init::loop(int screenWidth, int screenHeight)
     //std::cerr << GetMusicTimeLength(openMusic) << std::endl;
     const char msg1[50] = "Start Game";
     const char msg2[50] = "Instructions";
-    auto gif = std::make_shared<Gif> (screenWidth, screenHeight, 18);
-    gif->Load("initbg");
 
     float Mid = screenWidth / 2.0f - 200;
     Rectangle msg1Box = {Mid, screenHeight / 2.0f - 100, 380, 50};
@@ -133,7 +144,7 @@ int Init::loop(int screenWidth, int screenHeight)
         // 初始界面
         auto col1 = mouseOnText1 ? RED : BLACK;
         auto col2 = mouseOnText2 ? RED : BLACK;
-        gif->Draw(0,0);
+        Img::gif->Draw(0,0);
         DrawText(msg1, Mid, screenHeight / 2.0f - 100, 60, col1);
         DrawText(msg2, Mid, screenHeight / 2.0f + 50, 60, col2);
         EndDrawing();
@@ -241,8 +252,8 @@ int Init::choose(int screenWidth, int screenHeight)
 }
 
 int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
-    const char hint[50] = {"Choose the Level :"};
-    const char msg[4][50] = {"Lv1", "Lv2", "Lv3", "Back"};
+    const char hint[50] = {"Choose the Stage :"};
+    const char msg[4][50] = {"Stage1", "Stage2", "Stage3", "Back"};
     float Mid = screenHeight / 2 - 100;
     bool MouseOn[4];
     Rectangle msgBox[4] = {{Mid, 200, 100, 50}, {Mid, 400, 100, 50}, {Mid, 600, 100, 50}, {Mid, 800, 100, 50}};
