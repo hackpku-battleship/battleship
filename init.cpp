@@ -212,7 +212,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
     float playerLasttime = 0.0;
 
     const int MAX_STAGE = 3;
-    int stagecnt = 0;
+    int stagecnt = stage;
 
     while (!WindowShouldClose())
     {
@@ -248,11 +248,11 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             getStage(stagecnt, time, enemyQueue);
         }
 
-        /*while (!enemyQueue.empty() && enemyQueue.front().first <= time)
+        while (!enemyQueue.empty() && enemyQueue.front().first <= time)
         {
             enemys->addEnemy(enemyQueue.front().second);
             enemyQueue.pop();
-        }*/
+        }
 
         player->Update(time);
         player->Move(deltatime);
