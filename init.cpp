@@ -321,10 +321,11 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             }
         if (kind == 1 && time - player->Lastt < LASTOFRING)
         {
-            DrawRing(player->getPosition(), BOOMSCOPE - 2, BOOMSCOPE, 0.f, 360.f, 1, RED);
+            float nowRadius = BOOMSCOPE * (1 - (LASTOFRING - (time - player -> Lastt)));
+            DrawRing(player->getPosition(), nowRadius - 2, nowRadius, 0.f, 360.f, 1, RED);
             auto bullets = enemyBullets->getBullets();
             for (int i = 0; i < bullets.size(); i++)
-                if (bullets[i]->checkBox(player->getPosition(), BOOMSCOPE))
+                if (bullets[i]->checkBox(player->getPosition(), nowRadius))
                 {
                     bullets[i]->parryed();
                     //delete bullets[i];
@@ -365,6 +366,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         player->Draw();
         atk->Draw();
         playerHPBar->Draw(player->getHP());
+        playerLPBar->Draw(player->getLP());
         playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
         enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
