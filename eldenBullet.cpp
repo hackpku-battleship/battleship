@@ -6,7 +6,7 @@
 eldenBullet::eldenBullet(float nowTime, float lifeTime, BulletManager* from, Color col, float radius, Vector2 startPosition, float velocity, float angleV, float fishV):
     fishBullet(nowTime, lifeTime, from, col, radius, startPosition, velocity, angleV), fishV(fishV){}
 eldenBullet::eldenBullet(float nowTime, float lifeTime, BulletManager* from, Color col, float radius, Vector2 startPosition, float velocity, float angleV, float fishV, Vector2 startAngle):
-    fishBullet(nowTime, lifeTime, from, col, radius, startPosition, velocity, angleV), fishV(fishV){}
+    fishBullet(nowTime, lifeTime, from, col, radius, startPosition, velocity, angleV, startAngle), fishV(fishV){}
     
 float eldenBullet::updateTime(float nowTime, Vector2 playerPosition){
     if((int)(nowTime / fishV) - (int)(lastTime / fishV) >= 1){
