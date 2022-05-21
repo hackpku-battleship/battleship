@@ -20,7 +20,7 @@ std::vector<Bullet *> shotSimpleTraceEnemy::getBullet(float nowTime,
         }
         //std::cerr << "p1 " << dtime << std::endl;
         FOR_INTERVAL(dutime, dtime, 0.04) {
-            Bullet *b = new traceBullet(nowTime, 20, manager, GRAY, 6, pos + (Vector2){0, 30}, 200);
+            Bullet *b = new traceBullet(nowTime, 20, manager, GRAY, 6, pos + (Vector2){0, 30}, 300);
             ret.push_back(b);
         }
         pos = pos + (dtime - dutime) * slowv * f;
