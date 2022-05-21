@@ -9,6 +9,7 @@
 #include "enemymanager.h"
 #include "simpleenemy.h"
 #include "denemy.h"
+#include "easyenemy.h"
 #include "Vector2Basic.h"
 #include <queue>
 #include "stages.h"
@@ -247,14 +248,12 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
             }
         }
 
-        /*
         if (IsKeyPressed(KEY_U))
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new DEnemy(100, time, 30, x, y, 50, "source/lion.png"));
+            enemys->addEnemy(new EasyEnemy(100, time, 20, {x, y}, 10, "source/lion.png"));
         }
-        //*/
 
         auto _bullets = enemys->updateTime(time, enemyBullets, player->getPosition());
         enemys->draw();
