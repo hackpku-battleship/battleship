@@ -6,8 +6,9 @@
 
 struct BulletManager;
 
-class Bullet{
-protected:
+class Bullet
+{
+public:
     float genTime, lifeTime, lastTime;
     BulletManager *from;
     float radius;
@@ -15,7 +16,7 @@ protected:
     Vector2 pos;
 
 public:
-    Bullet(float nowTime, float liveTime, BulletManager* from, Color col, float radius, Vector2 pos);
+    Bullet(float nowTime, float liveTime, BulletManager *from, Color col, float radius, Vector2 pos);
     virtual ~Bullet();
     virtual float updateTime(float, Vector2);
     bool checkAlive(float);
@@ -23,6 +24,7 @@ public:
     virtual void Draw();
     bool checkBox(Vector2, float);
     bool checkProt(Vector2, float);
+    void Move(Vector2 dir);
 };
 
 // bullet manager

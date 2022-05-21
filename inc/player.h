@@ -21,8 +21,10 @@ public:
     void Draw(int hp);
 };
 
-class Prot {
+class Prot
+{
     float StartTime, LimitTime;
+
 public:
     Prot(float _StartTime);
     void Draw(Vector2 p, float r);
@@ -57,7 +59,8 @@ class Player
     bool canHit = true;
     int kind;
     int lp;
-    
+    Texture2D texture;
+
 public:
     Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float maxX, float hitlessTime, int kind);
     ~Player();

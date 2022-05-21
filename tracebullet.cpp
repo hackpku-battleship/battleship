@@ -11,6 +11,6 @@ float traceBullet::updateTime(float nowTime, Vector2 _playerpos){
         f = normalize(_playerpos - pos);
         isgetplayerpos = true;
     }
-    pos = pos + vel * f;
+    pos = pos + delta * vel * f;
     return delta;
 }
