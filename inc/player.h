@@ -14,12 +14,13 @@
 #define BALLCD 0.5
 #define BALLATTACK 30
 
-class PlayerHPBar
+class PlayerBar
 {
     float x, y, radius, delta;
+    Color col;
 
 public:
-    PlayerHPBar(float x, float y, float radius, float delta);
+    PlayerBar(float x, float y, float radius, float delta, Color col);
     void Draw(int hp);
 };
 
@@ -74,6 +75,7 @@ public:
     void Hit(float nowTime);
     bool useskill(float nowTime);
     int getHP();
+    int getLP();
     void Check(float nowTime); //判断盾是否消失
     Vector2 getPosition();
     float getRadius();

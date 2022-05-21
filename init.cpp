@@ -150,10 +150,10 @@ int Init::choose(int screenWidth, int screenHeight)
                     return Game::loop(screenWidth, screenHeight, i);
             }
         BeginDrawing();
-        //ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
-        DrawTexture(h1, 150, 100 , RAYWHITE);
-        DrawTexture(h2, 550, 100 , RAYWHITE);
-        DrawTexture(h3, 950, 100 , RAYWHITE);
+        // ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
+        DrawTexture(h1, 150, 100, RAYWHITE);
+        DrawTexture(h2, 550, 100, RAYWHITE);
+        DrawTexture(h3, 950, 100, RAYWHITE);
         DrawText(hint, 10, 10, 40, BLACK);
         for (int i = 0; i < 4; i++)
         {
@@ -172,7 +172,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
 
     const int FastSpeed = 500, SlowSpeed = 200;
 
-    PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
+    PlayerBar *playerHPBar = new PlayerBar(10, screenHeight - 20, 10, 25, MAROON);
+    PlayerBar *playerLPBar = new PlayerBar(10, screenHeight - 50, 10, 25, BLUE);
     auto atk = std::make_shared<class Atk>(50);
     BulletManager *playerBullets = new BulletManager();
     BulletManager *enemyBullets = new BulletManager();
@@ -212,7 +213,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
 
         if (stagecnt <= MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty() && enemyQueue.empty())
         {
-            if (stagecnt == MAX_STAGE) {
+            if (stagecnt == MAX_STAGE)
+            {
                 return Win::loop(screenWidth, screenHeight);
             }
             stagecnt++;
@@ -287,6 +289,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         player->Draw();
         atk->Draw();
         playerHPBar->Draw(player->getHP());
+        playerLPBar->Draw(player->getLP());
         playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
         enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
