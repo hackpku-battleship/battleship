@@ -5,41 +5,55 @@
 
 SimpleEnemy::SimpleEnemy(float _hp, float _gentime, float _livetime, Vector2 pos, float _r, char *filename) : Enemy(_hp, _gentime, _livetime, pos, _r, filename), rotatep(0.0) {}
 
-std::vector<Bullet *> SimpleEnemy::getBullet(float nowTime, BulletManager *creater, Vector2 playerPosition)
-{
+std::vector<Bullet *> SimpleEnemy::getBullet(float nowTime, BulletManager *creater, Vector2 playerPosition){
     float dtime = nowTime - gentime;
     std::vector<Bullet *> ret;
-    // std::cerr << (int)dtime << " " << (int)dutime << std::endl;
-    if ((int)(dtime * 0.3) - (int)(dutime * 0.3) >= 1)
-    { // test
-        ret.push_back(new eldenBullet(nowTime, 12.0, creater, Fade(YELLOW, 0.3), 30, pos, 100, 3, 0.5, playerPosition - pos));
-        ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 100, {80,80}, 1, {1000, 800}));
-    }
-    if ((int)dtime - (int)dutime >= 1)
+    if ((int)(dtime / 5) - (int)(dutime / 5) >= 1)
     {
-        ret.push_back(new fishBullet(nowTime, 30.0, creater, PURPLE, 7, pos, 300, 0.02));
+        static bool current = true;
+        if(current){
+            Vector2 startPosition = {rand()%1000,80}, direction = playerPosition - startPosition;
+            ret.push_back(new soccerBullet(nowTime, 2.5, creater, BLANK, 80, startPosition , 2.0, startPosition + (2000.f / norm(direction)) * direction, "source/soccer80.png"));
+        }else{
+            int t0=rand()%2;
+            int t=rand()%4;
+            if(t0){
+                if(t!=0) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {200,80}, 1, {200, 920}, "source/soccer80.png"));
+                if(t!=1) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {400,80}, 1, {400, 920}, "source/soccer80.png"));
+                if(t!=2) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {600,80}, 1, {600, 920}, "source/soccer80.png"));
+                if(t!=3) ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {800,80}, 1, {800, 920}, "source/soccer80.png"));
+            }else{
+                ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 80, {200,80}, 1.0, {200, 920}, "source/soccer80.png"));
+                ret.push_back(new soccerBullet(nowTime, 2.0, creater, BLANK, 80, {400,80}, 1.5, {400, 920}, "source/soccer80.png"));
+                ret.push_back(new soccerBullet(nowTime, 2.5, creater, BLANK, 80, {600,80}, 2.0, {600, 920}, "source/soccer80.png"));
+                ret.push_back(new soccerBullet(nowTime, 3.0, creater, BLANK, 80, {800,80}, 2.5, {800, 920}, "source/soccer80.png"));
+            }
+        }
+        current^=1;
     }
+    if ((int)(dtime * 0.1) - (int)(dutime * 0.1) >= 1)
+    {
+        ret.push_back(new eldenBullet(nowTime, 15.0, creater, Fade(YELLOW, 0.3), 30, pos, 80, 2, 0.5, playerPosition - pos));
+        ret.push_back(new eldenBullet(nowTime, 12.0, creater, Fade(YELLOW, 0.3), 30, pos, 80, 1, 0.5, rotate(playerPosition - pos, (rand()%2 ? 1 : -1) * PI/2)));
+    }
+    /*
     if (int(dtime * 0.5) - int(dutime * 0.5) >= 1)
     {
         std::vector<Bullet *> bullets;
         for (float alpha = PI / 4; alpha <= PI * 2; alpha += PI / 2)
         {
             Vector2 f = {cos(alpha), sin(alpha)};
-            Bullet *b = new fishBullet(nowTime, 30.0, creater, PURPLE, 8, {10 * f.x, 10 * f.y}, 200, alpha);
+            Bullet *b = new fishBullet(nowTime, 2.0, creater, PURPLE, 8, {10 * f.x, 10 * f.y}, 100, alpha / 2, playerPosition - Vector2{10 * f.x, 10 * f.y}, true);
             bullets.push_back(b);
         }
-        /*for (auto bullet : bullets)
-        {
-            std::cerr << "bullet pos:" << bullet->pos.x << ' ' << bullet->pos.y << std::endl;
-        }*/
         ret.push_back(new splitBullet(nowTime, 3.0, creater, ORANGE, 10, pos, {0, 50}, bullets));
-    }
+    }*/
     if ((int)dtime * 2 - (int)dutime * 2 >= 1)
     {
         for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 16)
         {
             Vector2 f = {cos(alpha + rotatep), sin(alpha + rotatep)};
-            Bullet *b = new basicBullet(nowTime, 15.0, creater, YELLOW, 5, pos + 10.0f * f, 50.0f * f);
+            Bullet *b = new basicBullet(nowTime, 15.0, creater, ORANGE, 5, pos + 10.0f * f, 80.0f * f);
             ret.push_back(b);
         }
     }
@@ -50,7 +64,7 @@ std::vector<Bullet *> SimpleEnemy::getBullet(float nowTime, BulletManager *creat
             float alpha = 1.0 * rand() / RAND_MAX * PI * 2;
             Vector2 f = {cos(alpha), sin(alpha)};
             float speed = 1.0 * rand() / RAND_MAX * 90 + 100;
-            Bullet *b = new basicBullet(nowTime, 5.0, creater, YELLOW, 5, pos + 10.0f * f, speed * f);
+            Bullet *b = new basicBullet(nowTime, 20.0, creater, ORANGE, 5, pos + 10.0f * f, speed * f);
             ret.push_back(b);
         }
         // std::cerr << dutime << " " << livetime << std::endl;

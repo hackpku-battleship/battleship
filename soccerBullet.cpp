@@ -4,10 +4,10 @@
 #include "Vector2Basic.h"
 #include <bits/stdc++.h>
 
-soccerBullet::soccerBullet(float nowTime, float liveTime, BulletManager* from, Color col, float radius, Vector2 startPos, float delayTime, Vector2 endPoint):
+soccerBullet::soccerBullet(float nowTime, float liveTime, BulletManager* from, Color col, float radius, Vector2 startPos, float delayTime, Vector2 endPoint, char* imgPath):
         Bullet(nowTime, liveTime, from, col, radius, startPos), delayTime(delayTime), endPoint(endPoint), angV(720), rotation(0),
         velocity((1.0f / (liveTime - delayTime)) * (endPoint - startPos)){
-            tex = LoadTexture("source/soccer-ball.png");
+            tex = LoadTexture(imgPath);
         }
 
 float soccerBullet::updateTime(float nowTime, Vector2 playerPosition){
