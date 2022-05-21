@@ -13,16 +13,27 @@ std::vector<Bullet *> PredictEnemy::getBullet(float nowTime, BulletManager *crea
 {
     std::vector<Bullet *> ret;
     float dtime = nowTime - gentime;
-    FOR_INTERVAL(dutime, dtime, 1)
+    if (int(dtime * 0.2) - int(dutime * 0.2) >= 1)
     {
-        Vector2 predict = {2 * playerPosition.x - playerLastPosition.x, 2 * playerPosition.y - playerLastPosition.y};
-        for (int i = 0; i < 1; i++)
-        {
-            Vector2 dv = normalize(predict - pos);
-            Bullet *b = new basicBullet(nowTime, 15, creater, BLUE, 15, pos, 1000 * dv);
-            ret.push_back(b);
-        }
+        Bullet *b = new fishBullet(nowTime, 20, creater, PURPLE, 15, pos, 200, PI / 2);
+        ret.push_back(b);
+    }
+    if (int(dtime * 2) - int(dutime * 2) >= 1)
+    {
+        Vector2 dir = {playerPosition.x - playerLastPosition.x, playerPosition.y - playerLastPosition.y};
+        Vector2 velocity = {dir.x / (nowTime - lastTime), dir.y / (nowTime - lastTime)};
+        float time = sqrt((pos.x - playerPosition.x) * (pos.x - playerPosition.x) + (pos.y - playerPosition.y) * (pos.y - playerPosition.y)) / 1000;
+        Vector2 predict = {playerPosition.x + time * velocity.x, playerPosition.y + time * velocity.y};
+        float ang = atan2(predict.y - pos.y, predict.x - pos.x);
+        Vector2 f = {cos(ang), sin(ang)};
+        Bullet *b = new basicBullet(nowTime, 15, creater, BLUE, 15, pos, {1000 * f.x, 1000 * f.y});
+        ret.push_back(b);
+        lastTime = nowTime;
+    }
+    if (int(dtime * 10) - int(dutime * 10) >= 1)
+    {
         playerLastPosition = playerPosition;
+        lastTime = nowTime;
     }
     dutime = dtime;
     return ret;
