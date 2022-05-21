@@ -4,9 +4,9 @@
 #include "raylib.h"
 #define MAXLP 5 //最大技能释放次数
 #define PROT_LIMITTIME 5
-#define PROT_REC {p.x - r - 10, p.y - r - 10, 40, 5}
+#define PROT_REC {p.x - r - 25, p.y - r - 10, 60, 5}
 #define BOOMSCOPE 200
-#define LASTOFRING 0.5
+#define LASTOFRING 0.2
 
 class PlayerHPBar
 {

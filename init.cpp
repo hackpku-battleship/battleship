@@ -319,6 +319,7 @@ int Pause::loop(int screenWidth, int screenHeight)
 int Over::loop(int screenWidth, int screenHeight)
 {
     const char msg[3][50] = {"New Game", "Return to menu", "Quit"};
+    const char gg[50] = {"Game Over!"};
     float Mid = screenWidth / 2.0f - 200;
 
     Rectangle msgBox[3] = {{Mid, screenHeight / 2.0f - 100, 300, 50}, {Mid, screenHeight / 2.0f + 0, 480, 50}, {Mid, screenHeight / 2.0f + 100, 130, 50}};
@@ -340,6 +341,7 @@ int Over::loop(int screenWidth, int screenHeight)
                     return Init::choose(screenWidth, screenHeight);
             }
         BeginDrawing();
+        DrawText(gg, Mid - 40, 200, 80, RED);
         for (int i = 0; i < 3; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
