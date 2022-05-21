@@ -129,12 +129,12 @@ int checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
 
 int Init::choose(int screenWidth, int screenHeight)
 {
-    Image png3 = LoadImage("source/alice_huge.png");
-    Image png1 = LoadImage("source/reimu_huge.png");
-    Image png2 = LoadImage("source/marisa_huge.png");
-    ImageResize(&png1, 400, 500);
-    ImageResize(&png2, 400, 500);
-    ImageResize(&png3, 400, 500);
+    Image png3 = LoadImage("source/marisa_huge2.png");
+    Image png1 = LoadImage("source/yuka_huge.png");
+    Image png2 = LoadImage("source/reimu_huge2.png");
+    ImageResize(&png1, 400 - 10, 500);
+    ImageResize(&png2, 400 - 10, 500);
+    ImageResize(&png3, 400 - 10, 500);
     Texture2D h1 = LoadTextureFromImage(png1);
     Texture2D h2 = LoadTextureFromImage(png2);
     Texture2D h3 = LoadTextureFromImage(png3);
@@ -142,7 +142,7 @@ int Init::choose(int screenWidth, int screenHeight)
     UnloadImage(png2);
     UnloadImage(png3);
     const char hint[50] = {"Choose your hero :"};
-    const char msg[4][50] = {"Reimu", "Marisa", "Reimu", "Back"};
+    const char msg[4][50] = {"Yuka", "Reimu", "Marisa", "Back"};
     float Bott = screenHeight - 200;
     bool MouseOn[4];
     Rectangle msgBox[4] = {{300, Bott, 180, 50}, {700, Bott, 180, 50}, {1100, Bott, 180, 50}, {1400, Bott + 40, 100, 30}};
@@ -381,6 +381,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         player->Draw();
         atk->Draw();
         playerHPBar->Draw(player->getHP());
+        playerLPBar->Draw(player->getLP());
         playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
         enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
@@ -406,16 +407,16 @@ int Inst::loop(int screenWidth, int screenHeight)
     const char msg2[50] = {"Skill intruction"};
     const char inst[9][50] = {{"Upward"}, {"Downward"}, {"Leftward"}, {"Rightward"},
                               {"Pause"}, {"Attack"}, {"Skill"}, {"Slow Move"}, {"Quit"}};
-    const char Name[3][50] = {"Reimu", "Marisa", "Alice"};
+    const char Name[3][50] = {"Yuka", "Reimu", "Marisa"};
     const char Skill[3][2][50] = {{{"Summon a unmbrella and it can resist"},
                                   {"the attack from the front, last 5s."}},
                                   {{"Instantly clears surrounding bullets."},
                                   {""}},
                                   {{"Launch a large bullet, it can clears the"},
                                    {"path and deal damage to the first enemy."}}};
-    Image pg3 = LoadImage("source/alice.png");
-    Image pg1 = LoadImage("source/reimu.png");
-    Image pg2 = LoadImage("source/marisa.png");
+    Image pg3 = LoadImage("source/marisa.png");
+    Image pg1 = LoadImage("source/yuka.png");
+    Image pg2 = LoadImage("source/reimu.png");
     ImageResize(&pg1, 70, 70);
     ImageResize(&pg2, 70, 70);
     ImageResize(&pg3, 70, 70);
