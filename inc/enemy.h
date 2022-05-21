@@ -2,47 +2,31 @@
 #define ENEMY_H
 
 #include <vector>
+#include "utils.h"
 #include "bullet.h"
 #include "basicBullet.h"
 #include "fishBullet.h"
 #include "eldenBullet.h"
+#include "splitBullet.h"
+#include "bulletManager.h"
+#include "accbullet.h"
+#include "turningbullet.h"
 
-class Enemy {
+class Enemy
+{
 public:
     float hp;
     float gentime, dutime, livetime;
-    float x, y, r;
-    Enemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    virtual std::vector<Bullet*> getBullet(float nowTime);
+    Vector2 pos;
+    float r;
+    Texture2D tex;
+    Enemy(float _hp, float _genTime, float livetime, Vector2 pos, float _r, char* filename);
+    virtual std::vector<Bullet *> getBullet(float nowTime, BulletManager *manager, Vector2 playerPosition);
     float getX();
     float getY();
     float getR();
-    virtual void draw() {}
+    void draw();
     bool isalive();
-};
-
-class EnemyManager {
-public:
-    std::vector<Enemy*> enemys;
-    void addEnemy(Enemy* pe) {
-        enemys.push_back(pe);
-    }
-    std::vector<Bullet*> updateTime(float nowTime);
-    void draw();
-};
-
-class SimpleEnemy : public Enemy {
-    float rotatep;
-public:
-    SimpleEnemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    std::vector<Bullet*> getBullet(float nowTime);
-    void draw();
-};
-
-class DEnemy:public Enemy {
-public:
-    DEnemy(float _hp, float _genTime, float livetime, float _x, float _y, float _r);
-    std::vector<Bullet*> getBullet(float nowTime);
-    void draw();
+    void hit();
 };
 #endif

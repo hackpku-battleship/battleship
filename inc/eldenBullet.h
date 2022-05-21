@@ -9,13 +9,11 @@
 
 
 class eldenBullet: public fishBullet{
-    BulletManager* from;
     float fishV; // 每fishV秒生成1个fish弹
 public:
-    eldenBullet(float, float, Vector2, float, float, BulletManager*, float);
-    eldenBullet(float, float, Vector2, float, float, BulletManager*, float, Vector2);
+    eldenBullet(float nowTime, float lifeTime, BulletManager* from, Color col, float radius, Vector2 startPosition, float velocity, float angleV, float fishV);
+    eldenBullet(float nowTime, float lifeTime, BulletManager* from, Color col, float radius, Vector2 startPosition, float velocity, float angleV, float fishV, Vector2 startAngle);
     float updateTime(float, Vector2);
-    void Draw();
 };
 
 

@@ -8,15 +8,23 @@ struct BulletManager;
 
 class Bullet{
 protected:
-    float genTime, lifeTime, lastTime; // 子弹的生成时间
+    float genTime, lifeTime, lastTime;
+    BulletManager *from;
+    float radius;
+    Color col;
+    Vector2 pos;
 
 public:
-    Bullet(float, float);
+    Bullet(float nowTime, float liveTime, BulletManager* from, Color col, float radius, Vector2 pos);
+    virtual ~Bullet();
     virtual float updateTime(float, Vector2);
     bool checkAlive(float);
-    virtual bool inScreen(int, int)=0;
-    virtual void Draw()=0;
-    virtual bool checkBox(Vector2, float)=0;
+    bool inScreen(int, int);
+    virtual void Draw();
+    bool checkBox(Vector2, float);
+    bool checkProt(Vector2, float);
 };
+
+// bullet manager
 
 #endif

@@ -5,17 +5,18 @@
 #include "bullet.h"
 #include <bits/stdc++.h>
 
+//追踪弹，追踪玩家位置
 class fishBullet: public Bullet{
 protected:
-    Vector2 position, angle;
-    float radius, velocity, angleV;
+    Vector2 angle;
+    float velocity, angleV;
+    bool fade;
 public:
-    fishBullet(float, float, Vector2, float, float);
-    fishBullet(float, float, Vector2, float, float, Vector2);
+    fishBullet(float nowTime, float lifeTime, BulletManager* from, Color col, float radius, Vector2 startPosition, float velocity, float angleV);
+    fishBullet(float nowTime, float lifeTime, BulletManager* from, Color col, float radius, Vector2 startPosition, float velocity, float angleV, Vector2 startAngle, bool fade=false);
+    virtual ~fishBullet();
     float updateTime(float, Vector2);
     void Draw();
-    virtual bool checkBox(Vector2, float);
-    bool inScreen(int, int);
 };
 
 
