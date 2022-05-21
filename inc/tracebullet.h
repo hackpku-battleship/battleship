@@ -2,7 +2,7 @@
 #define TRACEBULLET_H
 
 #include "bullet.h"
-
+//跟踪弹，以生成时玩家的位置为方向
 class traceBullet : public Bullet {
     Vector2 f;
     bool isgetplayerpos;

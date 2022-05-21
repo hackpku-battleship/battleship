@@ -9,9 +9,14 @@ std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager, V
     std::vector<Bullet *> ret;
     float dtime = nowTime - gentime;
     if (inPeriod(3, 2, dtime)) {
-        FOR_INTERVAL(dutime, dtime, 0.1) {
-            Bullet *b = new traceBullet(nowTime, 20, manager, RED, 6, pos + (Vector2){0, 40}, 4);
-            ret.push_back(b);
+        FOR_INTERVAL(dutime, dtime, 1) {
+            //Bullet *b = new traceBullet(nowTime, 20, manager, RED, 6, pos + (Vector2){0, 40}, 4);
+            for (float alpha = 0; alpha < PI * 2; alpha += PI / 8) {
+                Vector2 df = {cos(alpha), sin(alpha)};
+                Bullet *b = new turningTraceBullet(nowTime, 20, manager, RED, 6, pos + 20 * df, 
+                100 * df, 500, 2);
+                ret.push_back(b);
+            }
         }
     }
     /*
