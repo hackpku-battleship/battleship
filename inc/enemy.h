@@ -8,6 +8,7 @@
 #include "fishBullet.h"
 #include "eldenBullet.h"
 #include "splitBullet.h"
+#include "soccerBullet.h"
 #include "bulletManager.h"
 #include "accbullet.h"
 #include "turningbullet.h"
@@ -30,6 +31,6 @@ public:
     void draw();
     bool isalive();
     void hit();
-    ~Enemy();
+    virtual ~Enemy();
 };
 #endif
