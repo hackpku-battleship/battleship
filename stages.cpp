@@ -76,7 +76,7 @@ void Stage3(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
         float predtime[prede] = {23, 23.7, 24.5};
         float predlive = 20;
         for (int i = 0; i < prede; i++) {
-            Enemy *e = new PredictEnemy(40, nowtime + predtime[i], predlive, predpos[i], 50, "source/fish0.png");
+            Enemy *e = new PredictEnemy(1000, nowtime + predtime[i], predlive, predpos[i], 50, "source/fish0.png");
             queue.push(std::make_pair(nowtime + predtime[i], e));
         }
     }
