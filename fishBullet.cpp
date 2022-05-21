@@ -6,13 +6,19 @@
 fishBullet::fishBullet(float nowTime, float lifeTime, Vector2 startPosition, float velocity, float angleV):
         Bullet(nowTime, lifeTime),position(startPosition), velocity(velocity), angleV(angleV)
 {
-    radius=8;
+    radius=6;
     angle={0, velocity};
+}
+fishBullet::fishBullet(float nowTime, float lifeTime, Vector2 startPosition, float velocity, float angleV, Vector2 startAngle):
+        Bullet(nowTime, lifeTime),position(startPosition), velocity(velocity), angleV(angleV)
+{
+    radius=6;
+    angle=(velocity/norm(startAngle)) * startAngle;
 }
 float fishBullet::updateTime(float nowTime, Vector2 playerPosition){
     float deltaTime=Bullet::updateTime(nowTime, playerPosition);
     Vector2 d = playerPosition - position;
-    float ang = std::min<float>(angleV ,acos((1./norm(d)) * angle * d));
+    float ang = std::min<float>(angleV ,acos((1./norm(d)) * angle * d)) * deltaTime;
     // norm(angle) = 1
     angle = rotate(angle, (angle % d > 0 ? 1 : -1) * ang);
     position = position + deltaTime * angle;
@@ -25,5 +31,5 @@ bool fishBullet::checkBox(Vector2 center, float rad){
     return CheckCollisionCircles(position, radius, center, rad);
 }
 bool fishBullet::inScreen(int H, int W){
-    return 0<=position.x && position.x<H && 0<=position.y && position.y<W;
+    return -30<=position.x && position.x<=H+30 && -30<=position.y && position.y<=W+30;
 }

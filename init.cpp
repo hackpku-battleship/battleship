@@ -2,6 +2,7 @@
 #include "init.h"
 #include "raylib.h"
 #include "player.h"
+#include "managers.h"
 #include "bullet.h"
 #include "basicBullet.h"
 #include "bulletManager.h"
@@ -40,12 +41,15 @@ int Game::loop(int screenWidth, int screenHeight) {
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
 
-    Player *player = new Player({400, 600}, 10, 5, 10, 300, 2);
+    initManagers();
+    
+    Player *player = getPlayer();
     PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
-
-    BulletManager *playerBullets = new BulletManager();
-    BulletManager *enemyBullets = new BulletManager();
-    EnemyManager *enemys = new EnemyManager();
+    
+        
+    BulletManager *playerBullets = getPlayerBullets();
+    BulletManager *enemyBullets = getEnemyBullets();
+    EnemyManager *enemys = getEnemys();
 
     bool flag = 0;
 
@@ -66,7 +70,7 @@ int Game::loop(int screenWidth, int screenHeight) {
 
         if (IsKeyDown(KEY_X))
         {
-            playerBullets->addBullet(new basicBullet(time, 5, player->getPosition(), {(1. * rand() / RAND_MAX - 0.5) * 100, (1. * rand() / RAND_MAX - 0.5) * 100}));
+            playerBullets->addBullet(new basicBullet(time, 5, player->getPosition(), {0,-800}));
         }
 
         auto bullets = enemys->updateTime(time);
@@ -85,7 +89,7 @@ int Game::loop(int screenWidth, int screenHeight) {
         enemyBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
         enemyBullets->DrawAllBullets();
 
-        DrawText(TextFormat("%.5lf", time), 10, 10, 20, RED);
+        DrawText(TextFormat("FPS: %.0lf", 1/GetFrameTime()), 10, 10, 20, RED);
 
         EndDrawing();
     }

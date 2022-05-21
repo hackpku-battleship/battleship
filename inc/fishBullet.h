@@ -5,16 +5,16 @@
 #include "bullet.h"
 #include <bits/stdc++.h>
 
-struct BulletManager;
-
 class fishBullet: public Bullet{
+protected:
     Vector2 position, angle;
     float radius, velocity, angleV;
 public:
     fishBullet(float, float, Vector2, float, float);
+    fishBullet(float, float, Vector2, float, float, Vector2);
     float updateTime(float, Vector2);
     void Draw();
-    bool checkBox(Vector2, float);
+    virtual bool checkBox(Vector2, float);
     bool inScreen(int, int);
 };
 

@@ -5,8 +5,6 @@
 #include "bullet.h"
 #include <bits/stdc++.h>
 
-struct BulletManager;
-
 class basicBullet: public Bullet{
     Vector2 position, velocity;
     float radius;

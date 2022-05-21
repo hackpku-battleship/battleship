@@ -20,5 +20,5 @@ bool basicBullet::checkBox(Vector2 center, float rad){
     return CheckCollisionCircles(position, radius, center, rad);
 }
 bool basicBullet::inScreen(int H, int W){
-    return 0<=position.x && position.x<H && 0<=position.y && position.y<W;
+    return 0<=position.x && position.x<=H && 0<=position.y && position.y<=W;
 }

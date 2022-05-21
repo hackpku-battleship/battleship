@@ -5,6 +5,7 @@
 #include "bullet.h"
 #include "basicBullet.h"
 #include "fishBullet.h"
+#include "eldenBullet.h"
 
 class Enemy {
 public:

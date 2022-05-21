@@ -6,11 +6,9 @@
 
 struct BulletManager;
 
-class Bullet
-{
-public:
+class Bullet{
+protected:
     float genTime, lifeTime, lastTime; // 子弹的生成时间
-    BulletManager *from;
 
 public:
     Bullet(float, float);
