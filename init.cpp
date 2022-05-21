@@ -9,6 +9,11 @@
 #include "enemymanager.h"
 #include "simpleenemy.h"
 #include "denemy.h"
+#include "Vector2Basic.h"
+#include <queue>
+#include "stages.h"
+
+const Vector2 initPlayerPosition = {400, 900};
 
 int Init::loop(int screenWidth, int screenHeight)
 {
@@ -56,13 +61,31 @@ int Init::loop(int screenWidth, int screenHeight)
 void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
 {
     auto bullets = enemyBullets->getBullets();
+    bool flag = 0;
     for (int i = 0; i < bullets.size(); i++)
-        if (bullets[i]->checkBox(player->getPosition(), player->getRadius()))
+        //检测是否碰撞，当无敌时不考虑是否被Hit
+        if (player->prot != nullptr && bullets[i]->checkProt(player->getPosition(), player->getRadius()))
+        {
+            delete bullets[i];
+            bullets.erase(bullets.begin() + i);
+        }
+        else if (player->getcanHit() && bullets[i]->checkBox(player->getPosition(), player->getRadius()))
         {
             player->Hit(nowTime);
-            bullets.erase(bullets.begin() + i);
+            //将玩家置为初始位置
+            player->setPosition(initPlayerPosition);
+            flag = 1;
             break;
         }
+    //当发生Hit时
+    if (flag)
+    {
+        for (int i = 0; i < bullets.size(); i++)
+        {
+            delete bullets[i];
+        }
+        bullets.erase(bullets.begin(), bullets.end());
+    }
     enemyBullets->setBullets(bullets);
 }
 
@@ -75,10 +98,14 @@ void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
         for (int j = 0; j < bullets.size(); j++)
             if (bullets[j]->checkBox({enemys[i]->getX(), enemys[i]->getY()}, enemys[i]->getR()))
             {
+                delete bullets[j];
                 bullets.erase(bullets.begin() + j);
                 enemys[i]->hit();
                 if (!enemys[i]->isalive())
+                {
+                    delete enemys[i];
                     enemys.erase(enemys.begin() + i);
+                }
                 break;
             }
     }
@@ -123,12 +150,22 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
 
-    Player *player = new Player({400, 600}, 10, 5, 10, 100, 2);
+    const double FastSpeed = 500;
+    const double SlowSpeed = 200;
+
+    Player *player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 100, 2, kind, "source/lion.png");
     PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
 
     BulletManager *playerBullets = new BulletManager();
     BulletManager *enemyBullets = new BulletManager();
     EnemyManager *enemys = new EnemyManager();
+
+    std::queue<std::pair<float, Enemy *>> enemyQueue;
+
+    float time = 0.0;
+
+    const int MAX_STAGE = 1;
+    int stagecnt = 0;
 
     while (!WindowShouldClose())
     {
@@ -147,31 +184,75 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
                 break;
             }
         }
-        float time = GetTime();
+
+        if (player->getHP() <= 0)
+            return Over::loop(screenWidth, screenHeight);
+        float deltatime = GetFrameTime();
+        time += deltatime;
+
+        if (stagecnt < MAX_STAGE && enemys->isEmpty())
+        {
+            stagecnt++;
+            // std::cerr << stagecnt << std::endl;
+            getStage(stagecnt, time, enemyQueue);
+        }
+
+        /*while (!enemyQueue.empty() && enemyQueue.front().first <= time)
+        {
+            enemys->addEnemy(enemyQueue.front().second);
+            enemyQueue.pop();
+        }*/
+        //*/
 
         player->Update(time);
-        player->Move();
+        player->Move(deltatime);
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
-
+        player->Check(time);
+        if (IsKeyDown(KEY_Z)) // 放技能
+            player->useskill(time);
+        if (kind == 1 && time - player->Lastt < LASTOFRING)
+        {
+            DrawRing(player->getPosition(), BOOMSCOPE - 2, BOOMSCOPE, 0.f, 360.f, 1, RED);
+            auto bullets = enemyBullets->getBullets();
+            for (int i = 0; i < bullets.size(); i++)
+                if (bullets[i]->checkBox(player->getPosition(), BOOMSCOPE))
+                {
+                    delete bullets[i];
+                    bullets.erase(bullets.begin() + i);
+                }
+            enemyBullets->setBullets(bullets);
+        }
         if (IsKeyDown(KEY_X))
         {
-            playerBullets->addBullet(new basicBullet(time, 5, player->getPosition(), {0, -300}));
+            static float playerLasttime = 0.0;
+            if (time - playerLasttime > 0.05)
+            {
+                for (float bias = -100; bias <= 100; bias += 20)
+                {
+                    playerBullets->addBullet(
+                        new basicBullet(time, 5, RED, 5,
+                                        player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -400}));
+                }
+                playerLasttime = time;
+            }
         }
 
+        /*
         if (IsKeyPressed(KEY_U))
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new DEnemy(100, time, 30, x, y, 10));
+            enemys->addEnemy(new DEnemy(100, time, 30, x, y, 50, "source/lion.png"));
         }
+        //*/
 
         if (IsKeyPressed(KEY_I))
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new SimpleEnemy(100, time, 30, x, y, 10));
+            enemys->addEnemy(new SimpleEnemy(100, time, 30, {x, y}, 10, "source/lion.png"));
         }
 
         auto _bullets = enemys->updateTime(time, enemyBullets);
