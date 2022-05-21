@@ -10,6 +10,7 @@
 #include "simpleenemy.h"
 #include "denemy.h"
 #include "easyenemy.h"
+#include "predictenemy.h"
 #include "Vector2Basic.h"
 #include <queue>
 #include "stages.h"
@@ -165,9 +166,10 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     std::queue<std::pair<float, Enemy *>> enemyQueue;
 
     float time = 0.0;
+    float playerLasttime = 0.0;
 
-    const int MAX_STAGE = 2;
-    int stagecnt = 1;
+    const int MAX_STAGE = 3;
+    int stagecnt = 2;
 
     while (!WindowShouldClose())
     {
@@ -192,18 +194,18 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         float deltatime = GetFrameTime();
         time += deltatime;
 
-        if (stagecnt < MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty())
+        if (stagecnt < MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty() && enemyQueue.empty())
         {
             stagecnt++;
             // std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
         }
 
-        while (!enemyQueue.empty() && enemyQueue.front().first <= time)
+        /*while (!enemyQueue.empty() && enemyQueue.front().first <= time)
         {
             enemys->addEnemy(enemyQueue.front().second);
             enemyQueue.pop();
-        }
+        }*/
 
         player->Update(time);
         player->Move(deltatime);
@@ -235,14 +237,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         }
         if (IsKeyDown(KEY_X))
         {
-            static float playerLasttime = 0.0;
             if (time - playerLasttime > 0.05)
             {
                 for (float bias = -100; bias <= 100; bias += 20)
                 {
                     playerBullets->addBullet(
                         new basicBullet(time, 5, enemyBullets, RED, 5,
-                                        player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -400}));
+                                        player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -800}));
                 }
                 playerLasttime = time;
             }
@@ -252,7 +253,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new EasyEnemy(100, time, 20, {x, y}, 10, "source/lion.png"));
+            enemys->addEnemy(new PredictEnemy(100, time, 20, {x, y}, 10, "source/lion.png"));
         }
 
         auto _bullets = enemys->updateTime(time, enemyBullets, player->getPosition());
