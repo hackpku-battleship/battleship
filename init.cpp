@@ -286,13 +286,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             // std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
         }
-        /*
+        
         while (!enemyQueue.empty() && enemyQueue.front().first <= time)
         {
             enemys->addEnemy(enemyQueue.front().second);
             enemyQueue.pop();
         }
-        */
+        
         player->Update(time);
         player->Move(deltatime);
         if (kind == 2)
