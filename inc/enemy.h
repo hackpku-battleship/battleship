@@ -30,5 +30,6 @@ public:
     void draw();
     bool isalive();
     void hit();
+    ~Enemy();
 };
 #endif
