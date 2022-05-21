@@ -13,7 +13,7 @@ int main(void)
     freopen("log", "w", stderr);
     const int screenWidth = 1600;
     const int screenHeight = 900;
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - custom frame control");
+    InitWindow(screenWidth, screenHeight, "Battleship Shooting");
 
     InitAudioDevice();
     Mus::openMusic = LoadMusicStream("source/th10_01.mp3");

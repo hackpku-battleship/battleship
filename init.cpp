@@ -114,6 +114,7 @@ int Init::loop(int screenWidth, int screenHeight)
 {
     // StopMusicStream(openMusic);
     // std::cerr << GetMusicTimeLength(openMusic) << std::endl;
+    const char msg0[50] = "Battleship Shooting";
     const char msg1[50] = "Start Game";
     const char msg2[50] = "Instructions";
 
@@ -145,8 +146,9 @@ int Init::loop(int screenWidth, int screenHeight)
         auto col1 = mouseOnText1 ? GOLD : WHITE;
         auto col2 = mouseOnText2 ? GOLD : WHITE;
         Img::gif->Draw(0,0);
-        DrawText(msg1, Mid, screenHeight / 2.0f - 100, 60, col1);
-        DrawText(msg2, Mid, screenHeight / 2.0f + 50, 60, col2);
+        DrawText(msg0, Mid - 300, screenHeight / 2.0f - 300, 100, SKYBLUE);
+        DrawText(msg1, Mid, msg1Box.y, 60, col1);
+        DrawText(msg2, Mid, msg2Box.y, 60, col2);
         EndDrawing();
     }
     return 0;
