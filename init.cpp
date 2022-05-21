@@ -19,8 +19,17 @@ const Vector2 initPlayerPosition = {400, 900};
 const int playgroundWidth = 1000;
 const int playgroundHeight = 900;
 
+Music Mus::openMusic;
+Music Mus::stageMusics[4];
+Music Mus::endMusic;
+
+int LastPlayedMusic = -1;
+//*/
+
 int Init::loop(int screenWidth, int screenHeight)
 {
+    //StopMusicStream(openMusic);
+    //std::cerr << GetMusicTimeLength(openMusic) << std::endl;
     const char msg1[50] = "Start Game";
     const char msg2[50] = "Instructions";
     float Mid = screenWidth / 2.0f - 200;
@@ -29,6 +38,7 @@ int Init::loop(int screenWidth, int screenHeight)
     bool mouseOnText1 = true, mouseOnText2 = true;
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::openMusic);
         mouseOnText1 = false, mouseOnText2 = false;
         if (CheckCollisionPointRec(GetMousePosition(), msg1Box))
             mouseOnText1 = true;
@@ -132,6 +142,7 @@ int Init::choose(int screenWidth, int screenHeight)
     Rectangle msgBox[4] = {{300, Bott, 180, 50}, {700, Bott, 180, 50}, {1100, Bott, 180, 50}, {1400, Bott + 40, 100, 30}};
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::openMusic);
         ClearBackground(RAYWHITE);
         for (int i = 0; i < 4; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
@@ -140,8 +151,9 @@ int Init::choose(int screenWidth, int screenHeight)
             {
                 if (i == 3)
                     return Init::loop(screenWidth, screenHeight);
-                else
+                else {
                     return Init::choose_stage(screenWidth, screenHeight, i);
+                }
                     //return Game::loop(screenWidth, screenHeight, i , 0);
             }
         BeginDrawing();
@@ -168,6 +180,7 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
     Rectangle msgBox[4] = {{Mid, 200, 100, 50}, {Mid, 400, 100, 50}, {Mid, 600, 100, 50}, {Mid, 800, 100, 50}};
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::openMusic);
         for (int i = 0; i < 4; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
         for (int i = 0; i < 4; i++)
@@ -175,8 +188,12 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
             {
                 if (i == 3)
                     return Init::choose(screenWidth, screenHeight);
-                else
+                else {
+                    StopMusicStream(Mus::openMusic);
+                    PlayMusicStream(Mus::stageMusics[i]);
+                    std::cerr << "stage play" << " " << GetMusicTimeLength(Mus::stageMusics[i]) << std::endl;
                     return Game::loop(screenWidth, screenHeight, kind, i);
+                }
             }
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -216,24 +233,38 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::stageMusics[stagecnt]);
         if (IsKeyPressed(KEY_P))
         {
+            PauseMusicStream(Mus::stageMusics[stagecnt]);
             int ret = Pause::loop(screenWidth, screenHeight);
+            ResumeMusicStream(Mus::stageMusics[stagecnt]);
             switch (ret)
             {
             case 0: //退出
                 return 0;
             case 1: //重新开始
+            {
+                StopMusicStream(Mus::stageMusics[stagecnt]);
+                PlayMusicStream(Mus::openMusic);
                 return Init::choose(screenWidth, screenHeight);
+            }
             case 2: //返回菜单
+            {
+                StopMusicStream(Mus::stageMusics[stagecnt]);
+                PlayMusicStream(Mus::openMusic);
                 return Init::loop(screenWidth, screenHeight);
+            }
             default:
                 break;
             }
         }
 
-        if (player->getHP() <= 0)
+        if (player->getHP() <= 0) {
+            StopMusicStream(Mus::stageMusics[stagecnt]);
+            PlayMusicStream(Mus::endMusic);
             return Over::loop(screenWidth, screenHeight);
+        }
         float deltatime = GetFrameTime();
         time += deltatime;
 
@@ -241,9 +272,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         {
             if (stagecnt == MAX_STAGE)
             {
+                StopMusicStream(Mus::stageMusics[stagecnt]);
+                PlayMusicStream(Mus::endMusic);
                 return Win::loop(screenWidth, screenHeight);
             }
+            StopMusicStream(Mus::stageMusics[stagecnt]);
             stagecnt++;
+            PlayMusicStream(Mus::stageMusics[stagecnt]);
             // std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
         }
@@ -348,6 +383,7 @@ int Inst::loop(int screenWidth, int screenHeight)
     bool MouseOn = true;
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::openMusic);
         ClearBackground(RAYWHITE);
         MouseOn = CheckCollisionPointRec(GetMousePosition(), msgBox);
         BeginDrawing();
@@ -410,18 +446,27 @@ int Over::loop(int screenWidth, int screenHeight)
 
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::endMusic);
         ClearBackground(RAYWHITE);
         for (int i = 0; i < 3; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
         for (int i = 0; i < 3; i++)
             if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
-                if (i == 2)
+                if (i == 2) {
+                    StopMusicStream(Mus::endMusic);
                     return 0;
-                else if (i == 1)
+                }
+                else if (i == 1) {
+                    StopMusicStream(Mus::endMusic);
+                    PlayMusicStream(Mus::openMusic);
                     return Init::loop(screenWidth, screenHeight);
-                else
+                }
+                else{
+                    StopMusicStream(Mus::endMusic);
+                    PlayMusicStream(Mus::openMusic);
                     return Init::choose(screenWidth, screenHeight);
+                }
             }
         BeginDrawing();
         DrawText(gg, Mid - 40, 200, 80, RED);
@@ -446,18 +491,27 @@ int Win::loop(int screenWidth, int screenHeight)
 
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::endMusic);
         ClearBackground(RAYWHITE);
         for (int i = 0; i < 3; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
         for (int i = 0; i < 3; i++)
             if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
-                if (i == 2)
+                if (i == 2) {
+                    StopMusicStream(Mus::endMusic);
                     return 0;
-                else if (i == 1)
+                }
+                else if (i == 1) {
+                    StopMusicStream(Mus::endMusic);
+                    PlayMusicStream(Mus::openMusic);
                     return Init::loop(screenWidth, screenHeight);
-                else
+                }
+                else {
+                    StopMusicStream(Mus::endMusic);
+                    PlayMusicStream(Mus::openMusic);
                     return Init::choose(screenWidth, screenHeight);
+                }
             }
         BeginDrawing();
         DrawText(allclear, Mid - 40, 200, 80, RED);

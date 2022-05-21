@@ -1,6 +1,8 @@
 #ifndef INIT_H
 #define INIT_H
 
+#include "raylib.h"
+
 class Init {
 public:
     static int loop(int, int);
@@ -31,5 +33,11 @@ public:
 class Win{
 public:
     static int loop(int, int);
+};
+
+namespace Mus {
+extern Music openMusic;
+extern Music stageMusics[4];
+extern Music endMusic;
 };
 #endif
