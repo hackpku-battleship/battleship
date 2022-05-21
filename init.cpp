@@ -204,7 +204,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
     BulletManager *playerBullets = new BulletManager();
     BulletManager *enemyBullets = new BulletManager();
     EnemyManager *enemys = new EnemyManager();
-    Player *player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 510, 1000, 2, kind);
+    Player *player = new Player(initPlayerPosition, 5, 10, FastSpeed, SlowSpeed, 510, 1000, 2, kind);
 
     std::queue<std::pair<float, Enemy *>> enemyQueue;
 
@@ -247,13 +247,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             // std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
         }
-        
+        /*
         while (!enemyQueue.empty() && enemyQueue.front().first <= time)
         {
             enemys->addEnemy(enemyQueue.front().second);
             enemyQueue.pop();
         }
-        
+        */
         player->Update(time);
         player->Move(deltatime);
         if (kind == 2)
@@ -299,7 +299,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
                 for (float bias = -100; bias <= 100; bias += 20)
                 {
                     playerBullets->addBullet(
-                        new basicBullet(time, 5, enemyBullets, RED, 5,
+                        new basicBullet(time, 5, enemyBullets, YELLOW, 5,
                                         player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -800}));
                 }
                 playerLasttime = time;

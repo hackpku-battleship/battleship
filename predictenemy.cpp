@@ -55,7 +55,7 @@ std::vector<Bullet *> PredictEnemy::getBullet(float nowTime, BulletManager *crea
         {
             for (float x = 0; x <= 1000; x += (rand() & 1 ? 40 : 80))
             {
-                ret.push_back(new basicBullet(nowTime, 30, creater, RED, 5, {x, pos.y}, {0, 800}));
+                ret.push_back(new basicBullet(nowTime, 30, creater, RED, 10, {x, pos.y}, {0, 800}));
             }
         }
     }
@@ -67,7 +67,7 @@ std::vector<Bullet *> PredictEnemy::getBullet(float nowTime, BulletManager *crea
             do
                 pos = {float(rand() % 1000),
                        float(rand() % 900)};
-            while (-100 <= pos.x - playerPosition.x && pos.x - playerPosition.x <= 100 && -100 <= pos.y - playerPosition.y && pos.y - playerPosition.y <= 100);
+            while (-200 <= pos.x - playerPosition.x && pos.x - playerPosition.x <= 200 && -200 <= pos.y - playerPosition.y && pos.y - playerPosition.y <= 200);
             ret.push_back(new fishBullet(nowTime, 5, creater, ORANGE, 15, pos, 200, PI / 2));
         }
     }
