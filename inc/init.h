@@ -26,4 +26,9 @@ class Over {
 public:
     static int loop(int, int);
 };
+
+class Win{
+public:
+    static int loop(int, int);
+};
 #endif

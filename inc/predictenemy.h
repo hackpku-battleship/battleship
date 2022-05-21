@@ -6,7 +6,6 @@
 class PredictEnemy : public Enemy
 {
     float lastTime;
-    int count = 0;
     Vector2 playerLastPosition;
 
 public:

@@ -6,6 +6,8 @@
 #include "spinenemy.h"
 #include "shotSimpleTraceEnemy.h"
 #include "stage2Enemy.h"
+#include "predictenemy.h"
+#include "easyenemy.h"
 
 const int screenWidth = 1600 - 600;
 const int screenHeight = 900;
@@ -58,8 +60,29 @@ void Stage2(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
 }
 
 void Stage3(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
-    queue.push(std::make_pair(nowtime, 
-        new SimpleEnemy(1000, nowtime, 100, (Vector2){500, 50}, 50, "source/fish1.png")));
+    {
+        const int easye = 5;
+        Vector2 easypos[easye] = {{500, 100}, {300, 150}, {700, 150}, {100, 200}, {900, 200}};
+        float easytime[easye] = {0.5, 1, 1, 2, 2};
+        float easydutime = 20;
+        for (int i = 0; i < easye; i++) {
+            Enemy *e = new EasyEnemy(20, nowtime+ easytime[i], easydutime, easypos[i], 50, "source/fish0.png");
+            queue.push(std::make_pair(nowtime + easytime[i], e));
+        }
+    }
+    {
+        const int prede = 3;
+        Vector2 predpos[prede] = {{500, 100}, {350, 200}, {650, 200}};
+        float predtime[prede] = {23, 23.7, 24.5};
+        float predlive = 20;
+        for (int i = 0; i < prede; i++) {
+            Enemy *e = new PredictEnemy(40, nowtime + predtime[i], predlive, predpos[i], 50, "source/fish0.png");
+            queue.push(std::make_pair(nowtime + predtime[i], e));
+        }
+    }
+    
+    queue.push(std::make_pair(nowtime + 50, 
+        new SimpleEnemy(100, nowtime, 20, (Vector2){500, 50}, 50, "source/fish1.png")));
     return;
 }
 
