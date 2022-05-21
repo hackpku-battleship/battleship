@@ -4,7 +4,7 @@
 #include "bulletManager.h"
 
 Bullet::Bullet(float nowTime, float lifeTime, BulletManager* from, Color _col, float _radius, Vector2 _pos): 
-genTime(nowTime), lifeTime(lifeTime), lastTime(nowTime), col(_col), radius(_radius), pos(_pos), from(from){}
+genTime(nowTime), lifeTime(lifeTime), lastTime(nowTime), col(_col), radius(_radius), pos(_pos), from(from), lastParryedTime(-1e9){}
 
 float Bullet::updateTime(float nowTime, Vector2 playerPosition)
 {

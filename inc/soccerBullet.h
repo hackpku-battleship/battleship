@@ -14,6 +14,7 @@ public:
     soccerBullet(float nowTime, float liveTime, BulletManager* from, Color col, float radius, Vector2 startPos, float delayTime, Vector2 endPoint, char* imgPath);
     float updateTime(float nowTime, Vector2 playerPosition);
     void Draw();
+    virtual void turnBack();
 };
 
 

@@ -17,6 +17,7 @@ public:
     virtual ~fishBullet();
     float updateTime(float, Vector2);
     void Draw();
+    virtual void turnBack();
 };
 
 

@@ -15,3 +15,7 @@ float eldenBullet::updateTime(float nowTime, Vector2 playerPosition){
     float deltaTime=fishBullet::updateTime(nowTime, playerPosition);
     return deltaTime;
 }
+void eldenBullet::turnBack(){
+    fishBullet::turnBack();
+    fishV = 1e18;
+}
