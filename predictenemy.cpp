@@ -13,14 +13,13 @@ std::vector<Bullet *> PredictEnemy::getBullet(float nowTime, BulletManager *crea
 {
     std::vector<Bullet *> ret;
     float dtime = nowTime - gentime;
-    if (int(dtime * 2) - int(dutime * 2) >= 1)
+    FOR_INTERVAL(dutime, dtime, 1)
     {
         Vector2 predict = {2 * playerPosition.x - playerLastPosition.x, 2 * playerPosition.y - playerLastPosition.y};
         for (int i = 0; i < 1; i++)
         {
-            float ang = atan2(predict.y - pos.y, predict.x - pos.x) + 0.30 * rand() / RAND_MAX;
-            Vector2 f = {cos(ang), sin(ang)};
-            Bullet *b = new basicBullet(nowTime, 15, creater, BLUE, 30, pos, {3000 * f.x, 3000 * f.y});
+            Vector2 dv = normalize(predict - pos);
+            Bullet *b = new basicBullet(nowTime, 15, creater, BLUE, 15, pos, 1000 * dv);
             ret.push_back(b);
         }
         playerLastPosition = playerPosition;
