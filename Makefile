@@ -385,7 +385,7 @@ $(PROJECT_NAME): $(OBJS)
 # NOTE: This pattern will compile every module defined on $(OBJS)
 #%.o: %.c
 #$(info $(OBJ_DIR))
-obj/%.o: %.cpp
+obj/%.o: %.cpp inc/%.h
 	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
 
 # Clean everything

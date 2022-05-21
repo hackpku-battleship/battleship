@@ -2,58 +2,48 @@
 #include "stage2Enemy.h"
 #include "Vector2Basic.h"
 #include <iostream>
+#include "utils.h"
 
 stage2Enemy::stage2Enemy(float _hp, float _gentime, float _livetime, Vector2 pos, float _r, char *filename) : 
-    Enemy(_hp, _gentime, _livetime, pos, _r, filename), rotatep(0.0) {}
+    Enemy(_hp, _gentime, _livetime, pos, _r, filename){}
 
 std::vector<Bullet *> stage2Enemy::getBullet(float nowTime, BulletManager *creater, Vector2 playerPosition)
 {
     float dtime = nowTime - gentime;
     std::vector<Bullet *> ret;
-    // std::cerr << (int)dtime << " " << (int)dutime << std::endl;
-    if ((int)(dtime * 0.3) - (int)(dutime * 0.3) >= 1)
-    { // test
-        ret.push_back(new eldenBullet(nowTime, 12.0, creater, Fade(ORANGE, 0.3), 30, pos, 100, 3, 0.5, playerPosition - pos));
-    }
-    if ((int)dtime - (int)dutime >= 1)
+    if (dtime <= 10) 
     {
-        ret.push_back(new fishBullet(nowTime, 30.0, creater, PURPLE, 7, pos, 300, 0.02));
-    }
-    if (int(dtime * 0.5) - int(dutime * 0.5) >= 1)
-    {
-        std::vector<Bullet *> bullets;
-        for (float alpha = PI / 4; alpha <= PI * 2; alpha += PI / 2)
-        {
-            Vector2 f = {cos(alpha), sin(alpha)};
-            Bullet *b = new fishBullet(nowTime, 30.0, creater, PURPLE, 8, {10 * f.x, 10 * f.y}, 200, alpha);
-            bullets.push_back(b);
-        }
-        /*for (auto bullet : bullets)
-        {
-            std::cerr << "bullet pos:" << bullet->pos.x << ' ' << bullet->pos.y << std::endl;
-        }*/
-        ret.push_back(new splitBullet(nowTime, 3.0, creater, ORANGE, 10, pos, {0, 50}, bullets));
-    }
-    if ((int)dtime * 2 - (int)dutime * 2 >= 1)
-    {
-        for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 16)
-        {
-            Vector2 f = {cos(alpha + rotatep), sin(alpha + rotatep)};
-            Bullet *b = new basicBullet(nowTime, 15.0, creater, ORANGE, 5, pos + 10.0f * f, 50.0f * f);
-            ret.push_back(b);
+        FOR_INTERVAL(dutime, dtime, 2) {
+            float bias = getrand(-PI / 4, PI / 4);
+            for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 8) {
+                //float randtime = getrand(0, 1.5);
+                Vector2 f1 = {cos(alpha + bias), sin(alpha + bias)};
+                for (float beta = 0.0; beta <= PI * 2; beta += PI / 16) {
+                    Vector2 f2 = {cos(beta), sin(beta)};
+                    Bullet *b = new TurningBullet(nowTime, 10, creater, LIME, 5, 
+                    pos + f1, 300 * f1, 50 * f2, 1 + getrand(0, 1.5));
+                    ret.push_back(b);
+                }
+                Bullet *b = new basicBullet(nowTime, 5, creater, VIOLET, 8, pos + f1, 300 * f1);
+                ret.push_back(b);
+            }
         }
     }
-    if ((int)(dtime * 0.8) - (int)(dutime * 0.8) >= 1)
-    {
-        for (int i = 0; i <= 20; i++)
-        {
-            float alpha = 1.0 * rand() / RAND_MAX * PI * 2;
-            Vector2 f = {cos(alpha), sin(alpha)};
-            float speed = 1.0 * rand() / RAND_MAX * 90 + 100;
-            Bullet *b = new basicBullet(nowTime, 5.0, creater, ORANGE, 5, pos + 10.0f * f, speed * f);
-            ret.push_back(b);
+    else if (dtime >= 14 && dtime <= 24) {
+        FOR_INTERVAL(dutime, dtime, 2) {
+            float bias = getrand(-PI / 4, PI / 4);
+            for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 4) {
+                Vector2 f1 = {cos(alpha + bias), sin(alpha + bias)};
+                for (float turnt = 1; turnt <= 3; turnt += 0.2) {
+                    for (float beta = 0.0; beta <= PI * 2; beta += PI / 4) {
+                        Vector2 f2 = {cos(beta), sin(beta)};
+                        Bullet *b = new TurningBullet(nowTime, 10, creater, BEIGE, 5,
+                        pos + f1, 300 * f1, 50 * f2, turnt);
+                        ret.push_back(b);
+                    }
+                }
+            }
         }
-        // std::cerr << dutime << " " << livetime << std::endl;
     }
     dutime = dtime;
     return ret;

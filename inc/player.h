@@ -7,7 +7,7 @@
 #include "enemymanager.h"
 #define MAXLP 5 //最大技能释放次数
 #define PROT_LIMITTIME 5
-#define PROT_REC {p.x - r - 25, p.y - r - 10, 60, 5}
+#define PROT_REC {p.x - 40 - 10, p.y - 40 - 10, 100, 8}
 #define BOOMSCOPE 200
 #define LASTOFRING 0.2
 #define FOOTBALLSP 500

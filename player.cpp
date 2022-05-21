@@ -32,7 +32,7 @@ Player::~Player()
 
 void Player::Hit(float nowTime)
 {
-    if (canHit)
+    if (canHit) // 无敌！！！
     {
         hp -= 1;
         canHit = false;
@@ -189,10 +189,11 @@ void Atk::HitEnemy(EnemyManager * enemys) {
 }
 
 void Atk::Check(int screenWidth, int screenHeight ) { //判断是否出界
-    for (auto i = Ps.begin(); i != Ps.end(); i++) {
+    for (auto i = Ps.begin(); i != Ps.end(); ) {
         auto j = *i;
         if (j.x < - R || j.y < -R || j.x > screenWidth + R || j.y > screenHeight + R )
-            Ps.erase(i);
+            i = Ps.erase(i);
+        else i++;
     }
 }
 
