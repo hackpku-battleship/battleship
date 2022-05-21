@@ -253,7 +253,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             enemys->addEnemy(enemyQueue.front().second);
             enemyQueue.pop();
         }
-
+        
         player->Update(time);
         player->Move(deltatime);
         if (kind == 2)
@@ -310,7 +310,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new PredictEnemy(100, time, 60, {x, y}, 10, "source/lion.png"));
+            enemys->addEnemy(new PredictEnemy(1000, time, 10000, {x, y}, 40, "source/lion.png"));
         }
 
         auto _bullets = enemys->updateTime(time, enemyBullets, player->getPosition());

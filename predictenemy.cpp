@@ -24,23 +24,17 @@ std::vector<Bullet *> PredictEnemy::getBullet(float nowTime, BulletManager *crea
         }
         if (int(dtime * 0.2) - int(dutime * 0.2) >= 1)
         {
-            if (rand() & 1)
+
+            for (float _ang = 0; _ang <= PI; _ang += PI / 6)
             {
-                for (float _ang = 0; _ang <= PI; _ang += PI / 6)
+                std::vector<Bullet *> bullets;
+                for (float ang = 0; ang <= 2 * PI; ang += PI / 16)
                 {
-                    std::vector<Bullet *> bullets;
-                    for (float ang = 0; ang <= 2 * PI; ang += PI / 16)
-                    {
-                        Vector2 f = {cos(ang), sin(ang)};
-                        Bullet *b = new accBullet(nowTime, 10, creater, RED, 5, {0, 0}, {0, 0}, {200 * f.x, 200 * f.y});
-                        bullets.push_back(b);
-                    }
-                    ret.push_back(new splitBullet(nowTime, rand() % 10, creater, GREEN, 15, pos, {80 * cos(_ang), 80 * sin(_ang)}, bullets));
+                    Vector2 f = {cos(ang), sin(ang)};
+                    Bullet *b = new accBullet(nowTime, 10, creater, RED, 5, {0, 0}, {0, 0}, {200 * f.x, 200 * f.y});
+                    bullets.push_back(b);
                 }
-            }
-            else
-            {
-                ret.push_back(new eldenBullet(nowTime, 10, creater, YELLOW, 30, pos, 40, PI / 2, 0.5));
+                ret.push_back(new splitBullet(nowTime, rand() % 10, creater, GREEN, 15, pos, {80 * cos(_ang), 80 * sin(_ang)}, bullets));
             }
         }
         if (int(dtime * 2) - int(dutime * 2) >= 1)
@@ -74,12 +68,16 @@ std::vector<Bullet *> PredictEnemy::getBullet(float nowTime, BulletManager *crea
                 pos = {float(rand() % 1000),
                        float(rand() % 900)};
             while (-100 <= pos.x - playerPosition.x && pos.x - playerPosition.x <= 100 && -100 <= pos.y - playerPosition.y && pos.y - playerPosition.y <= 100);
-            ret.push_back(new fishBullet(nowTime, 5, creater, ORANGE, 15, pos, 300, PI / 2));
+            ret.push_back(new fishBullet(nowTime, 5, creater, ORANGE, 15, pos, 200, PI / 2));
         }
     }
     if (nowTime - stateLastTime >= 10)
     {
-        state = rand() % 3 + 1;
+        int new_state;
+        do
+            new_state = rand() % 3 + 1;
+        while (state == new_state);
+        state = new_state;
         stateLastTime = nowTime;
     }
     if (int(dtime * 10) - int(dutime * 10) >= 1)
