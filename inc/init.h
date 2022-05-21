@@ -55,7 +55,7 @@ extern Music killedMusic;
 };
 
 namespace Img {
-    extern Texture2D t1, t2, t3, h1, h2, h3, ky, sr;
+    extern Texture2D t1, t2, t3, h1, h2, h3, ky, sr, sr2;
     extern std::shared_ptr<Gif> gif;
     void Init();
     void Release();
