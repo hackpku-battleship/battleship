@@ -46,12 +46,6 @@ int Init::loop(int screenWidth, int screenHeight)
             if (!ret)
                 return 0;
         }
-        else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnText2)
-        { // 进入说明界面
-            int ret = Inst::loop(screenWidth, screenHeight);
-            if (!ret)
-                return 0;
-        }
         // 初始界面
         auto col1 = mouseOnText1 ? RED : BLACK;
         auto col2 = mouseOnText2 ? RED : BLACK;
@@ -147,7 +141,8 @@ int Init::choose(int screenWidth, int screenHeight)
                 if (i == 3)
                     return Init::loop(screenWidth, screenHeight);
                 else
-                    return Game::loop(screenWidth, screenHeight, i);
+                    return Init::choose_stage(screenWidth, screenHeight, i);
+                    //return Game::loop(screenWidth, screenHeight, i , 0);
             }
         BeginDrawing();
         // ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
@@ -165,7 +160,38 @@ int Init::choose(int screenWidth, int screenHeight)
     return 0;
 }
 
-int Game::loop(int screenWidth, int screenHeight, int kind)
+int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
+    const char hint[50] = {"Choose the Level :"};
+    const char msg[4][50] = {"Lv1", "Lv2", "Lv3", "Back"};
+    float Mid = screenHeight / 2 - 100;
+    bool MouseOn[4];
+    Rectangle msgBox[4] = {{Mid, 200, 100, 50}, {Mid, 400, 100, 50}, {Mid, 600, 100, 50}, {Mid, 800, 100, 50}};
+    while (!WindowShouldClose())
+    {
+        for (int i = 0; i < 4; i++)
+            MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
+        for (int i = 0; i < 4; i++)
+            if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                if (i == 3)
+                    return Init::choose(screenWidth, screenHeight);
+                else
+                    return Game::loop(screenWidth, screenHeight, kind, i);
+            }
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        DrawText(hint, 10, 10, 40, BLACK);
+        for (int i = 0; i < 4; i++)
+        {
+            //DrawRectangleRec(msgBox[i], LIGHTGRAY);
+            DrawText(msg[i], msgBox[i].x, msgBox[i].y,  50, MouseOn[i] ? RED : BLACK);
+        }
+        EndDrawing();
+    }
+    return 0;
+}
+
+int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 {
     Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTextureFromImage(Bgimage);
@@ -186,7 +212,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     float playerLasttime = 0.0;
 
     const int MAX_STAGE = 3;
-    int stagecnt = 2;
+    int stagecnt = 0;
 
     while (!WindowShouldClose())
     {
