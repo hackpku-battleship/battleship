@@ -2,6 +2,7 @@
 #include "bullet.h"
 #include "bulletManager.h"
 #include "raylib.h"
+#include "enemymanager.h"
 
 PlayerHPBar::PlayerHPBar(float x, float y, float radius, float delta)
     : x(x), y(y), radius(radius), delta(delta)
@@ -157,7 +158,7 @@ bool Prot::Check(float nowTime)
     return nowTime - StartTime >= LimitTime;
 }
 
-Atk::Atk(float _R):R(_R),Speed(FOOTBALLSP) {
+Atk::Atk(float _R):R(_R),Speed(FOOTBALLSP),attack(BALLATTACK) {
 }
 
 void Atk::Draw() {
@@ -176,8 +177,15 @@ void Atk::HitBullet(BulletManager * enemyBullets) {
     enemyBullets->setBullets(bullets);
 }
 
-void Atk::HitEnemy() {
-    //todo : 碰到敌人, 敌人掉血, （技能消失？）
+void Atk::HitEnemy(EnemyManager * enemys) {
+    //todo : 碰到敌人, 敌人掉血, (技能消失)
+    for (auto i = Ps.begin(); i != Ps.end(); i++)
+        for (auto j : enemys->enemys) 
+            if(CheckCollisionCircles(*i, R, j->pos, j->r) ) {
+                Ps.erase(i);
+                j->hp -= attack;
+                break;
+            }
 }
 
 void Atk::Check(int screenWidth, int screenHeight ) { //判断是否出界
