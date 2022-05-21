@@ -55,7 +55,7 @@ void Stage2(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
         Enemy *e = new shotSimpleTraceEnemy(100, nowtime + etime[i], 10, epos[i], 40, devil, 40, 10);
         queue.push(std::make_pair(nowtime + etime[i], e));
     }
-    queue.push(std::make_pair(15 + nowtime, new stage2Enemy(100, nowtime + 15, 25, {500,50}, 50, "source/fish1.png")));
+    queue.push(std::make_pair(15 + nowtime, new stage2Enemy(100, nowtime + 15, 25, {500,50}, 50, "source/tiger.png")));
     return;
 }
 
@@ -74,15 +74,14 @@ void Stage3(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
         const int prede = 3;
         Vector2 predpos[prede] = {{500, 100}, {350, 200}, {650, 200}};
         float predtime[prede] = {23, 23.7, 24.5};
-        float predlive = 20;
-        for (int i = 0; i < prede; i++) {
-            Enemy *e = new PredictEnemy(40, nowtime + predtime[i], predlive, predpos[i], 50, "source/fish0.png");
+        float predlive = 1000;
+        for (int i = 0; i < 3; i++) {
+            Enemy *e = new PredictEnemy(1000, nowtime + predtime[i], predlive, predpos[i], 50, "source/fish0.png");
             queue.push(std::make_pair(nowtime + predtime[i], e));
         }
     }
 
-    queue.push(std::make_pair(nowtime + 50, new SimpleEnemy(3000, nowtime, nowtime + 1145141919, (Vector2){500, 50}, 50, "source/fish1.png")));
-    
+    queue.push(std::make_pair(nowtime + 50, new SimpleEnemy(5000, nowtime, nowtime + 1145141919, (Vector2){500, 50}, 50, "source/jellyfish.png")));
     return;
 }
 
