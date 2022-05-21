@@ -93,8 +93,9 @@ void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
     enemyBullets->setBullets(bullets);
 }
 
-void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
+int checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
 {
+    int destroyed = 0;
     auto enemys = enemyManager->getEnemys();
     auto bullets = playerBullets->getBullets();
     for (int i = 0; i < enemys.size(); i++)
@@ -107,6 +108,7 @@ void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
                 enemys[i]->hit();
                 if (!enemys[i]->isalive())
                 {
+                    ++destroyed;
                     delete enemys[i];
                     enemys.erase(enemys.begin() + i);
                 }
@@ -115,6 +117,7 @@ void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
     }
     enemyManager->setEnemys(enemys);
     playerBullets->setBullets(bullets);
+    return destroyed;
 }
 
 int Init::choose(int screenWidth, int screenHeight)
@@ -185,7 +188,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     float playerLasttime = 0.0;
 
     const int MAX_STAGE = 3;
-    int stagecnt = 2;
+    int stagecnt = 2, destroyedEnemy = 0;
 
     while (!WindowShouldClose())
     {
@@ -282,7 +285,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         atk->HitBullet(enemyBullets);
         atk->HitEnemy(enemys);
         checkPlayerHit(player, enemyBullets, time);
-        checkEnemysHit(enemys, playerBullets);
+        destroyedEnemy += checkEnemysHit(enemys, playerBullets);
 
         player->Draw();
         atk->Draw();
@@ -295,6 +298,10 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         // std::cerr<<enemyBullets->getBullets().size()<<std::endl;
 
         DrawText(TextFormat("FPS: %.0lf", 1 / GetFrameTime()), 10, 10, 20, RED);
+
+
+        DrawText(TextFormat("STAGE %d", stagecnt), 1020, 10, 40, BLACK);
+        DrawText(TextFormat("enemy destroyed: ", destroyedEnemy), 1020, 50, 20, BLACK);
 
         EndDrawing();
     }
