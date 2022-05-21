@@ -17,13 +17,16 @@ void PlayerHPBar::Draw(int hp)
 Player::Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float maxX, float hitlessTime, int kind)
     : position(position), radius(radius), hp(hp), speed(speed), lowspeed(lowspeed), minY(minY), maxX(maxX), hitlessTime(hitlessTime), kind(kind),lp(MAXLP),prot(nullptr),Lastt(-2.0)
 {
-    //texture = LoadTexture(filename);
+    if (kind == 0) texture = LoadTexture("source/reimu.png");
+    else if (kind == 1) texture = LoadTexture("source/marisa.png");
+    else texture = LoadTexture("source/alice.png");
 }
 
 Player::~Player()
 {
     if (prot != nullptr)
         delete prot;
+    UnloadTexture(texture);
 }
 
 void Player::Hit(float nowTime)
@@ -69,13 +72,17 @@ void Player::Draw()
 {
     if (prot != nullptr)
         prot->Draw(position, radius);
+    const float playerradius = 40;
     int frameWidth = texture.width;
     int frameHeight = texture.height;
     Rectangle sourceRec = {0.0f, 0.0f, (float)frameWidth, (float)frameHeight};
-    Rectangle destRec = {position.x, position.y, radius * 2.0f, radius * 2.0f};
-    Vector2 origin = {radius, radius};
+    Rectangle destRec = {position.x, position.y, playerradius * 2.0f, playerradius * 2.0f};
+    Vector2 origin = {playerradius, playerradius};
     DrawTexturePro(texture, sourceRec, destRec, origin, 0.0, WHITE);
-    // DrawCircleV(position, radius, MAROON);
+    if (IsKeyDown(KEY_LEFT_SHIFT)) {
+        DrawCircleV(position, radius, WHITE);
+        DrawRing(position, radius, radius + 2, 0.f, 360.f, 1, BLACK);
+    }
 }
 
 int Player::getHP()
