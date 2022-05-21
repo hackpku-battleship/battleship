@@ -24,7 +24,7 @@ void Stage1(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
 
     {
         const int STIME = 15;
-        Enemy *e = new spinEnemy(20, nowtime + STIME, 40, (Vector2){500, 50}, 50, "source/j.png", 
+        Enemy *e = new spinEnemy(200, nowtime + STIME, 30, (Vector2){500, 50}, 50, "source/zhuanzhuan.png", 
             (Vector2){0, 0}, 1);
         queue.push(std::make_pair(nowtime + STIME, e));
     }
