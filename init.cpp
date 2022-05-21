@@ -57,6 +57,7 @@ Texture2D Img::h1;
 Texture2D Img::h2;
 Texture2D Img::h3;
 Texture2D Img::ky;
+Texture2D Img::sr;
 std::shared_ptr<Gif> Img::gif;
 
 void Img::Init() {
@@ -111,6 +112,12 @@ void Img::Init() {
         ClearBackground(RAYWHITE);
         DrawText("Loading....", 10, 10, 80, BLACK);
     EndDrawing();
+    {
+        Image irm = LoadImage("source/reimu_simple.png");
+        ImageResize(&irm, 600, 800);
+        sr = LoadTextureFromImage(irm);
+        UnloadImage(irm);
+    }
 }
 
 void Img::Release() {
@@ -121,6 +128,7 @@ void Img::Release() {
     UnloadTexture(h2);
     UnloadTexture(h3);
     UnloadTexture(ky);
+    UnloadTexture(sr);
     //gif->release();
     //delete gif;
 }
@@ -492,6 +500,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 
         DrawText(TextFormat("STAGE %d", stagecnt), 1020, 10, 40, BLACK);
         DrawText(TextFormat("enemy destroyed: %d", destroyedEnemy), 1020, 50, 20, BLACK);
+        DrawTexture(Img::sr, 1000, 80, RAYWHITE);
 
         EndDrawing();
     }
