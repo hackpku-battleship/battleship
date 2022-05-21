@@ -17,7 +17,7 @@ void PlayerHPBar::Draw(int hp)
 Player::Player(Vector2 position, float radius, int hp, float speed, float lowspeed, float minY, float maxX, float hitlessTime, int kind)
     : position(position), radius(radius), hp(hp), speed(speed), lowspeed(lowspeed), minY(minY), maxX(maxX), hitlessTime(hitlessTime), kind(kind),lp(MAXLP),prot(nullptr),Lastt(-2.0)
 {
-    //texture = LoadTexture(filename);
+    texture = LoadTexture("source/lion.png");
 }
 
 Player::~Player()
