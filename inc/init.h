@@ -39,5 +39,6 @@ namespace Mus {
 extern Music openMusic;
 extern Music stageMusics[4];
 extern Music endMusic;
+extern Music killedMusic;
 };
 #endif

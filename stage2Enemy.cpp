@@ -37,7 +37,7 @@ std::vector<Bullet *> stage2Enemy::getBullet(float nowTime, BulletManager *creat
                 for (float turnt = 1; turnt <= 3; turnt += 0.2) {
                     for (float beta = 0.0; beta <= PI * 2; beta += PI / 4) {
                         Vector2 f2 = {cos(beta), sin(beta)};
-                        Bullet *b = new TurningBullet(nowTime, 10, creater, BEIGE, 5,
+                        Bullet *b = new TurningBullet(nowTime, 10, creater, BLACK, 5,
                         pos + f1, 300 * f1, 50 * f2, turnt);
                         ret.push_back(b);
                     }
