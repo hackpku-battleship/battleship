@@ -443,9 +443,9 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             for (int i = 0; i < bullets.size(); i++)
                 if (bullets[i]->checkBox(player->getPosition(), nowRadius))
                 {
-                    bullets[i]->parryed();
-                    // delete bullets[i];
-                    // bullets.erase(bullets.begin() + i);
+                    //bullets[i]->parryed();
+                    delete bullets[i];
+                    bullets.erase(bullets.begin() + i);
                 }
             enemyBullets->setBullets(bullets);
         }

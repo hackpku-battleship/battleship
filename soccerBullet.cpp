@@ -9,7 +9,9 @@ soccerBullet::soccerBullet(float nowTime, float liveTime, BulletManager* from, C
         velocity((1.0f / (liveTime - delayTime)) * (endPoint - startPos)){
             tex = LoadTexture(imgPath);
         }
-
+bool soccerBullet::inScreen(int H,int W){
+    return -100 <= pos.x && pos.x <= H + 100 && -100 <= pos.y && pos.y <= W + 100;
+}
 float soccerBullet::updateTime(float nowTime, Vector2 playerPosition){
     float _deltaTime=0;
     if(lastTime < genTime + delayTime) _deltaTime = delayTime - (lastTime - genTime);

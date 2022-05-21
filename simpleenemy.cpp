@@ -4,16 +4,18 @@
 #include <iostream>
 
 SimpleEnemy::SimpleEnemy(float _hp, float _gentime, float _livetime, Vector2 pos, float _r, char *filename) : Enemy(_hp, _gentime, _livetime, pos, _r, filename), rotatep(0.0) {}
-
 std::vector<Bullet *> SimpleEnemy::getBullet(float nowTime, BulletManager *creater, Vector2 playerPosition){
     float dtime = nowTime - gentime;
     std::vector<Bullet *> ret;
     if ((int)(dtime / 5) - (int)(dutime / 5) >= 1)
     {
-        static bool current = true;
+        static bool current = true; 
         if(current){
             Vector2 startPosition = {rand()%1000,80}, direction = playerPosition - startPosition;
             ret.push_back(new soccerBullet(nowTime, 2.5, creater, BLANK, 80, startPosition , 2.0, startPosition + (2000.f / norm(direction)) * direction, "source/soccer80.png"));
+            Vector2 startD = {-90, 820}, endD = {1090, 820};
+            if(playerPosition.x < 500)std::swap(startD, endD);
+            ret.push_back(new soccerBullet(nowTime, 2.0, creater, BLANK, 80, startD , 1.5, endD, "source/soccer80.png"));
         }else{
             int t0=rand()%2;
             int t=rand()%4;

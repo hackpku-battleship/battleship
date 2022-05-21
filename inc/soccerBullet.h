@@ -15,6 +15,7 @@ public:
     float updateTime(float nowTime, Vector2 playerPosition);
     void Draw();
     virtual void turnBack();
+    virtual bool inScreen(int, int);
 };
 
 

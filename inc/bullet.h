@@ -21,7 +21,7 @@ public:
     virtual ~Bullet();
     virtual float updateTime(float, Vector2);
     bool checkAlive(float);
-    bool inScreen(int, int);
+    virtual bool inScreen(int, int);
     virtual void Draw();
     bool checkBox(Vector2, float);
     bool checkProt(Vector2, float);

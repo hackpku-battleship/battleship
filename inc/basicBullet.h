@@ -12,7 +12,6 @@ public:
     basicBullet(float nowTime, float liveTime, BulletManager* from, Color col, float radius, Vector2 _pos, Vector2 _velocity);
     float updateTime(float, Vector2);
     bool checkBox(Vector2, float);
-    bool inScreen(int, int);
     virtual void turnBack();
 };
 
