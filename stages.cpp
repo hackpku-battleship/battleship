@@ -49,14 +49,14 @@ void Stage2(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
     const int senmy = 9;
     Vector2 epos[senmy] = {{200, 200}, {800, 200}, {300, 300}, {700, 300}, {500, 100}, {500, 500},
                             {100, 100}, {900, 100}, {500, 400}};
-    float etime[senmy] = {1, 1, 5, 5, 8, 8, 16+nowtime, 17+nowtime, 18+nowtime};
+    float etime[senmy] = {1, 1, 5, 5, 8, 8, 10, 10, 10};
     float dutime = 15;
     char devil[] = "source/devil.png";
     for (int i = 0; i < senmy; i++) {
         Enemy *e = new shotSimpleTraceEnemy(100, nowtime + etime[i], 10, epos[i], 40, devil, 40, 10);
         queue.push(std::make_pair(nowtime + etime[i], e));
     }
-    queue.push(std::make_pair(15 + nowtime, new stage2Enemy(1000, nowtime + 15, 25, {500,50}, 50, "source/tiger.png")));
+    queue.push(std::make_pair(15 + nowtime, new stage2Enemy(1000, nowtime + 15, 25, {500,50}, 50, "source/Patchouli.png")));
     return;
 }
 
