@@ -12,3 +12,6 @@ float basicBullet::updateTime(float nowTime, Vector2 playerPosition){
     pos = pos + deltaTime * velocity;
     return deltaTime;
 }
+void basicBullet::turnBack(){
+    velocity = (-1) * velocity;
+}

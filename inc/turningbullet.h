@@ -9,6 +9,7 @@ public:
     float turntime;
     TurningBullet(float nowTime, float liveTime, BulletManager* from, Color col, float radius, Vector2 _pos, Vector2 _vel1, Vector2 _vel2, float _turnTime);
     float updateTime(float, Vector2);
+    virtual void turnBack();
 };
 
 #endif

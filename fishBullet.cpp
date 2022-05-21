@@ -28,3 +28,7 @@ float fishBullet::updateTime(float nowTime, Vector2 playerPosition){
 void fishBullet::Draw(){
     DrawCircleV(pos, fade ? radius * (1 - (lastTime - genTime) / lifeTime) : radius, col);
 }
+void fishBullet::turnBack(){
+    angleV = 0;
+    angle = (-1) * angle;
+}

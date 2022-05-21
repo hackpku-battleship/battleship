@@ -35,7 +35,7 @@ Player::~Player()
 
 void Player::Hit(float nowTime)
 {
-    if (canHit) // 无敌！！！
+    if (canHit)
     {
         hp -= 1;
         canHit = false;
@@ -161,11 +161,13 @@ void Player::setPosition(Vector2 newPosition)
 
 Prot::Prot(float _StartTime) : StartTime(_StartTime), LimitTime(PROT_LIMITTIME)
 {
+    tex = LoadTexture("source/kasa_mid.png");
 }
 
 void Prot::Draw(Vector2 p, float r)
 {
-    DrawRectangleRec(PROT_REC, GREEN);
+    Rectangle area = PROT_REC;
+    DrawTextureTiled(tex, {0, 0, tex.width, tex.height}, area, {0, 0}, 0, 1, WHITE);
 }
 
 void Prot::Hit()
@@ -196,6 +198,7 @@ void Atk::HitBullet(BulletManager *enemyBullets)
             {
                 delete bullets[i];
                 bullets.erase(bullets.begin() + i);
+                --i;
             }
     enemyBullets->setBullets(bullets);
 }
@@ -203,14 +206,18 @@ void Atk::HitBullet(BulletManager *enemyBullets)
 void Atk::HitEnemy(EnemyManager *enemys)
 {
     // todo : 碰到敌人, 敌人掉血, (技能消失)
-    for (auto i = Ps.begin(); i != Ps.end(); i++)
+    for (auto i = Ps.begin(); i != Ps.end();){
+        bool flag = false;
         for (auto j : enemys->enemys)
             if (CheckCollisionCircles(*i, R, j->pos, j->r))
             {
-                Ps.erase(i);
+                i=Ps.erase(i);
+                flag = true;
                 j->hp -= attack;
                 break;
             }
+        if(!flag) i++;
+    }
 }
 
 void Atk::Check(int screenWidth, int screenHeight)
