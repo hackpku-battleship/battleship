@@ -8,6 +8,13 @@ std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager)
 {
     std::vector<Bullet *> ret;
     float dtime = nowTime - gentime;
+    if (inPeriod(3, 2, dtime)) {
+        FOR_INTERVAL(dutime, dtime, 0.1) {
+            Bullet *b = new traceBullet(nowTime, 20, RED, 6, pos + (Vector2){0, 40}, 4);
+            ret.push_back(b);
+        }
+    }
+    /*
     FOR_INTERVAL(dutime, dtime, 0.4) {
         //std::cerr << dtime << " " << dutime << std::endl;
         for (int i = -4; i <= 4; i++) {
@@ -21,6 +28,7 @@ std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager)
         Bullet *b = new fishBullet(nowTime, 5, PURPLE, 10, (Vector2){pos.x, pos.y + 50}, 300, 0.02);
         ret.push_back(b);
     }
+    //*/
     /*
     FOR_INTERVAL(dutime, dtime, 0.2) {
         float alpha = 0.0;
@@ -38,7 +46,7 @@ std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager)
         //std::cerr << ret.size() << std::endl;
     }
     //*/
-    
+    /*
     FOR_INTERVAL(dutime, dtime, 2) {
         for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 8) {
             float randtime = getrand(0, 1.5);

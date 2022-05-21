@@ -19,3 +19,8 @@ Vector2 rotate(Vector2 a, float b){
         float(sinb*a.x+cosb*a.y)
     };
 }
+
+Vector2 normalize(Vector2 vec) {
+    float nm = 1.0 / norm(vec);
+    return nm * vec;
+}
