@@ -57,6 +57,12 @@ void Stage2(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
     return;
 }
 
+void Stage3(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
+    queue.push(std::make_pair(nowtime, 
+        new SimpleEnemy(100, nowtime, 20, (Vector2){500, 50}, 50, "source/fish1.png")));
+    return;
+}
+
 void getStage(int stageid, float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
     switch (stageid)
     {
@@ -65,6 +71,9 @@ void getStage(int stageid, float nowtime, std::queue<std::pair<float, Enemy*> > 
         break;
     case 2:
         Stage2(nowtime, queue);
+        break;
+    case 3:
+        Stage3(nowtime, queue);
         break;
     default:
         break;
