@@ -120,7 +120,6 @@ Prot::Prot(float _StartTime):StartTime(_StartTime),LimitTime(PROT_LIMITTIME) {
 }
 
 void Prot::Draw(Vector2 p, float r) {
-    //Rectangle tmp = {p.x - r - 10, p.y - r - 10, 40, 5};
     DrawRectangleRec(PROT_REC, GREEN);
 }
 

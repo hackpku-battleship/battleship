@@ -37,3 +37,7 @@ void BulletManager::setBullets(std::vector<Bullet *> v)
 {
     bullets = v;
 }
+
+bool BulletManager::isEmpty() {
+    return bullets.empty();
+}

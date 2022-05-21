@@ -14,6 +14,7 @@ struct BulletManager
     bool checkBox(Vector2 x, double r);
     std::vector<Bullet *> getBullets();
     void setBullets(std::vector<Bullet *> v);
+    bool isEmpty();
 };
 
 #endif

@@ -14,6 +14,8 @@
 #include "stages.h"
 
 const Vector2 initPlayerPosition = {400, 900};
+const int playgroundWidth = 1000;
+const int playgroundHeight = 900;
 
 int Init::loop(int screenWidth, int screenHeight)
 {
@@ -182,7 +184,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         float deltatime = GetFrameTime();
         time += deltatime;
 
-        if (stagecnt < MAX_STAGE && enemys->isEmpty()) {
+        if (stagecnt < MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty()) {
             stagecnt++;
             //std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
@@ -244,9 +246,9 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
 
         player->Draw();
         playerHPBar->Draw(player->getHP());
-        playerBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
+        playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
-        enemyBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
+        enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         enemyBullets->DrawAllBullets();
 
         //std::cerr<<enemyBullets->getBullets().size()<<std::endl;
@@ -320,6 +322,7 @@ int Pause::loop(int screenWidth, int screenHeight)
 int Over::loop(int screenWidth, int screenHeight)
 {
     const char msg[3][50] = {"New Game", "Return to menu", "Quit"};
+    const char gg[50] = {"Game Over!"};
     float Mid = screenWidth / 2.0f - 200;
 
     Rectangle msgBox[3] = {{Mid, screenHeight / 2.0f - 100, 300, 50}, {Mid, screenHeight / 2.0f + 0, 480, 50}, {Mid, screenHeight / 2.0f + 100, 130, 50}};
@@ -341,6 +344,7 @@ int Over::loop(int screenWidth, int screenHeight)
                     return Init::choose(screenWidth, screenHeight);
             }
         BeginDrawing();
+        DrawText(gg, Mid - 40, 200, 80, RED);
         for (int i = 0; i < 3; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
