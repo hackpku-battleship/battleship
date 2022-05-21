@@ -10,7 +10,7 @@
 #define PROT_REC {p.x - r - 25, p.y - r - 10, 60, 5}
 #define BOOMSCOPE 200
 #define LASTOFRING 0.2
-#define FOOTBALLSP 300
+#define FOOTBALLSP 500
 #define BALLCD 0.5
 #define BALLATTACK 30
 
