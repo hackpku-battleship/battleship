@@ -242,7 +242,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
                 {
                     playerBullets->addBullet(
                         new basicBullet(time, 5, enemyBullets, RED, 5,
-                                        player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -400}));
+                                        player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -800}));
                 }
                 playerLasttime = time;
             }
