@@ -119,6 +119,18 @@ void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
 
 int Init::choose(int screenWidth, int screenHeight)
 {
+    Image png3 = LoadImage("source/alice_huge.png");
+    Image png1 = LoadImage("source/reimu_huge.png");
+    Image png2 = LoadImage("source/marisa_huge.png");
+    ImageResize(&png1, 400, 500);
+    ImageResize(&png2, 400, 500);
+    ImageResize(&png3, 400, 500);
+    Texture2D h1 = LoadTextureFromImage(png1);
+    Texture2D h2 = LoadTextureFromImage(png2);
+    Texture2D h3 = LoadTextureFromImage(png3);
+    UnloadImage(png1);
+    UnloadImage(png2);
+    UnloadImage(png3);
     const char hint[50] = {"Choose your hero :"};
     const char msg[4][50] = {"Hero1", "Hero2", "Hero3", "Back"};
     float Bott = screenHeight - 200;
@@ -138,6 +150,10 @@ int Init::choose(int screenWidth, int screenHeight)
                     return Game::loop(screenWidth, screenHeight, i);
             }
         BeginDrawing();
+        //ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
+        DrawTexture(h1, 150, 100 , RAYWHITE);
+        DrawTexture(h2, 550, 100 , RAYWHITE);
+        DrawTexture(h3, 950, 100 , RAYWHITE);
         DrawText(hint, 10, 10, 40, BLACK);
         for (int i = 0; i < 4; i++)
         {
