@@ -3,7 +3,7 @@
 
 #include "raylib.h"
 #include "bullet.h"
-#include "basicBullet.h"
+#include "fishBullet.h"
 #include "bulletManager.h"
 #include <bits/stdc++.h>
 

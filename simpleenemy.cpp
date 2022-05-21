@@ -22,7 +22,7 @@ std::vector<Bullet *> SimpleEnemy::getBullet(float nowTime, BulletManager *creat
         for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 16)
         {
             Vector2 f = {cos(alpha + rotatep), sin(alpha + rotatep)};
-            Bullet *b = new basicBullet(nowTime, 15.0, (Vector2){x, y} + 10.0f * f, 50.0f * f);
+            Bullet *b = new basicBullet(nowTime, 30.0, (Vector2){x, y} + 10.0f * f, 50.0f * f);
             ret.push_back(b);
         }
     }

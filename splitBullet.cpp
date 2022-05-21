@@ -5,7 +5,7 @@
 
 splitBullet::splitBullet(float nowTime, float lifeTime, Vector2 startPosition, Vector2 velocity, float speed, BulletManager *creater) : Bullet(nowTime, lifeTime), position(startPosition), velocity(velocity), speed(speed), creater(creater)
 {
-    radius = 5;
+    radius = 15;
 }
 float splitBullet::updateTime(float nowTime, Vector2 playerPosition)
 {
@@ -14,10 +14,10 @@ float splitBullet::updateTime(float nowTime, Vector2 playerPosition)
     position = position + deltaTime * velocity;
     if (int(dtime * speed) - int(dutime * speed) >= 1)
     {
-        for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 16)
+        for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 2)
         {
             Vector2 f = {cos(alpha), sin(alpha)};
-            Bullet *b = new basicBullet(nowTime, 15.0, position + 10.0f * f, 50.0f * f);
+            Bullet *b = new fishBullet(nowTime, 30.0, position + 10.0f * f, 200, alpha);
             creater->addBullet(b);
         }
     }

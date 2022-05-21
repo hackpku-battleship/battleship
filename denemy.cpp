@@ -11,7 +11,7 @@ std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager)
         // std::cerr << dtime << " " << dutime << std::endl;
         for (int i = -4; i <= 4; i++)
         {
-            Bullet *b = new basicBullet(nowTime, 15, (Vector2){x + i * 50, y + 30}, (Vector2){0, 50});
+            Bullet *b = new basicBullet(nowTime, 30, (Vector2){x + i * 50, y + 30}, (Vector2){0, 50});
             ret.push_back(b);
             b = new accBullet(nowTime, 15, (Vector2){x + i * 50, y + 30}, (Vector2){i * 5, 10}, (Vector2){(float)i * 5, 40});
             ret.push_back(b);
