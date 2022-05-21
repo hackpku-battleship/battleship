@@ -39,5 +39,12 @@ namespace Mus {
 extern Music openMusic;
 extern Music stageMusics[4];
 extern Music endMusic;
+extern Music killedMusic;
 };
+
+namespace Img {
+    extern Texture2D t1, t2, t3, h1, h2, h3, ky;
+    void Init();
+    void Release();
+}
 #endif

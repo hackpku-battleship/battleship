@@ -19,11 +19,11 @@ Player::Player(Vector2 position, float radius, int hp, float speed, float lowspe
     : position(position), radius(radius), hp(hp), speed(speed), lowspeed(lowspeed), minY(minY), maxX(maxX), hitlessTime(hitlessTime), kind(kind), lp(MAXLP), prot(nullptr), Lastt(-2.0)
 {
     if (kind == 0)
-        texture = LoadTexture("source/reimu.png");
+        texture = LoadTexture("source/yuka.png");
     else if (kind == 1)
-        texture = LoadTexture("source/marisa.png");
+        texture = LoadTexture("source/reimu.png");
     else
-        texture = LoadTexture("source/alice.png");
+        texture = LoadTexture("source/marisa.png");
 }
 
 Player::~Player()
