@@ -185,8 +185,9 @@ Atk::Atk(float _R) : R(_R), Speed(FOOTBALLSP), attack(BALLATTACK)
 
 void Atk::Draw()
 {
+    static Texture2D tex = LoadTexture("source/dog.png");
     for (auto i : Ps)
-        DrawCircleV(i, R, PINK);
+        DrawTexture(tex, i.x-50, i.y-50, WHITE);
 }
 
 void Atk::HitBullet(BulletManager *enemyBullets)

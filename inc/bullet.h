@@ -26,12 +26,7 @@ public:
     bool checkBox(Vector2, float);
     bool checkProt(Vector2, float);
     void Move(Vector2 dir);
-    void parryed(){
-        if(lastParryedTime + 1 < lastTime){
-            this->turnBack();
-            lastParryedTime = lastTime;
-        }
-    }
+    void parryed();
     virtual void turnBack() = 0;
 };
 

@@ -2,6 +2,7 @@
 #include "bullet.h"
 #include "player.h"
 #include "bulletManager.h"
+#define PARRYED_DURATION 1
 
 Bullet::Bullet(float nowTime, float lifeTime, BulletManager* from, Color _col, float _radius, Vector2 _pos): 
 genTime(nowTime), lifeTime(lifeTime), lastTime(nowTime), col(_col), radius(_radius), pos(_pos), from(from), lastParryedTime(-1e9){}
@@ -23,7 +24,7 @@ void Bullet::Draw(){
 }
 bool Bullet::checkBox(Vector2 center, float rad)
 {
-    return CheckCollisionCircles(pos, radius, center, rad);
+    return lastTime - lastParryedTime < PARRYED_DURATION * 3 ? false : CheckCollisionCircles(pos, radius, center, rad);
 }
 bool Bullet::checkProt(Vector2 p, float r)
 {
@@ -37,4 +38,10 @@ void Bullet::Move(Vector2 dir)
 {
     pos.x = pos.x + dir.x;
     pos.y = pos.y + dir.y;
+}
+void Bullet::parryed(){
+    if(lastParryedTime + PARRYED_DURATION < lastTime){
+        this->turnBack();
+        lastParryedTime = lastTime;
+    }
 }

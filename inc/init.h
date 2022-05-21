@@ -1,6 +1,7 @@
 #ifndef INIT_H
 #define INIT_H
-
+#include <vector>
+#include <string>
 #include "raylib.h"
 
 class Init {
@@ -33,6 +34,15 @@ public:
 class Win{
 public:
     static int loop(int, int);
+};
+
+class Gif {
+    std::vector<Texture2D> src;
+    int W, H, currentframe, totalframe; 
+public:
+    Gif(int _W, int _H, int _totalframe);
+    void Load(std::string path);
+    void Draw(int X, int Y);
 };
 
 namespace Mus {
