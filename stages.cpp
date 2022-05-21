@@ -4,6 +4,7 @@
 #include "denemy.h"
 #include "Vector2Basic.h"
 #include "spinenemy.h"
+#include "shotSimpleTraceEnemy.h"
 
 const int screenWidth = 1600 - 600;
 const int screenHeight = 900;
@@ -36,6 +37,20 @@ void Stage1(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
             (Vector2){0, 0}, 1);
         queue.push(std::make_pair(nowtime + STIME, e));
     }
+    return;
+}
+
+void Stage2(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
+    const int senmy = 6;
+    Vector2 epos[senmy] = {{200, 200}, {800, 200}, {300, 300}, {700, 300}, {500, 100}, {500, 500}};
+    float etime[senmy] = {1, 1, 5, 5, 8, 8};
+    float dutime = 15;
+    char devil[] = "source/devil.png";
+    for (int i = 0; i < senmy; i++) {
+        Enemy *e = new shotSimpleTraceEnemy(100, nowtime + etime[i], 30, epos[i], 40, devil, 40, 10);
+        queue.push(std::make_pair(nowtime + etime[i], e));
+    }
+    return;
 }
 
 void getStage(int stageid, float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
@@ -44,7 +59,9 @@ void getStage(int stageid, float nowtime, std::queue<std::pair<float, Enemy*> > 
     case 1:
         Stage1(nowtime, queue);
         break;
-    
+    case 2:
+        Stage2(nowtime, queue);
+        break;
     default:
         break;
     }
