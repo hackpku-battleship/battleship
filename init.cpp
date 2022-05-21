@@ -165,8 +165,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
 
     float time = 0.0;
 
-    const int MAX_STAGE = 1;
-    int stagecnt = 0;
+    const int MAX_STAGE = 2;
+    int stagecnt = 1;
 
     while (!WindowShouldClose())
     {
