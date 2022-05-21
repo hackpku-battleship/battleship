@@ -14,6 +14,7 @@ public:
     eldenBullet(float nowTime, float lifeTime, BulletManager* from, Color col, float radius, Vector2 startPosition, float velocity, float angleV, float fishV);
     eldenBullet(float nowTime, float lifeTime, BulletManager* from, Color col, float radius, Vector2 startPosition, float velocity, float angleV, float fishV, Vector2 startAngle);
     float updateTime(float, Vector2);
+    virtual void turnBack();
 };
 
 

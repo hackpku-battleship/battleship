@@ -64,8 +64,9 @@ void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
         //检测是否碰撞，当无敌时不考虑是否被Hit
         if (player->prot != nullptr && bullets[i]->checkProt(player->getPosition(), player->getRadius()))
         {
-            delete bullets[i];
-            bullets.erase(bullets.begin() + i);
+            bullets[i]->parryed();
+            //delete bullets[i];
+            //bullets.erase(bullets.begin() + i);
         }
         else if (player->getcanHit() && bullets[i]->checkBox(player->getPosition(), player->getRadius()))
         {
@@ -290,8 +291,9 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             for (int i = 0; i < bullets.size(); i++)
                 if (bullets[i]->checkBox(player->getPosition(), BOOMSCOPE))
                 {
-                    delete bullets[i];
-                    bullets.erase(bullets.begin() + i);
+                    bullets[i]->parryed();
+                    //delete bullets[i];
+                    //bullets.erase(bullets.begin() + i);
                 }
             enemyBullets->setBullets(bullets);
         }

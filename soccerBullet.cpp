@@ -29,3 +29,6 @@ void soccerBullet::Draw(){
     Rectangle dest = {pos.x, pos.y, radius*2, radius*2};
     DrawTexturePro(tex, source, dest, origin, rotation, WHITE);
 }
+void soccerBullet::turnBack(){
+    // do nothing
+}

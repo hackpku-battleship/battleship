@@ -61,6 +61,8 @@ void Stage2(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
 }
 
 void Stage3(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
+    queue.push(std::make_pair(nowtime , new SimpleEnemy(5000, nowtime, nowtime + 1145141919, (Vector2){500, 50}, 50, "source/jellyfish.png")));
+    return;
     {
         const int easye = 7;
         Vector2 easypos[easye] = {{500, 100}, {300, 150}, {700, 150}, {100, 200}, {900, 200},

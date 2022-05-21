@@ -30,3 +30,6 @@ splitBullet::~splitBullet()
         from->addBullet(bullet);
     }
 }
+void splitBullet::turnBack(){
+    velocity = (-1) * velocity;
+}

@@ -12,6 +12,7 @@ public:
     turningTraceBullet(float nowTime, float liveTime, BulletManager* from, Color col, float radius, 
         Vector2 pos, Vector2 vel1, float vel2, float turningtime);
     float updateTime(float, Vector2);
+    virtual void turnBack();
 };
 
 #endif

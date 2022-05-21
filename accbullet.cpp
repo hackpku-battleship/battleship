@@ -10,3 +10,6 @@ float accBullet::updateTime(float nowTime, Vector2 playerpos) {
     pos = pos + delta * vel;
     return delta;
 }
+void accBullet::turnBack(){
+    vel = (-1) * vel;
+}
