@@ -24,14 +24,20 @@ int main(void)
     Mus::endMusic = LoadMusicStream("source/th10_18.mp3");
     Mus::killedMusic = LoadMusicStream("source/killed-short.mp3");
 
+    Img::Init();
+
     PlayMusicStream(Mus::openMusic);
 
     SetTargetFPS(60);
     Init::loop(screenWidth, screenHeight);
+
     UnloadMusicStream(Mus::openMusic);
     for (int i = 0; i <= 3; i++) UnloadMusicStream(Mus::stageMusics[i]);
     UnloadMusicStream(Mus::endMusic);
     UnloadMusicStream(Mus::killedMusic);
+
+    Img::Release();
+    
     CloseAudioDevice(); 
     CloseWindow();
     return 0;
