@@ -142,8 +142,8 @@ int Init::loop(int screenWidth, int screenHeight)
                 return 0;
         }
         // 初始界面
-        auto col1 = mouseOnText1 ? PINK : WHITE;
-        auto col2 = mouseOnText2 ? PINK : WHITE;
+        auto col1 = mouseOnText1 ? GOLD : WHITE;
+        auto col2 = mouseOnText2 ? GOLD : WHITE;
         Img::gif->Draw(0,0);
         DrawText(msg1, Mid, screenHeight / 2.0f - 100, 60, col1);
         DrawText(msg2, Mid, screenHeight / 2.0f + 50, 60, col2);
@@ -246,7 +246,7 @@ int Init::choose(int screenWidth, int screenHeight)
         for (int i = 0; i < 4; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], msgBox[i].x, msgBox[i].y, i == 3 ? 30 : 60, MouseOn[i] ? RED : WHITE);
+            DrawText(msg[i], msgBox[i].x, msgBox[i].y, i == 3 ? 30 : 60, MouseOn[i] ? GOLD : WHITE);
         }
         EndDrawing();
     }
@@ -284,7 +284,7 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
         for (int i = 0; i < 4; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], msgBox[i].x, msgBox[i].y, 50, MouseOn[i] ? RED : WHITE);
+            DrawText(msg[i], msgBox[i].x, msgBox[i].y, 50, MouseOn[i] ? GOLD : WHITE);
         }
         EndDrawing();
     }
@@ -468,10 +468,10 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 
         // std::cerr<<enemyBullets->getBullets().size()<<std::endl;
 
-        DrawText(TextFormat("FPS: %.0lf", 1 / GetFrameTime()), 10, 10, 20, RED);
+        DrawText(TextFormat("FPS: %.0lf", 1 / GetFrameTime()), 10, 10, 20, GOLD);
 
-        DrawText(TextFormat("STAGE %d", stagecnt), 1020, 10, 40, WHITE);
-        DrawText(TextFormat("enemy destroyed: %d", destroyedEnemy), 1020, 50, 20, WHITE);
+        DrawText(TextFormat("STAGE %d", stagecnt), 1020, 10, 40, BLACK);
+        DrawText(TextFormat("enemy destroyed: %d", destroyedEnemy), 1020, 50, 20, BLACK);
 
         EndDrawing();
     }
@@ -510,7 +510,7 @@ int Inst::loop(int screenWidth, int screenHeight)
         DrawLine(800, 100, 800, 850, BLACK);
         DrawText(msg1, 200, 50, 60, BLACK);
         DrawText(msg2, 900, 50, 60, BLACK);
-        DrawText(msg, msgBox.x, msgBox.y, 30, MouseOn ? RED : BLACK);
+        DrawText(msg, msgBox.x, msgBox.y, 30, MouseOn ? GOLD : BLACK);
         for (int i = 0; i < 9; i++)
             DrawText(inst[i], 100, 150 + i * 80, 50, BLUE);
         for (int i = 0; i < 3; i++)
@@ -557,7 +557,7 @@ int Pause::loop(int screenWidth, int screenHeight)
         for (int i = 0; i < 4; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : WHITE);
+            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
         }
         EndDrawing();
         if (IsKeyPressed(KEY_P))
@@ -607,7 +607,7 @@ int Over::loop(int screenWidth, int screenHeight)
         for (int i = 0; i < 3; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : WHITE);
+            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
         }
         EndDrawing();
     }
@@ -651,11 +651,11 @@ int Win::loop(int screenWidth, int screenHeight)
                 }
             }
         BeginDrawing();
-        DrawText(allclear, Mid - 40, 200, 80, RED);
+        DrawText(allclear, Mid - 40, 200, 80, GOLD);
         for (int i = 0; i < 3; i++)
         {
             // DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : WHITE);
+            DrawText(msg[i], Mid, msgBox[i].y, 60, MouseOn[i] ? RED : BLACK);
         }
         EndDrawing();
     }
