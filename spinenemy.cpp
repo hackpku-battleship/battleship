@@ -6,7 +6,7 @@ spinEnemy::spinEnemy(float _hp, float _genTime, float livetime, Vector2 pos, flo
 std::vector<Bullet *> spinEnemy::getBullet(float nowTime, BulletManager *manager) {
     std::vector<Bullet *> ret;
     float dtime = nowTime - gentime;
-    if (inPeriod(6, 5.5, dtime)) {
+    if (inPeriod(6, 5, dtime) && dtime <= 12) {
         //std::cerr << dtime << std::endl;
         lastalpha += (dtime - dutime) * spinrate;
         FOR_INTERVAL(dutime, dtime, 0.05) {
@@ -15,6 +15,22 @@ std::vector<Bullet *> spinEnemy::getBullet(float nowTime, BulletManager *manager
                 Bullet *b = new basicBullet(nowTime, 15, RED, 4, pos + 20 * f, 200 * f);
                 ret.push_back(b);
             }
+        }
+    }
+    if (dtime >= 14 && dtime <= 30 && inPeriod(8, 7, dtime - 14)) {
+        static int flag = 1;
+        FOR_INTERVAL(dutime, dtime, 0.2) {
+            float deltaalpha = getrand(0, PI / 8);
+            for (float alpha = 0.0; alpha <= PI * 2; alpha += PI / 10) {
+                float _alpha = alpha + deltaalpha;
+                Vector2 f = {cos(_alpha), sin(_alpha)};
+                Vector2 f2 = {cos(_alpha + PI / 2 * flag), sin(_alpha + PI / 2 * flag)};
+                Bullet *b = new TurningBullet(nowTime, 20, ORANGE, 7, pos + 20 * f,
+                150 * f, 60 * f2 + 50 * f, 4);
+                ret.push_back(b);
+            }
+            if (flag == 1) flag = -1;
+            else flag = 1;
         }
     }
     dutime = dtime;

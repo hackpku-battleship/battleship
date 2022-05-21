@@ -8,6 +8,10 @@ const int screenWidth = 1600 - 600;
 const int screenHeight = 900;
 
 void Stage1(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
+    {
+        Enemy * e = new DEnemy(50, nowtime + 0, 10, (Vector2){500, 50}, 50, "source/lion.png");
+        queue.push(std::make_pair(nowtime + 0, e));
+    }
     char baka[20] = "source/baka.png";
     const int BakaCnt = 5;
     Vector2 Bakapos[BakaCnt] = {{500, 100}, {100, 100}, {800, 150}, {200, 400}, {900, 450}};
@@ -24,7 +28,7 @@ void Stage1(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
 
     {
         const int STIME = 15;
-        Enemy *e = new spinEnemy(20, nowtime + STIME, 40, (Vector2){500, 50}, 50, "source/j.png", 
+        Enemy *e = new spinEnemy(200, nowtime + STIME, 30, (Vector2){500, 50}, 50, "source/zhuanzhuan.png", 
             (Vector2){0, 0}, 1);
         queue.push(std::make_pair(nowtime + STIME, e));
     }

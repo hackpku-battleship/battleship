@@ -14,6 +14,8 @@
 #include "stages.h"
 
 const Vector2 initPlayerPosition = {400, 900};
+const int playgroundWidth = 1000;
+const int playgroundHeight = 900;
 
 int Init::loop(int screenWidth, int screenHeight)
 {
@@ -183,7 +185,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         float deltatime = GetFrameTime();
         time += deltatime;
 
-        if (stagecnt < MAX_STAGE && enemys->isEmpty()) {
+        if (stagecnt < MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty()) {
             stagecnt++;
             //std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
@@ -250,9 +252,9 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         player->Draw();
         atk->Draw();
         playerHPBar->Draw(player->getHP());
-        playerBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
+        playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
-        enemyBullets->updateTime(time, screenWidth, screenHeight, player->getPosition());
+        enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         enemyBullets->DrawAllBullets();
 
         DrawText(TextFormat("%.5lf", time), 10, 10, 20, RED);
