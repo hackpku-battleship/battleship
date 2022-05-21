@@ -261,6 +261,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         for (auto b : _bullets)
             enemyBullets->addBullet(b);
         atk->HitBullet(enemyBullets);
+        atk->HitEnemy(enemys);
         checkPlayerHit(player, enemyBullets, time);
         checkEnemysHit(enemys, playerBullets);
 
