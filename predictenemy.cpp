@@ -2,13 +2,15 @@
 #include "predictenemy.h"
 #include "basicBullet.h"
 #include "splitBullet.h"
+#include "accBullet.h"
 #include "Vector2Basic.h"
 #include <iostream>
 
 PredictEnemy::PredictEnemy(float hp, float gentime, float livetime, Vector2 pos, float r, char *filename) : Enemy(hp, gentime, livetime, pos, r, filename)
 {
-    predictLastTime = stateLastTime = gentime;
-    state = rand() % 3 + 1;
+    predictLastTime = stateLastTime = accLastTime = gentime;
+    state = 4;
+    // state = rand() % 4 + 1;
 }
 
 std::vector<Bullet *> PredictEnemy::getBullet(float nowTime, BulletManager *creater, Vector2 playerPosition)
@@ -71,11 +73,28 @@ std::vector<Bullet *> PredictEnemy::getBullet(float nowTime, BulletManager *crea
             ret.push_back(new fishBullet(nowTime, 5, creater, ORANGE, 15, pos, 200, PI / 2));
         }
     }
-    if (nowTime - stateLastTime >= 10)
+    else if (state == 4 && nowTime - stateLastTime >= 2)
     {
+
+        if (nowTime - accLastTime >= 0.5 - 0.01 * accCount)
+        {
+            for (float ang = 0; ang <= PI * 2; ang += PI / 16)
+            {
+                float _ang = ang + (PI / 64) * (accCount % 4);
+                Vector2 f = {cos(_ang), sin(_ang)};
+                Bullet *b = new accBullet(nowTime, 15, creater, PURPLE, 30, pos, {100 * f.x, 100 * f.y}, {200 * f.x, 200 * f.y});
+                ret.push_back(b);
+            }
+            accCount++;
+            accLastTime = nowTime;
+        }
+    }
+    if (nowTime - stateLastTime >= stateLengths[state])
+    {
+        accCount = 0;
         int new_state;
         do
-            new_state = rand() % 3 + 1;
+            new_state = rand() % 4 + 1;
         while (state == new_state);
         state = new_state;
         stateLastTime = nowTime;

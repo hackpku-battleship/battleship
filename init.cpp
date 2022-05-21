@@ -28,8 +28,8 @@ int LastPlayedMusic = -1;
 
 int Init::loop(int screenWidth, int screenHeight)
 {
-    //StopMusicStream(openMusic);
-    //std::cerr << GetMusicTimeLength(openMusic) << std::endl;
+    // StopMusicStream(openMusic);
+    // std::cerr << GetMusicTimeLength(openMusic) << std::endl;
     const char msg1[50] = "Start Game";
     const char msg2[50] = "Instructions";
     float Mid = screenWidth / 2.0f - 200;
@@ -75,8 +75,8 @@ void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
         if (player->prot != nullptr && bullets[i]->checkProt(player->getPosition(), player->getRadius()))
         {
             bullets[i]->parryed();
-            //delete bullets[i];
-            //bullets.erase(bullets.begin() + i);
+            // delete bullets[i];
+            // bullets.erase(bullets.begin() + i);
         }
         else if (player->getcanHit() && bullets[i]->checkBox(player->getPosition(), player->getRadius()))
         {
@@ -155,16 +155,17 @@ int Init::choose(int screenWidth, int screenHeight)
             {
                 if (i == 3)
                     return Init::loop(screenWidth, screenHeight);
-                else {
+                else
+                {
                     return Init::choose_stage(screenWidth, screenHeight, i);
                 }
-                    //return Game::loop(screenWidth, screenHeight, i , 0);
+                // return Game::loop(screenWidth, screenHeight, i , 0);
             }
         BeginDrawing();
-        //ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
-        DrawTexture(h1, 150, 100 , RAYWHITE);
-        DrawTexture(h2, 550, 100 , RAYWHITE);
-        DrawTexture(h3, 950, 100 , RAYWHITE);
+        // ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
+        DrawTexture(h1, 150, 100, RAYWHITE);
+        DrawTexture(h2, 550, 100, RAYWHITE);
+        DrawTexture(h3, 950, 100, RAYWHITE);
         DrawText(hint, 10, 10, 40, BLACK);
         for (int i = 0; i < 4; i++)
         {
@@ -176,7 +177,8 @@ int Init::choose(int screenWidth, int screenHeight)
     return 0;
 }
 
-int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
+int Init::choose_stage(int screenWidth, int screenHeight, int kind)
+{
     const char hint[50] = {"Choose the Level :"};
     const char msg[4][50] = {"Lv1", "Lv2", "Lv3", "Back"};
     float Mid = screenHeight / 2 - 100;
@@ -192,10 +194,12 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
             {
                 if (i == 3)
                     return Init::choose(screenWidth, screenHeight);
-                else {
+                else
+                {
                     StopMusicStream(Mus::openMusic);
                     PlayMusicStream(Mus::stageMusics[i]);
-                    std::cerr << "stage play" << " " << GetMusicTimeLength(Mus::stageMusics[i]) << std::endl;
+                    std::cerr << "stage play"
+                              << " " << GetMusicTimeLength(Mus::stageMusics[i]) << std::endl;
                     return Game::loop(screenWidth, screenHeight, kind, i);
                 }
             }
@@ -204,8 +208,8 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
         DrawText(hint, 10, 10, 40, BLACK);
         for (int i = 0; i < 4; i++)
         {
-            //DrawRectangleRec(msgBox[i], LIGHTGRAY);
-            DrawText(msg[i], msgBox[i].x, msgBox[i].y,  50, MouseOn[i] ? RED : BLACK);
+            // DrawRectangleRec(msgBox[i], LIGHTGRAY);
+            DrawText(msg[i], msgBox[i].x, msgBox[i].y, 50, MouseOn[i] ? RED : BLACK);
         }
         EndDrawing();
     }
@@ -214,7 +218,7 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
 
 int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 {
-    //Image Bgimage = LoadImage("source/1.png");
+    // Image Bgimage = LoadImage("source/1.png");
     Texture2D Bgtexture = LoadTexture("source/bg-ps.png");
 
     const int FastSpeed = 500, SlowSpeed = 200;
@@ -227,7 +231,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
     EnemyManager *enemys = new EnemyManager();
     Player *player = new Player(initPlayerPosition, 5, 10, FastSpeed, SlowSpeed, 510, 1000, 2, kind);
 
-    std::queue<std::pair<float, Enemy *> > enemyQueue;
+    std::queue<std::pair<float, Enemy *>> enemyQueue;
 
     float time = 0.0;
     float playerLasttime = 0.0;
@@ -264,7 +268,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             }
         }
 
-        if (player->getHP() <= 0) {
+        if (player->getHP() <= 0)
+        {
             StopMusicStream(Mus::stageMusics[stagecnt]);
             PlayMusicStream(Mus::endMusic);
             return Over::loop(screenWidth, screenHeight);
@@ -286,13 +291,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             // std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
         }
-        
+
         while (!enemyQueue.empty() && enemyQueue.front().first <= time)
         {
             enemys->addEnemy(enemyQueue.front().second);
             enemyQueue.pop();
         }
-        
+
         player->Update(time);
         player->Move(deltatime);
         if (kind == 2)
@@ -300,14 +305,14 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
-        //draw background
+        // draw background
         DrawLine(1000, 0, 1000, 900, BLACK);
         {
             int frameWidth = Bgtexture.width;
             int frameHeight = Bgtexture.height;
             std::cerr << frameHeight << " " << frameWidth << std::endl;
-            Rectangle sourceRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
-            Rectangle destRec = { 0.0, 0.0, 1000, 900};
+            Rectangle sourceRec = {0.0f, 0.0f, (float)frameWidth, (float)frameHeight};
+            Rectangle destRec = {0.0, 0.0, 1000, 900};
             Vector2 origin = {0, 0};
             DrawTexturePro(Bgtexture, sourceRec, destRec, origin, 0.0, WHITE);
         }
@@ -327,8 +332,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
                 if (bullets[i]->checkBox(player->getPosition(), BOOMSCOPE))
                 {
                     bullets[i]->parryed();
-                    //delete bullets[i];
-                    //bullets.erase(bullets.begin() + i);
+                    // delete bullets[i];
+                    // bullets.erase(bullets.begin() + i);
                 }
             enemyBullets->setBullets(bullets);
         }
@@ -365,6 +370,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         player->Draw();
         atk->Draw();
         playerHPBar->Draw(player->getHP());
+        playerLPBar->Draw(player->getLP());
         playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
         enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
@@ -373,7 +379,6 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         // std::cerr<<enemyBullets->getBullets().size()<<std::endl;
 
         DrawText(TextFormat("FPS: %.0lf", 1 / GetFrameTime()), 10, 10, 20, RED);
-
 
         DrawText(TextFormat("STAGE %d", stagecnt), 1020, 10, 40, BLACK);
         DrawText(TextFormat("enemy destroyed: %d", destroyedEnemy), 1020, 50, 20, BLACK);
@@ -388,13 +393,12 @@ int Inst::loop(int screenWidth, int screenHeight)
     const char msg[50] = {"Back"};
     const char msg1[50] = {"Base operation"};
     const char msg2[50] = {"Skill intruction"};
-    const char inst[9][50] = {{"Upward"}, {"Downward"}, {"Leftward"}, {"Rightward"},
-                              {"Pause"}, {"Attack"}, {"Skill"}, {"Slow Move"}, {"Quit"}};
+    const char inst[9][50] = {{"Upward"}, {"Downward"}, {"Leftward"}, {"Rightward"}, {"Pause"}, {"Attack"}, {"Skill"}, {"Slow Move"}, {"Quit"}};
     const char Name[3][50] = {"Reimu", "Marisa", "Alice"};
     const char Skill[3][2][50] = {{{"Summon a unmbrella and it can resist"},
-                                  {"the attack from the front, last 5s."}},
+                                   {"the attack from the front, last 5s."}},
                                   {{"Instantly clears surrounding bullets."},
-                                  {""}},
+                                   {""}},
                                   {{"Launch a large bullet, it can clears the"},
                                    {"path and deal damage to the first enemy."}}};
     Image pg3 = LoadImage("source/alice.png");
@@ -406,12 +410,12 @@ int Inst::loop(int screenWidth, int screenHeight)
     Texture2D h1 = LoadTextureFromImage(pg1);
     Texture2D h2 = LoadTextureFromImage(pg2);
     Texture2D h3 = LoadTextureFromImage(pg3);
-    
+
     Image png1 = LoadImage("source/inst.png");
     ImageResize(&png1, 150, 700);
     Texture2D ky = LoadTextureFromImage(png1);
     UnloadImage(png1);
-    
+
     float Mid = screenWidth / 2.0f - 200;
     Rectangle msgBox = {1400, screenHeight / 2.0f + 400, 120, 25};
     bool MouseOn = true;
@@ -424,21 +428,22 @@ int Inst::loop(int screenWidth, int screenHeight)
         if (MouseOn && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             return 1;
         BeginDrawing();
-        DrawTexture(ky, 550, 150 , RAYWHITE);
+        DrawTexture(ky, 550, 150, RAYWHITE);
         DrawLine(800, 100, 800, 850, BLACK);
         DrawText(msg1, 200, 50, 60, BLACK);
         DrawText(msg2, 900, 50, 60, BLACK);
         DrawText(msg, msgBox.x, msgBox.y, 30, MouseOn ? RED : BLACK);
         for (int i = 0; i < 9; i++)
-            DrawText(inst[i], 100, 150 + i * 80,50,BLUE);
-        for (int i = 0; i < 3; i++) {
+            DrawText(inst[i], 100, 150 + i * 80, 50, BLUE);
+        for (int i = 0; i < 3; i++)
+        {
             DrawText(Name[i], 900, 150 + 200 * i, 40, ORANGE);
-            for (int j = 0; j < 2 ;j++)
-                DrawText(Skill[i][j], 950, 250 + 200 * i + 30*j, 30, PURPLE);
+            for (int j = 0; j < 2; j++)
+                DrawText(Skill[i][j], 950, 250 + 200 * i + 30 * j, 30, PURPLE);
         }
-        DrawTexture(h1, 1200, 150 , RAYWHITE);
-        DrawTexture(h2, 1200, 350 , RAYWHITE);
-        DrawTexture(h3, 1200, 550 , RAYWHITE);
+        DrawTexture(h1, 1200, 150, RAYWHITE);
+        DrawTexture(h2, 1200, 350, RAYWHITE);
+        DrawTexture(h3, 1200, 550, RAYWHITE);
         EndDrawing();
     }
     return 0;
@@ -501,16 +506,19 @@ int Over::loop(int screenWidth, int screenHeight)
         for (int i = 0; i < 3; i++)
             if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
-                if (i == 2) {
+                if (i == 2)
+                {
                     StopMusicStream(Mus::endMusic);
                     return 0;
                 }
-                else if (i == 1) {
+                else if (i == 1)
+                {
                     StopMusicStream(Mus::endMusic);
                     PlayMusicStream(Mus::openMusic);
                     return Init::loop(screenWidth, screenHeight);
                 }
-                else{
+                else
+                {
                     StopMusicStream(Mus::endMusic);
                     PlayMusicStream(Mus::openMusic);
                     return Init::choose(screenWidth, screenHeight);
@@ -546,16 +554,19 @@ int Win::loop(int screenWidth, int screenHeight)
         for (int i = 0; i < 3; i++)
             if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
-                if (i == 2) {
+                if (i == 2)
+                {
                     StopMusicStream(Mus::endMusic);
                     return 0;
                 }
-                else if (i == 1) {
+                else if (i == 1)
+                {
                     StopMusicStream(Mus::endMusic);
                     PlayMusicStream(Mus::openMusic);
                     return Init::loop(screenWidth, screenHeight);
                 }
-                else {
+                else
+                {
                     StopMusicStream(Mus::endMusic);
                     PlayMusicStream(Mus::openMusic);
                     return Init::choose(screenWidth, screenHeight);
