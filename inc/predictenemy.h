@@ -5,8 +5,9 @@
 
 class PredictEnemy : public Enemy
 {
-    float lastTime;
+    float predictLastTime;
     Vector2 playerLastPosition;
+    int state, stateLastTime;
 
 public:
     PredictEnemy(float hp, float genTime, float livetime, Vector2 pos, float r, char *filename);
