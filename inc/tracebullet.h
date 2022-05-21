@@ -8,7 +8,7 @@ class traceBullet : public Bullet {
     bool isgetplayerpos;
     float vel;
 public:
-    traceBullet(float nowTime, float liveTime, Color col, float radius, Vector2 pos, float vel);
+    traceBullet(float nowTime, float liveTime, BulletManager* from, Color col, float radius, Vector2 pos, float vel);
     virtual float updateTime(float, Vector2);
 };
 

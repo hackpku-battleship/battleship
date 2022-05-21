@@ -25,7 +25,7 @@ std::vector<Bullet *> spinEnemy::getBullet(float nowTime, BulletManager *manager
                 float _alpha = alpha + deltaalpha;
                 Vector2 f = {cos(_alpha), sin(_alpha)};
                 Vector2 f2 = {cos(_alpha + PI / 2 * flag), sin(_alpha + PI / 2 * flag)};
-                Bullet *b = new TurningBullet(nowTime, 20, ORANGE, 7, pos + 20 * f,
+                Bullet *b = new TurningBullet(nowTime, 20, manager, ORANGE, 7, pos + 20 * f,
                 150 * f, 60 * f2 + 50 * f, 4);
                 ret.push_back(b);
             }

@@ -4,13 +4,13 @@
 
 DEnemy::DEnemy(float _hp, float _genTime, float _livetime, Vector2 pos, float _r, char* filename) :
  Enemy(_hp, _genTime, _livetime, pos, _r, filename) {}
-std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager)
+std::vector<Bullet *> DEnemy::getBullet(float nowTime, BulletManager *manager, Vector2 playerPosition)
 {
     std::vector<Bullet *> ret;
     float dtime = nowTime - gentime;
     if (inPeriod(3, 2, dtime)) {
         FOR_INTERVAL(dutime, dtime, 0.1) {
-            Bullet *b = new traceBullet(nowTime, 20, RED, 6, pos + (Vector2){0, 40}, 4);
+            Bullet *b = new traceBullet(nowTime, 20, manager, RED, 6, pos + (Vector2){0, 40}, 4);
             ret.push_back(b);
         }
     }
