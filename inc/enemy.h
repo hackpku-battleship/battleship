@@ -12,6 +12,7 @@
 #include "accbullet.h"
 #include "turningbullet.h"
 #include "tracebullet.h"
+#include "turningTraceBullet.h"
 
 class Enemy
 {
@@ -29,5 +30,6 @@ public:
     void draw();
     bool isalive();
     void hit();
+    ~Enemy();
 };
 #endif

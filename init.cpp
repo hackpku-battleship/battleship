@@ -199,11 +199,11 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
             getStage(stagecnt, time, enemyQueue);
         }
 
-        /*while (!enemyQueue.empty() && enemyQueue.front().first <= time)
+        while (!enemyQueue.empty() && enemyQueue.front().first <= time)
         {
             enemys->addEnemy(enemyQueue.front().second);
             enemyQueue.pop();
-        }*/
+        }
 
         player->Update(time);
         player->Move(deltatime);
@@ -212,6 +212,8 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
+
+        DrawLine(1000, 0, 1000, 900, BLACK);
         player->Check(time);
         atk->Check(screenWidth, screenHeight);
         if (IsKeyDown(KEY_Z)) // 放技能

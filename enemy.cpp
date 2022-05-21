@@ -46,3 +46,7 @@ void Enemy::draw() {
     DrawTexturePro(tex, sourceRec, destRec, origin, 0.0, WHITE);
     //DrawCircleV(pos, r, PURPLE);
 }
+
+Enemy::~Enemy() {
+    UnloadTexture(tex);
+}
