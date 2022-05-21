@@ -31,14 +31,14 @@ void Stage1(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
 
     for (int i = 0; i < BakaCnt; i++) {
         Vector2 f = {cos(Bakaalpha[i]), sin(Bakaalpha[i])};
-        Enemy * e = new bakaDirect(50, nowtime + Bakatime[i], BakaDutime, 
+        Enemy * e = new bakaDirect(100, nowtime + Bakatime[i], BakaDutime, 
             Bakapos[i], 40, baka, Bakavel[i] * f);
         queue.push(std::make_pair(nowtime + Bakatime[i], e));
     }
 
     {
         const int STIME = 15;
-        Enemy *e = new spinEnemy(200, nowtime + STIME, 30, (Vector2){500, 50}, 50, "source/zhuanzhuan.png", 
+        Enemy *e = new spinEnemy(400, nowtime + STIME, 30, (Vector2){500, 50}, 50, "source/zhuanzhuan.png", 
             (Vector2){0, 0}, 1);
         queue.push(std::make_pair(nowtime + STIME, e));
     }
@@ -46,36 +46,38 @@ void Stage1(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
 }
 
 void Stage2(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
-    const int senmy = 6;
-    Vector2 epos[senmy] = {{200, 200}, {800, 200}, {300, 300}, {700, 300}, {500, 100}, {500, 500}};
-    float etime[senmy] = {1, 1, 5, 5, 8, 8};
+    const int senmy = 9;
+    Vector2 epos[senmy] = {{200, 200}, {800, 200}, {300, 300}, {700, 300}, {500, 100}, {500, 500},
+                            {100, 100}, {900, 100}, {500, 400}};
+    float etime[senmy] = {1, 1, 5, 5, 8, 8, 16+nowtime, 17+nowtime, 18+nowtime};
     float dutime = 15;
     char devil[] = "source/devil.png";
     for (int i = 0; i < senmy; i++) {
         Enemy *e = new shotSimpleTraceEnemy(100, nowtime + etime[i], 10, epos[i], 40, devil, 40, 10);
         queue.push(std::make_pair(nowtime + etime[i], e));
     }
-    queue.push(std::make_pair(15 + nowtime, new stage2Enemy(100, nowtime + 15, 25, {500,50}, 50, "source/tiger.png")));
+    queue.push(std::make_pair(15 + nowtime, new stage2Enemy(1000, nowtime + 15, 25, {500,50}, 50, "source/tiger.png")));
     return;
 }
 
 void Stage3(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
     {
-        const int easye = 5;
-        Vector2 easypos[easye] = {{500, 100}, {300, 150}, {700, 150}, {100, 200}, {900, 200}};
-        float easytime[easye] = {0.5, 1, 1, 2, 2};
+        const int easye = 7;
+        Vector2 easypos[easye] = {{500, 100}, {300, 150}, {700, 150}, {100, 200}, {900, 200},
+                                {300, 150}, {700, 150}};
+        float easytime[easye] = {0.5, 1, 1, 2, 2, 22.5, 22.6};
         float easydutime = 20;
         for (int i = 0; i < easye; i++) {
-            Enemy *e = new EasyEnemy(20, nowtime+ easytime[i], easydutime, easypos[i], 50, "source/fish0.png");
+            Enemy *e = new EasyEnemy(100, nowtime+ easytime[i], easydutime, easypos[i], 50, "source/fish0.png");
             queue.push(std::make_pair(nowtime + easytime[i], e));
         }
     }
     {
-        const int prede = 3;
-        Vector2 predpos[prede] = {{500, 100}, {350, 200}, {650, 200}};
-        float predtime[prede] = {23, 23.7, 24.5};
+        const int prede = 1;
+        Vector2 predpos[prede] = {{500, 100}};
+        float predtime[prede] = {23};
         float predlive = 1000;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 1; i++) {
             Enemy *e = new PredictEnemy(1000, nowtime + predtime[i], predlive, predpos[i], 50, "source/fish0.png");
             queue.push(std::make_pair(nowtime + predtime[i], e));
         }

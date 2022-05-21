@@ -302,7 +302,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
                 for (float bias = -100; bias <= 100; bias += 20)
                 {
                     playerBullets->addBullet(
-                        new basicBullet(time, 5, enemyBullets, RED, 5,
+                        new basicBullet(time, 5, enemyBullets, Fade(YELLOW, 0.2), 5,
                                         player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -800}));
                 }
                 playerLasttime = time;
