@@ -145,10 +145,10 @@ int Init::choose(int screenWidth, int screenHeight)
                     //return Game::loop(screenWidth, screenHeight, i , 0);
             }
         BeginDrawing();
-        // ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
-        DrawTexture(h1, 150, 100, RAYWHITE);
-        DrawTexture(h2, 550, 100, RAYWHITE);
-        DrawTexture(h3, 950, 100, RAYWHITE);
+        //ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
+        DrawTexture(h1, 150, 100 , RAYWHITE);
+        DrawTexture(h2, 550, 100 , RAYWHITE);
+        DrawTexture(h3, 950, 100 , RAYWHITE);
         DrawText(hint, 10, 10, 40, BLACK);
         for (int i = 0; i < 4; i++)
         {
@@ -206,13 +206,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
     EnemyManager *enemys = new EnemyManager();
     Player *player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 100, 1000, 2, kind);
 
-    std::queue<std::pair<float, Enemy *>> enemyQueue;
+    std::queue<std::pair<float, Enemy *> > enemyQueue;
 
     float time = 0.0;
     float playerLasttime = 0.0;
 
     const int MAX_STAGE = 3;
-    int stagecnt = stage;
+    int stagecnt = 0;
 
     while (!WindowShouldClose())
     {
@@ -239,8 +239,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 
         if (stagecnt <= MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty() && enemyQueue.empty())
         {
-            if (stagecnt == MAX_STAGE)
-            {
+            if (stagecnt == MAX_STAGE) {
                 return Win::loop(screenWidth, screenHeight);
             }
             stagecnt++;
@@ -300,7 +299,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new PredictEnemy(100, time, 60, {x, y}, 10, "source/lion.png"));
+            enemys->addEnemy(new PredictEnemy(100, time, 20, {x, y}, 10, "source/lion.png"));
         }
 
         auto _bullets = enemys->updateTime(time, enemyBullets, player->getPosition());
@@ -315,7 +314,6 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         player->Draw();
         atk->Draw();
         playerHPBar->Draw(player->getHP());
-        playerLPBar->Draw(player->getLP());
         playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
         enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
