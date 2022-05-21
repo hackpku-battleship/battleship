@@ -7,6 +7,7 @@ class EasyEnemy : public Enemy
 {
     float lastTime;
     int count = 0;
+    Vector2 playerLastPosition;
 
 public:
     EasyEnemy(float hp, float genTime, float livetime, Vector2 pos, float r, char *filename);
