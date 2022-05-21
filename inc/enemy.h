@@ -8,6 +8,7 @@
 #include "fishBullet.h"
 #include "eldenBullet.h"
 #include "splitBullet.h"
+#include "soccerBullet.h"
 #include "bulletManager.h"
 #include "accbullet.h"
 #include "turningbullet.h"

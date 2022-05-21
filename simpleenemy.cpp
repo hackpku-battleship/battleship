@@ -13,6 +13,7 @@ std::vector<Bullet *> SimpleEnemy::getBullet(float nowTime, BulletManager *creat
     // std::cerr << (int)dtime << " " << (int)dutime << std::endl;
     if ((int)(dtime * 0.3) - (int)(dutime * 0.3) >= 1) { // test
         ret.push_back(new eldenBullet(nowTime, 12.0, creater, Fade(YELLOW, 0.3), 30, pos, 100, 3, 0.5, playerPosition - pos));
+        ret.push_back(new soccerBullet(nowTime, 1.5, creater, BLANK, 100, {80,80}, 1, {1000, 800}));
     }
     if ((int)dtime - (int)dutime >= 1)
     {
