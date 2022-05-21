@@ -104,7 +104,9 @@ bool Player::useskill(float nowTime) {
         if (nowTime - Lastt > LASTOFRING) {Lastt = nowTime, lp --;}
         return 1; 
     } else {
-        
+        if (lp ==0 || nowTime -Lastt < BALLCD) return 0;
+        lp --, Lastt = nowTime;
+        return 1;
     }
 }
 
@@ -131,3 +133,43 @@ bool Prot::Check(float nowTime) {
     return nowTime - StartTime >= LimitTime;
 }
 
+Atk::Atk(float _R):R(_R),Speed(FOOTBALLSP) {
+}
+
+void Atk::Draw() {
+    for (auto i : Ps)
+        DrawCircleV(i, R, PINK);
+}
+
+void Atk::HitBullet(BulletManager * enemyBullets) {
+    auto bullets = enemyBullets->getBullets();
+    for (auto j : Ps)
+        for (int i = 0; i < bullets.size(); i++)
+            if (bullets[i]->checkBox(j, R)) {
+                delete bullets[i];
+                bullets.erase(bullets.begin() + i);
+            }
+    enemyBullets->setBullets(bullets);
+}
+
+void Atk::HitEnemy() {
+    //todo : 碰到敌人, 敌人掉血, （技能消失？）
+}
+
+void Atk::Check(int screenWidth, int screenHeight ) { //判断是否出界
+    for (auto i = Ps.begin(); i != Ps.end(); i++) {
+        auto j = *i;
+        if (j.x < - R || j.y < -R || j.x > screenWidth + R || j.y > screenHeight + R )
+            Ps.erase(i);
+    }
+}
+
+void Atk::Move(float deltatime) {
+    for (auto i = Ps.begin(); i != Ps.end(); i++)
+        (*i).y -= Speed * deltatime;
+}
+
+void Atk::Add(Vector2 pos) {
+    pos.y -= R;
+    Ps.push_back(pos);
+}

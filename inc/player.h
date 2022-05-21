@@ -2,11 +2,15 @@
 #define PLAYER_H
 
 #include "raylib.h"
+#include <list>
+#include "bulletManager.h"
 #define MAXLP 5 //最大技能释放次数
 #define PROT_LIMITTIME 5
 #define PROT_REC {p.x - r - 25, p.y - r - 10, 60, 5}
 #define BOOMSCOPE 200
 #define LASTOFRING 0.2
+#define FOOTBALLSP 300
+#define BALLCD 0.5
 
 class PlayerHPBar
 {
@@ -24,6 +28,19 @@ public:
     void Draw(Vector2 p, float r);
     void Hit();
     bool Check(float nowTime);
+};
+
+class Atk {
+    std::list<Vector2> Ps;
+    float R, Speed;
+public:
+    Atk(float _R);
+    void Draw();
+    void Move(float deltatime);
+    void HitBullet(BulletManager * enemyBullets);
+    void HitEnemy();
+    void Check(int screenWidth, int screenHeight);
+    void Add(Vector2);
 };
 
 class Player
