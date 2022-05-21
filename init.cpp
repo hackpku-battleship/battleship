@@ -126,7 +126,7 @@ int Init::choose(int screenWidth, int screenHeight)
     UnloadImage(png2);
     UnloadImage(png3);
     const char hint[50] = {"Choose your hero :"};
-    const char msg[4][50] = {"Hero1", "Hero2", "Hero3", "Back"};
+    const char msg[4][50] = {"Reimu", "Marisa", "Reimu", "Back"};
     float Bott = screenHeight - 200;
     bool MouseOn[4];
     Rectangle msgBox[4] = {{300, Bott, 180, 50}, {700, Bott, 180, 50}, {1100, Bott, 180, 50}, {1400, Bott + 40, 100, 30}};
@@ -341,18 +341,58 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 int Inst::loop(int screenWidth, int screenHeight)
 {
     const char msg[50] = {"Back"};
+    const char msg1[50] = {"Base operation"};
+    const char msg2[50] = {"Skill intruction"};
+    const char inst[9][50] = {{"Upward"}, {"Downward"}, {"Leftward"}, {"Rightward"},
+                              {"Pause"}, {"Attack"}, {"Skill"}, {"Slow Move"}, {"Quit"}};
+    const char Name[3][50] = {"Reimu", "Marisa", "Alice"};
+    const char Skill[3][2][50] = {{{"Summon a unmbrella and it can resist"},
+                                  {"the attack from the front, last 5s."}},
+                                  {{"Instantly clears surrounding bullets."},
+                                  {""}},
+                                  {{"Launch a large bullet, it can clears the"},
+                                   {"path and deal damage to the first enemy."}}};
+    Image pg3 = LoadImage("source/alice.png");
+    Image pg1 = LoadImage("source/reimu.png");
+    Image pg2 = LoadImage("source/marisa.png");
+    ImageResize(&pg1, 70, 70);
+    ImageResize(&pg2, 70, 70);
+    ImageResize(&pg3, 70, 70);
+    Texture2D h1 = LoadTextureFromImage(pg1);
+    Texture2D h2 = LoadTextureFromImage(pg2);
+    Texture2D h3 = LoadTextureFromImage(pg3);
+    
+    Image png1 = LoadImage("source/inst.png");
+    ImageResize(&png1, 150, 700);
+    Texture2D ky = LoadTextureFromImage(png1);
+    UnloadImage(png1);
+    
     float Mid = screenWidth / 2.0f - 200;
-    Rectangle msgBox = {Mid, screenHeight / 2.0f + 200, 150, 50};
+    Rectangle msgBox = {1400, screenHeight / 2.0f + 400, 120, 25};
     bool MouseOn = true;
     while (!WindowShouldClose())
     {
         ClearBackground(RAYWHITE);
         MouseOn = CheckCollisionPointRec(GetMousePosition(), msgBox);
-        BeginDrawing();
         // DrawRectangleRec(msgBox, LIGHTGRAY);
         if (MouseOn && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             return 1;
-        DrawText(msg, Mid, msgBox.y, 60, MouseOn ? RED : BLACK);
+        BeginDrawing();
+        DrawTexture(ky, 550, 150 , RAYWHITE);
+        DrawLine(800, 100, 800, 850, BLACK);
+        DrawText(msg1, 200, 50, 60, BLACK);
+        DrawText(msg2, 900, 50, 60, BLACK);
+        DrawText(msg, msgBox.x, msgBox.y, 30, MouseOn ? RED : BLACK);
+        for (int i = 0; i < 9; i++)
+            DrawText(inst[i], 100, 150 + i * 80,50,BLUE);
+        for (int i = 0; i < 3; i++) {
+            DrawText(Name[i], 900, 150 + 200 * i, 40, ORANGE);
+            for (int j = 0; j < 2 ;j++)
+                DrawText(Skill[i][j], 950, 250 + 200 * i + 30*j, 30, PURPLE);
+        }
+        DrawTexture(h1, 1200, 150 , RAYWHITE);
+        DrawTexture(h2, 1200, 350 , RAYWHITE);
+        DrawTexture(h3, 1200, 550 , RAYWHITE);
         EndDrawing();
     }
     return 0;
