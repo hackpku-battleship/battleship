@@ -9,8 +9,7 @@
 PredictEnemy::PredictEnemy(float hp, float gentime, float livetime, Vector2 pos, float r, char *filename) : Enemy(hp, gentime, livetime, pos, r, filename)
 {
     predictLastTime = stateLastTime = accLastTime = gentime;
-    state = 4;
-    // state = rand() % 4 + 1;
+    state = rand() % 4 + 1;
 }
 
 std::vector<Bullet *> PredictEnemy::getBullet(float nowTime, BulletManager *creater, Vector2 playerPosition)
