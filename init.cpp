@@ -39,8 +39,68 @@ void Gif::Draw(int X, int Y) {
     currentframe = (currentframe + 1 ) % (totalframe*10);
 }
 
+Music Mus::openMusic;
+Music Mus::stageMusics[4];
+Music Mus::endMusic;
+Music Mus::killedMusic;
+Texture2D Img::t1;
+Texture2D Img::t2;
+Texture2D Img::t3;
+Texture2D Img::h1;
+Texture2D Img::h2;
+Texture2D Img::h3;
+Texture2D Img::ky;
+
+void Img::Init() {
+    {
+        Image png3 = LoadImage("source/marisa_huge2.png");
+        Image png1 = LoadImage("source/yuka_huge.png");
+        Image png2 = LoadImage("source/reimu_huge2.png");
+        ImageResize(&png1, 400 - 10, 500);
+        ImageResize(&png2, 400 - 10, 500);
+        ImageResize(&png3, 400 - 10, 500);
+        t1 = LoadTextureFromImage(png1);
+        t2 = LoadTextureFromImage(png2);
+        t3 = LoadTextureFromImage(png3);
+        UnloadImage(png1);
+        UnloadImage(png2);
+        UnloadImage(png3);
+    }
+    {
+        Image pg3 = LoadImage("source/marisa.png");
+        Image pg1 = LoadImage("source/yuka.png");
+        Image pg2 = LoadImage("source/reimu.png");
+        ImageResize(&pg1, 70, 70);
+        ImageResize(&pg2, 70, 70);
+        ImageResize(&pg3, 70, 70);
+        h1 = LoadTextureFromImage(pg1);
+        h2 = LoadTextureFromImage(pg2);
+        h3 = LoadTextureFromImage(pg3);
+        Image png1 = LoadImage("source/inst.png");
+        ImageResize(&png1, 150, 700);
+        ky = LoadTextureFromImage(png1);
+        UnloadImage(png1);
+    }
+
+}
+
+void Img::Release() {
+    UnloadTexture(t1);
+    UnloadTexture(t2);
+    UnloadTexture(t3);
+    UnloadTexture(h1);
+    UnloadTexture(h2);
+    UnloadTexture(h3);
+    UnloadTexture(ky);
+}
+
+int LastPlayedMusic = -1;
+//*/
+
 int Init::loop(int screenWidth, int screenHeight)
 {
+    //StopMusicStream(openMusic);
+    //std::cerr << GetMusicTimeLength(openMusic) << std::endl;
     const char msg1[50] = "Start Game";
     const char msg2[50] = "Instructions";
     auto gif = std::make_shared<Gif> (screenWidth, screenHeight, 18);
@@ -52,6 +112,7 @@ int Init::loop(int screenWidth, int screenHeight)
     bool mouseOnText1 = true, mouseOnText2 = true;
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::openMusic);
         mouseOnText1 = false, mouseOnText2 = false;
         if (CheckCollisionPointRec(GetMousePosition(), msg1Box))
             mouseOnText1 = true;
@@ -80,16 +141,17 @@ int Init::loop(int screenWidth, int screenHeight)
     return 0;
 }
 
-void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
+int checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
 {
     auto bullets = enemyBullets->getBullets();
-    bool flag = 0;
+    int flag = 0;
     for (int i = 0; i < bullets.size(); i++)
         //检测是否碰撞，当无敌时不考虑是否被Hit
         if (player->prot != nullptr && bullets[i]->checkProt(player->getPosition(), player->getRadius()))
         {
-            delete bullets[i];
-            bullets.erase(bullets.begin() + i);
+            bullets[i]->parryed();
+            //delete bullets[i];
+            //bullets.erase(bullets.begin() + i);
         }
         else if (player->getcanHit() && bullets[i]->checkBox(player->getPosition(), player->getRadius()))
         {
@@ -109,6 +171,7 @@ void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
         bullets.erase(bullets.begin(), bullets.end());
     }
     enemyBullets->setBullets(bullets);
+    return flag;
 }
 
 int checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
@@ -140,25 +203,14 @@ int checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
 
 int Init::choose(int screenWidth, int screenHeight)
 {
-    Image png3 = LoadImage("source/alice_huge.png");
-    Image png1 = LoadImage("source/reimu_huge.png");
-    Image png2 = LoadImage("source/marisa_huge.png");
-    ImageResize(&png1, 400, 500);
-    ImageResize(&png2, 400, 500);
-    ImageResize(&png3, 400, 500);
-    Texture2D h1 = LoadTextureFromImage(png1);
-    Texture2D h2 = LoadTextureFromImage(png2);
-    Texture2D h3 = LoadTextureFromImage(png3);
-    UnloadImage(png1);
-    UnloadImage(png2);
-    UnloadImage(png3);
-    const char hint[50] = {"Choose your hero :"};
-    const char msg[4][50] = {"Reimu", "Marisa", "Reimu", "Back"};
+    const char hint[50] = {"Choose your player :"};
+    const char msg[4][50] = {"Yuka", "Reimu", "Marisa", "Back"};
     float Bott = screenHeight - 200;
     bool MouseOn[4];
     Rectangle msgBox[4] = {{300, Bott, 180, 50}, {700, Bott, 180, 50}, {1100, Bott, 180, 50}, {1400, Bott + 40, 100, 30}};
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::openMusic);
         ClearBackground(RAYWHITE);
         for (int i = 0; i < 4; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
@@ -167,15 +219,16 @@ int Init::choose(int screenWidth, int screenHeight)
             {
                 if (i == 3)
                     return Init::loop(screenWidth, screenHeight);
-                else
+                else {
                     return Init::choose_stage(screenWidth, screenHeight, i);
+                }
                     //return Game::loop(screenWidth, screenHeight, i , 0);
             }
         BeginDrawing();
         //ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
-        DrawTexture(h1, 150, 100 , RAYWHITE);
-        DrawTexture(h2, 550, 100 , RAYWHITE);
-        DrawTexture(h3, 950, 100 , RAYWHITE);
+        DrawTexture(Img::t1, 150, 100 , RAYWHITE);
+        DrawTexture(Img::t2, 550, 100 , RAYWHITE);
+        DrawTexture(Img::t3, 950, 100 , RAYWHITE);
         DrawText(hint, 10, 10, 40, BLACK);
         for (int i = 0; i < 4; i++)
         {
@@ -195,6 +248,7 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
     Rectangle msgBox[4] = {{Mid, 200, 100, 50}, {Mid, 400, 100, 50}, {Mid, 600, 100, 50}, {Mid, 800, 100, 50}};
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::openMusic);
         for (int i = 0; i < 4; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
         for (int i = 0; i < 4; i++)
@@ -202,8 +256,12 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
             {
                 if (i == 3)
                     return Init::choose(screenWidth, screenHeight);
-                else
+                else {
+                    StopMusicStream(Mus::openMusic);
+                    PlayMusicStream(Mus::stageMusics[i]);
+                    //std::cerr << "stage play" << " " << GetMusicTimeLength(Mus::stageMusics[i]) << std::endl;
                     return Game::loop(screenWidth, screenHeight, kind, i);
+                }
             }
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -240,36 +298,63 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 
     const int MAX_STAGE = 3;
     int stagecnt = stage, destroyedEnemy = 0;
+    int iskilledmusicplayed = 0;
 
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::stageMusics[stagecnt]);
+        if (iskilledmusicplayed) {
+            UpdateMusicStream(Mus::killedMusic);
+            if (GetMusicTimePlayed(Mus::killedMusic) >= GetMusicTimeLength(Mus::killedMusic) * 0.9) {
+                iskilledmusicplayed = 0;
+                StopMusicStream(Mus::killedMusic);
+            }
+        }
         if (IsKeyPressed(KEY_P))
         {
+            PauseMusicStream(Mus::stageMusics[stagecnt]);
             int ret = Pause::loop(screenWidth, screenHeight);
+            ResumeMusicStream(Mus::stageMusics[stagecnt]);
             switch (ret)
             {
             case 0: //退出
                 return 0;
             case 1: //重新开始
+            {
+                StopMusicStream(Mus::stageMusics[stagecnt]);
+                PlayMusicStream(Mus::openMusic);
                 return Init::choose(screenWidth, screenHeight);
+            }
             case 2: //返回菜单
+            {
+                StopMusicStream(Mus::stageMusics[stagecnt]);
+                PlayMusicStream(Mus::openMusic);
                 return Init::loop(screenWidth, screenHeight);
+            }
             default:
                 break;
             }
         }
 
-        if (player->getHP() <= 0)
+        if (player->getHP() <= 0) {
+            StopMusicStream(Mus::stageMusics[stagecnt]);
+            PlayMusicStream(Mus::endMusic);
             return Over::loop(screenWidth, screenHeight);
+        }
         float deltatime = GetFrameTime();
         time += deltatime;
 
         if (stagecnt <= MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty() && enemyQueue.empty())
         {
-            if (stagecnt == MAX_STAGE) {
+            if (stagecnt == MAX_STAGE)
+            {
+                StopMusicStream(Mus::stageMusics[stagecnt]);
+                PlayMusicStream(Mus::endMusic);
                 return Win::loop(screenWidth, screenHeight);
             }
+            StopMusicStream(Mus::stageMusics[stagecnt]);
             stagecnt++;
+            PlayMusicStream(Mus::stageMusics[stagecnt]);
             // std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
         }
@@ -292,7 +377,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         {
             int frameWidth = Bgtexture.width;
             int frameHeight = Bgtexture.height;
-            std::cerr << frameHeight << " " << frameWidth << std::endl;
+            //std::cerr << frameHeight << " " << frameWidth << std::endl;
             Rectangle sourceRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
             Rectangle destRec = { 0.0, 0.0, 1000, 900};
             Vector2 origin = {0, 0};
@@ -308,13 +393,15 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             }
         if (kind == 1 && time - player->Lastt < LASTOFRING)
         {
-            DrawRing(player->getPosition(), BOOMSCOPE - 2, BOOMSCOPE, 0.f, 360.f, 1, RED);
+            float nowRadius = BOOMSCOPE * (1 - (LASTOFRING - (time - player -> Lastt)));
+            DrawRing(player->getPosition(), nowRadius - 2, nowRadius, 0.f, 360.f, 1, RED);
             auto bullets = enemyBullets->getBullets();
             for (int i = 0; i < bullets.size(); i++)
-                if (bullets[i]->checkBox(player->getPosition(), BOOMSCOPE))
+                if (bullets[i]->checkBox(player->getPosition(), nowRadius))
                 {
-                    delete bullets[i];
-                    bullets.erase(bullets.begin() + i);
+                    bullets[i]->parryed();
+                    //delete bullets[i];
+                    //bullets.erase(bullets.begin() + i);
                 }
             enemyBullets->setBullets(bullets);
         }
@@ -345,12 +432,19 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             enemyBullets->addBullet(b);
         atk->HitBullet(enemyBullets);
         atk->HitEnemy(enemys);
-        checkPlayerHit(player, enemyBullets, time);
+        if (checkPlayerHit(player, enemyBullets, time)) {
+            if (iskilledmusicplayed == 0) {
+                std::cerr << "killed" << std::endl;
+                iskilledmusicplayed = 1;
+                PlayMusicStream(Mus::killedMusic);
+            }
+        }
         destroyedEnemy += checkEnemysHit(enemys, playerBullets);
 
         player->Draw();
         atk->Draw();
         playerHPBar->Draw(player->getHP());
+        playerLPBar->Draw(player->getLP());
         playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
         enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
@@ -376,40 +470,28 @@ int Inst::loop(int screenWidth, int screenHeight)
     const char msg2[50] = {"Skill intruction"};
     const char inst[9][50] = {{"Upward"}, {"Downward"}, {"Leftward"}, {"Rightward"},
                               {"Pause"}, {"Attack"}, {"Skill"}, {"Slow Move"}, {"Quit"}};
-    const char Name[3][50] = {"Reimu", "Marisa", "Alice"};
+    const char Name[3][50] = {"Yuka", "Reimu", "Marisa"};
     const char Skill[3][2][50] = {{{"Summon a unmbrella and it can resist"},
                                   {"the attack from the front, last 5s."}},
                                   {{"Instantly clears surrounding bullets."},
                                   {""}},
                                   {{"Launch a large bullet, it can clears the"},
                                    {"path and deal damage to the first enemy."}}};
-    Image pg3 = LoadImage("source/alice.png");
-    Image pg1 = LoadImage("source/reimu.png");
-    Image pg2 = LoadImage("source/marisa.png");
-    ImageResize(&pg1, 70, 70);
-    ImageResize(&pg2, 70, 70);
-    ImageResize(&pg3, 70, 70);
-    Texture2D h1 = LoadTextureFromImage(pg1);
-    Texture2D h2 = LoadTextureFromImage(pg2);
-    Texture2D h3 = LoadTextureFromImage(pg3);
     
-    Image png1 = LoadImage("source/inst.png");
-    ImageResize(&png1, 150, 700);
-    Texture2D ky = LoadTextureFromImage(png1);
-    UnloadImage(png1);
     
     float Mid = screenWidth / 2.0f - 200;
     Rectangle msgBox = {1400, screenHeight / 2.0f + 400, 120, 25};
     bool MouseOn = true;
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::openMusic);
         ClearBackground(RAYWHITE);
         MouseOn = CheckCollisionPointRec(GetMousePosition(), msgBox);
         // DrawRectangleRec(msgBox, LIGHTGRAY);
         if (MouseOn && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             return 1;
         BeginDrawing();
-        DrawTexture(ky, 550, 150 , RAYWHITE);
+        DrawTexture(Img::ky, 550, 150 , RAYWHITE);
         DrawLine(800, 100, 800, 850, BLACK);
         DrawText(msg1, 200, 50, 60, BLACK);
         DrawText(msg2, 900, 50, 60, BLACK);
@@ -421,9 +503,9 @@ int Inst::loop(int screenWidth, int screenHeight)
             for (int j = 0; j < 2 ;j++)
                 DrawText(Skill[i][j], 950, 250 + 200 * i + 30*j, 30, PURPLE);
         }
-        DrawTexture(h1, 1200, 150 , RAYWHITE);
-        DrawTexture(h2, 1200, 350 , RAYWHITE);
-        DrawTexture(h3, 1200, 550 , RAYWHITE);
+        DrawTexture(Img::h1, 1200, 150 , RAYWHITE);
+        DrawTexture(Img::h2, 1200, 350 , RAYWHITE);
+        DrawTexture(Img::h3, 1200, 550 , RAYWHITE);
         EndDrawing();
     }
     return 0;
@@ -479,18 +561,27 @@ int Over::loop(int screenWidth, int screenHeight)
 
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::endMusic);
         ClearBackground(RAYWHITE);
         for (int i = 0; i < 3; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
         for (int i = 0; i < 3; i++)
             if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
-                if (i == 2)
+                if (i == 2) {
+                    StopMusicStream(Mus::endMusic);
                     return 0;
-                else if (i == 1)
+                }
+                else if (i == 1) {
+                    StopMusicStream(Mus::endMusic);
+                    PlayMusicStream(Mus::openMusic);
                     return Init::loop(screenWidth, screenHeight);
-                else
+                }
+                else{
+                    StopMusicStream(Mus::endMusic);
+                    PlayMusicStream(Mus::openMusic);
                     return Init::choose(screenWidth, screenHeight);
+                }
             }
         BeginDrawing();
         DrawText(gg, Mid - 40, 200, 80, RED);
@@ -515,18 +606,27 @@ int Win::loop(int screenWidth, int screenHeight)
 
     while (!WindowShouldClose())
     {
+        UpdateMusicStream(Mus::endMusic);
         ClearBackground(RAYWHITE);
         for (int i = 0; i < 3; i++)
             MouseOn[i] = CheckCollisionPointRec(GetMousePosition(), msgBox[i]);
         for (int i = 0; i < 3; i++)
             if (MouseOn[i] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
-                if (i == 2)
+                if (i == 2) {
+                    StopMusicStream(Mus::endMusic);
                     return 0;
-                else if (i == 1)
+                }
+                else if (i == 1) {
+                    StopMusicStream(Mus::endMusic);
+                    PlayMusicStream(Mus::openMusic);
                     return Init::loop(screenWidth, screenHeight);
-                else
+                }
+                else {
+                    StopMusicStream(Mus::endMusic);
+                    PlayMusicStream(Mus::openMusic);
                     return Init::choose(screenWidth, screenHeight);
+                }
             }
         BeginDrawing();
         DrawText(allclear, Mid - 40, 200, 80, RED);

@@ -12,3 +12,7 @@ float TurningBullet::updateTime(float nowTime, Vector2 playerpos) {
     else pos = pos + delta * vel2;
     return delta;
 }
+void TurningBullet::turnBack(){
+    vel1 = (-1) * vel1;
+    vel2 = (-1) * vel2;
+}

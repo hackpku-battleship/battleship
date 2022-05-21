@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "raylib.h"
+
 class Init {
 public:
     static int loop(int, int);
@@ -44,4 +45,16 @@ public:
     void Draw(int X, int Y);
 };
 
+namespace Mus {
+extern Music openMusic;
+extern Music stageMusics[4];
+extern Music endMusic;
+extern Music killedMusic;
+};
+
+namespace Img {
+    extern Texture2D t1, t2, t3, h1, h2, h3, ky;
+    void Init();
+    void Release();
+}
 #endif

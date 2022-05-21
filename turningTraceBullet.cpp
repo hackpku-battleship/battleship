@@ -17,3 +17,7 @@ float turningTraceBullet::updateTime(float nowTime, Vector2 playerpos) {
     }
     return delta;
 }
+void turningTraceBullet::turnBack(){
+    v1 = (-1) * v1;
+    v2 = (-1) * v2;
+}

@@ -14,6 +14,7 @@ public:
     float radius;
     Color col;
     Vector2 pos;
+    float lastParryedTime;
 
 public:
     Bullet(float nowTime, float liveTime, BulletManager *from, Color col, float radius, Vector2 pos);
@@ -25,6 +26,8 @@ public:
     bool checkBox(Vector2, float);
     bool checkProt(Vector2, float);
     void Move(Vector2 dir);
+    void parryed();
+    virtual void turnBack() = 0;
 };
 
 // bullet manager

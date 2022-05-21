@@ -13,6 +13,7 @@ public:
     float updateTime(float, Vector2);
     bool checkBox(Vector2, float);
     bool inScreen(int, int);
+    virtual void turnBack();
 };
 
 
