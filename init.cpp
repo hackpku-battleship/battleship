@@ -164,6 +164,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     std::queue<std::pair<float, Enemy *>> enemyQueue;
 
     float time = 0.0;
+    float playerLasttime = 0.0;
 
     const int MAX_STAGE = 2;
     int stagecnt = 1;
@@ -191,7 +192,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         float deltatime = GetFrameTime();
         time += deltatime;
 
-        if (stagecnt < MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty())
+        if (stagecnt < MAX_STAGE && enemys->isEmpty() && enemyBullets->isEmpty() && enemyQueue.empty())
         {
             stagecnt++;
             // std::cerr << stagecnt << std::endl;
@@ -234,7 +235,6 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         }
         if (IsKeyDown(KEY_X))
         {
-            static float playerLasttime = 0.0;
             if (time - playerLasttime > 0.05)
             {
                 for (float bias = -100; bias <= 100; bias += 20)

@@ -5,15 +5,18 @@
 #include "Vector2Basic.h"
 #include "spinenemy.h"
 #include "shotSimpleTraceEnemy.h"
+#include "stage2Enemy.h"
 
 const int screenWidth = 1600 - 600;
 const int screenHeight = 900;
 
 void Stage1(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
+    /*
     {
         Enemy * e = new DEnemy(50, nowtime + 0, 10, (Vector2){500, 50}, 50, "source/lion.png");
         queue.push(std::make_pair(nowtime + 0, e));
     }
+    //*/
     char baka[20] = "source/baka.png";
     const int BakaCnt = 5;
     Vector2 Bakapos[BakaCnt] = {{500, 100}, {100, 100}, {800, 150}, {200, 400}, {900, 450}};
@@ -22,7 +25,7 @@ void Stage1(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
     float Bakatime[BakaCnt] = {1, 4, 4, 8, 8};
     float BakaDutime = 5;
 
-    queue.push(std::make_pair(0, new SimpleEnemy(114514, nowtime, 1919810, {114,514}, 50, "source/fish1.png")));
+    //queue.push(std::make_pair(0, new SimpleEnemy(114514, nowtime, 1919810, {114,514}, 50, "source/fish1.png")));
 
     for (int i = 0; i < BakaCnt; i++) {
         Vector2 f = {cos(Bakaalpha[i]), sin(Bakaalpha[i])};
@@ -47,9 +50,10 @@ void Stage2(float nowtime, std::queue<std::pair<float, Enemy*> > &queue) {
     float dutime = 15;
     char devil[] = "source/devil.png";
     for (int i = 0; i < senmy; i++) {
-        Enemy *e = new shotSimpleTraceEnemy(100, nowtime + etime[i], 30, epos[i], 40, devil, 40, 10);
+        Enemy *e = new shotSimpleTraceEnemy(100, nowtime + etime[i], 10, epos[i], 40, devil, 40, 10);
         queue.push(std::make_pair(nowtime + etime[i], e));
     }
+    queue.push(std::make_pair(15 + nowtime, new stage2Enemy(100, nowtime + 15, 20, {500,50}, 50, "source/fish1.png")));
     return;
 }
 
