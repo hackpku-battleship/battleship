@@ -15,7 +15,7 @@ float splitBullet::updateTime(float nowTime, Vector2 playerPosition)
     float dtime = nowTime - genTime;
     pos = pos + deltaTime * velocity;
     /*for(auto bullet:bullets) {
-        std::cerr<<bullet->pos.x<<' '<<bullet->pos.y<<std::endl;
+        //std::cerr<<bullet->pos.x<<' '<<bullet->pos.y<<std::endl;
     }*/
     // position = position + deltaTime * velocity;
     dutime = dtime;

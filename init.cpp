@@ -22,6 +22,7 @@ const int playgroundHeight = 900;
 Music Mus::openMusic;
 Music Mus::stageMusics[4];
 Music Mus::endMusic;
+Music Mus::killedMusic;
 
 int LastPlayedMusic = -1;
 //*/
@@ -66,10 +67,10 @@ int Init::loop(int screenWidth, int screenHeight)
     return 0;
 }
 
-void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
+int checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
 {
     auto bullets = enemyBullets->getBullets();
-    bool flag = 0;
+    int flag = 0;
     for (int i = 0; i < bullets.size(); i++)
         //检测是否碰撞，当无敌时不考虑是否被Hit
         if (player->prot != nullptr && bullets[i]->checkProt(player->getPosition(), player->getRadius()))
@@ -95,6 +96,7 @@ void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
         bullets.erase(bullets.begin(), bullets.end());
     }
     enemyBullets->setBullets(bullets);
+    return flag;
 }
 
 int checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
@@ -194,7 +196,7 @@ int Init::choose_stage(int screenWidth, int screenHeight, int kind) {
                 else {
                     StopMusicStream(Mus::openMusic);
                     PlayMusicStream(Mus::stageMusics[i]);
-                    std::cerr << "stage play" << " " << GetMusicTimeLength(Mus::stageMusics[i]) << std::endl;
+                    //std::cerr << "stage play" << " " << GetMusicTimeLength(Mus::stageMusics[i]) << std::endl;
                     return Game::loop(screenWidth, screenHeight, kind, i);
                 }
             }
@@ -233,10 +235,18 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 
     const int MAX_STAGE = 3;
     int stagecnt = stage, destroyedEnemy = 0;
+    int iskilledmusicplayed = 0;
 
     while (!WindowShouldClose())
     {
         UpdateMusicStream(Mus::stageMusics[stagecnt]);
+        if (iskilledmusicplayed) {
+            UpdateMusicStream(Mus::killedMusic);
+            if (GetMusicTimePlayed(Mus::killedMusic) >= GetMusicTimeLength(Mus::killedMusic) * 0.9) {
+                iskilledmusicplayed = 0;
+                StopMusicStream(Mus::killedMusic);
+            }
+        }
         if (IsKeyPressed(KEY_P))
         {
             PauseMusicStream(Mus::stageMusics[stagecnt]);
@@ -304,7 +314,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         {
             int frameWidth = Bgtexture.width;
             int frameHeight = Bgtexture.height;
-            std::cerr << frameHeight << " " << frameWidth << std::endl;
+            //std::cerr << frameHeight << " " << frameWidth << std::endl;
             Rectangle sourceRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
             Rectangle destRec = { 0.0, 0.0, 1000, 900};
             Vector2 origin = {0, 0};
@@ -357,7 +367,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             enemyBullets->addBullet(b);
         atk->HitBullet(enemyBullets);
         atk->HitEnemy(enemys);
-        checkPlayerHit(player, enemyBullets, time);
+        if (checkPlayerHit(player, enemyBullets, time)) {
+            if (iskilledmusicplayed == 0) {
+                std::cerr << "killed" << std::endl;
+                iskilledmusicplayed = 1;
+                PlayMusicStream(Mus::killedMusic);
+            }
+        }
         destroyedEnemy += checkEnemysHit(enemys, playerBullets);
 
         player->Draw();
