@@ -13,16 +13,39 @@
 #include "predictenemy.h"
 #include "Vector2Basic.h"
 #include <queue>
+#include <memory>
 #include "stages.h"
 
 const Vector2 initPlayerPosition = {400, 900};
 const int playgroundWidth = 1000;
 const int playgroundHeight = 900;
 
+Gif::Gif(int _W, int _H, int _T):W(_W), H(_H),totalframe(_T),currentframe(0){
+}
+
+void Gif::Load(std::string path) {
+    for (int i = 0; i < totalframe; i++) {
+        std::string tmp = "source/" + path + "/" + path + "-" + std::to_string(i) + ".png";
+        Image png = LoadImage(tmp.c_str());
+        //ImageResize(&png, W, H);
+
+        src.push_back(LoadTextureFromImage(png));
+        UnloadImage(png);
+    }
+}
+
+void Gif::Draw(int X, int Y) {
+    DrawTexture(src[currentframe / 10], X, Y, RAYWHITE);
+    currentframe = (currentframe + 1 ) % (totalframe*10);
+}
+
 int Init::loop(int screenWidth, int screenHeight)
 {
     const char msg1[50] = "Start Game";
     const char msg2[50] = "Instructions";
+    auto gif = std::make_shared<Gif> (screenWidth, screenHeight, 18);
+    gif->Load("initbg");
+
     float Mid = screenWidth / 2.0f - 200;
     Rectangle msg1Box = {Mid, screenHeight / 2.0f - 100, 380, 50};
     Rectangle msg2Box = {Mid, screenHeight / 2.0f + 50, 380, 50};
@@ -49,6 +72,7 @@ int Init::loop(int screenWidth, int screenHeight)
         // 初始界面
         auto col1 = mouseOnText1 ? RED : BLACK;
         auto col2 = mouseOnText2 ? RED : BLACK;
+        gif->Draw(0,0);
         DrawText(msg1, Mid, screenHeight / 2.0f - 100, 60, col1);
         DrawText(msg2, Mid, screenHeight / 2.0f + 50, 60, col2);
         EndDrawing();
