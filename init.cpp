@@ -97,8 +97,9 @@ void checkPlayerHit(Player *player, BulletManager *enemyBullets, float nowTime)
     enemyBullets->setBullets(bullets);
 }
 
-void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
+int checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
 {
+    int destroyed = 0;
     auto enemys = enemyManager->getEnemys();
     auto bullets = playerBullets->getBullets();
     for (int i = 0; i < enemys.size(); i++)
@@ -111,6 +112,7 @@ void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
                 enemys[i]->hit();
                 if (!enemys[i]->isalive())
                 {
+                    ++destroyed;
                     delete enemys[i];
                     enemys.erase(enemys.begin() + i);
                 }
@@ -119,6 +121,7 @@ void checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
     }
     enemyManager->setEnemys(enemys);
     playerBullets->setBullets(bullets);
+    return destroyed;
 }
 
 int Init::choose(int screenWidth, int screenHeight)
@@ -136,7 +139,7 @@ int Init::choose(int screenWidth, int screenHeight)
     UnloadImage(png2);
     UnloadImage(png3);
     const char hint[50] = {"Choose your hero :"};
-    const char msg[4][50] = {"Hero1", "Hero2", "Hero3", "Back"};
+    const char msg[4][50] = {"Reimu", "Marisa", "Reimu", "Back"};
     float Bott = screenHeight - 200;
     bool MouseOn[4];
     Rectangle msgBox[4] = {{300, Bott, 180, 50}, {700, Bott, 180, 50}, {1100, Bott, 180, 50}, {1400, Bott + 40, 100, 30}};
@@ -157,10 +160,10 @@ int Init::choose(int screenWidth, int screenHeight)
                     //return Game::loop(screenWidth, screenHeight, i , 0);
             }
         BeginDrawing();
-        // ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
-        DrawTexture(h1, 150, 100, RAYWHITE);
-        DrawTexture(h2, 550, 100, RAYWHITE);
-        DrawTexture(h3, 950, 100, RAYWHITE);
+        //ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
+        DrawTexture(h1, 150, 100 , RAYWHITE);
+        DrawTexture(h2, 550, 100 , RAYWHITE);
+        DrawTexture(h3, 950, 100 , RAYWHITE);
         DrawText(hint, 10, 10, 40, BLACK);
         for (int i = 0; i < 4; i++)
         {
@@ -223,13 +226,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
     EnemyManager *enemys = new EnemyManager();
     Player *player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 510, 1000, 2, kind);
 
-    std::queue<std::pair<float, Enemy *>> enemyQueue;
+    std::queue<std::pair<float, Enemy *> > enemyQueue;
 
     float time = 0.0;
     float playerLasttime = 0.0;
 
     const int MAX_STAGE = 3;
-    int stagecnt = stage;
+    int stagecnt = stage, destroyedEnemy = 0;
 
     while (!WindowShouldClose())
     {
@@ -282,13 +285,13 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
             // std::cerr << stagecnt << std::endl;
             getStage(stagecnt, time, enemyQueue);
         }
-
+        
         while (!enemyQueue.empty() && enemyQueue.front().first <= time)
         {
             enemys->addEnemy(enemyQueue.front().second);
             enemyQueue.pop();
         }
-
+        
         player->Update(time);
         player->Move(deltatime);
         if (kind == 2)
@@ -334,7 +337,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
                 for (float bias = -100; bias <= 100; bias += 20)
                 {
                     playerBullets->addBullet(
-                        new basicBullet(time, 5, enemyBullets, RED, 5,
+                        new basicBullet(time, 5, enemyBullets, Fade(YELLOW, 0.2), 5,
                                         player->getPosition() + (Vector2){bias, -10.0}, (Vector2){0, -800}));
                 }
                 playerLasttime = time;
@@ -345,7 +348,7 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         {
             float x = screenWidth / 3.0 + (1.0 * rand() / RAND_MAX - 0.5) * 100;
             float y = 100;
-            enemys->addEnemy(new PredictEnemy(100, time, 60, {x, y}, 10, "source/lion.png"));
+            enemys->addEnemy(new PredictEnemy(1000, time, 10000, {x, y}, 40, "source/lion.png"));
         }
 
         auto _bullets = enemys->updateTime(time, enemyBullets, player->getPosition());
@@ -355,12 +358,11 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
         atk->HitBullet(enemyBullets);
         atk->HitEnemy(enemys);
         checkPlayerHit(player, enemyBullets, time);
-        checkEnemysHit(enemys, playerBullets);
+        destroyedEnemy += checkEnemysHit(enemys, playerBullets);
 
         player->Draw();
         atk->Draw();
         playerHPBar->Draw(player->getHP());
-        playerLPBar->Draw(player->getLP());
         playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
         enemyBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
@@ -370,6 +372,10 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 
         DrawText(TextFormat("FPS: %.0lf", 1 / GetFrameTime()), 10, 10, 20, RED);
 
+
+        DrawText(TextFormat("STAGE %d", stagecnt), 1020, 10, 40, BLACK);
+        DrawText(TextFormat("enemy destroyed: %d", destroyedEnemy), 1020, 50, 20, BLACK);
+
         EndDrawing();
     }
     return 0;
@@ -378,19 +384,59 @@ int Game::loop(int screenWidth, int screenHeight, int kind, int stage)
 int Inst::loop(int screenWidth, int screenHeight)
 {
     const char msg[50] = {"Back"};
+    const char msg1[50] = {"Base operation"};
+    const char msg2[50] = {"Skill intruction"};
+    const char inst[9][50] = {{"Upward"}, {"Downward"}, {"Leftward"}, {"Rightward"},
+                              {"Pause"}, {"Attack"}, {"Skill"}, {"Slow Move"}, {"Quit"}};
+    const char Name[3][50] = {"Reimu", "Marisa", "Alice"};
+    const char Skill[3][2][50] = {{{"Summon a unmbrella and it can resist"},
+                                  {"the attack from the front, last 5s."}},
+                                  {{"Instantly clears surrounding bullets."},
+                                  {""}},
+                                  {{"Launch a large bullet, it can clears the"},
+                                   {"path and deal damage to the first enemy."}}};
+    Image pg3 = LoadImage("source/alice.png");
+    Image pg1 = LoadImage("source/reimu.png");
+    Image pg2 = LoadImage("source/marisa.png");
+    ImageResize(&pg1, 70, 70);
+    ImageResize(&pg2, 70, 70);
+    ImageResize(&pg3, 70, 70);
+    Texture2D h1 = LoadTextureFromImage(pg1);
+    Texture2D h2 = LoadTextureFromImage(pg2);
+    Texture2D h3 = LoadTextureFromImage(pg3);
+    
+    Image png1 = LoadImage("source/inst.png");
+    ImageResize(&png1, 150, 700);
+    Texture2D ky = LoadTextureFromImage(png1);
+    UnloadImage(png1);
+    
     float Mid = screenWidth / 2.0f - 200;
-    Rectangle msgBox = {Mid, screenHeight / 2.0f + 200, 150, 50};
+    Rectangle msgBox = {1400, screenHeight / 2.0f + 400, 120, 25};
     bool MouseOn = true;
     while (!WindowShouldClose())
     {
         UpdateMusicStream(Mus::openMusic);
         ClearBackground(RAYWHITE);
         MouseOn = CheckCollisionPointRec(GetMousePosition(), msgBox);
-        BeginDrawing();
         // DrawRectangleRec(msgBox, LIGHTGRAY);
         if (MouseOn && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             return 1;
-        DrawText(msg, Mid, msgBox.y, 60, MouseOn ? RED : BLACK);
+        BeginDrawing();
+        DrawTexture(ky, 550, 150 , RAYWHITE);
+        DrawLine(800, 100, 800, 850, BLACK);
+        DrawText(msg1, 200, 50, 60, BLACK);
+        DrawText(msg2, 900, 50, 60, BLACK);
+        DrawText(msg, msgBox.x, msgBox.y, 30, MouseOn ? RED : BLACK);
+        for (int i = 0; i < 9; i++)
+            DrawText(inst[i], 100, 150 + i * 80,50,BLUE);
+        for (int i = 0; i < 3; i++) {
+            DrawText(Name[i], 900, 150 + 200 * i, 40, ORANGE);
+            for (int j = 0; j < 2 ;j++)
+                DrawText(Skill[i][j], 950, 250 + 200 * i + 30*j, 30, PURPLE);
+        }
+        DrawTexture(h1, 1200, 150 , RAYWHITE);
+        DrawTexture(h2, 1200, 350 , RAYWHITE);
+        DrawTexture(h3, 1200, 550 , RAYWHITE);
         EndDrawing();
     }
     return 0;
