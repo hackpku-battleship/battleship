@@ -149,11 +149,12 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
     const int FastSpeed=500, SlowSpeed=200;
     
     PlayerHPBar *playerHPBar = new PlayerHPBar(10, screenHeight - 20, 10, 25);
-    BulletManager* playerBullets = new BulletManager();
-    BulletManager* enemyBullets = new BulletManager();
-    EnemyManager* enemys = new EnemyManager();
-
-    Player* player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 100, 2, kind);
+    auto atk = std::make_shared<class Atk>(50);
+    BulletManager *playerBullets = new BulletManager();
+    BulletManager *enemyBullets = new BulletManager();
+    EnemyManager *enemys = new EnemyManager();
+    Player* player = new Player(initPlayerPosition, 5, 5, FastSpeed, SlowSpeed, 100, 1000, 2, kind);
+    
     std::queue<std::pair<float, Enemy*> > enemyQueue;
 
     float time = 0.0;
@@ -198,12 +199,16 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
 
         player->Update(time);
         player->Move(deltatime);
+        if (kind == 2) atk->Move(deltatime);
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
         player->Check(time);
+        atk->Check(screenWidth, screenHeight);
         if (IsKeyDown(KEY_Z))  // 放技能
-            player->useskill(time);
+            if (player->useskill(time) && kind == 2) {
+                atk->Add(Vector2{player->getPosition().x, player->getPosition().y - player->getRadius()});
+            }
         if (kind == 1 && time - player->Lastt < LASTOFRING) {
             DrawRing(player->getPosition(),BOOMSCOPE - 2, BOOMSCOPE, 0.f, 360.f, 1, RED); 
             auto bullets = enemyBullets->getBullets();
@@ -240,11 +245,12 @@ int Game::loop(int screenWidth, int screenHeight, int kind)
         enemys->draw();
         for (auto b : _bullets)
             enemyBullets->addBullet(b);
-
+        atk->HitBullet(enemyBullets);
         checkPlayerHit(player, enemyBullets, time);
         checkEnemysHit(enemys, playerBullets);
 
         player->Draw();
+        atk->Draw();
         playerHPBar->Draw(player->getHP());
         playerBullets->updateTime(time, playgroundWidth, playgroundHeight, player->getPosition());
         playerBullets->DrawAllBullets();
