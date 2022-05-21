@@ -23,6 +23,56 @@ Music Mus::openMusic;
 Music Mus::stageMusics[4];
 Music Mus::endMusic;
 Music Mus::killedMusic;
+Texture2D Img::t1;
+Texture2D Img::t2;
+Texture2D Img::t3;
+Texture2D Img::h1;
+Texture2D Img::h2;
+Texture2D Img::h3;
+Texture2D Img::ky;
+
+void Img::Init() {
+    {
+        Image png3 = LoadImage("source/marisa_huge2.png");
+        Image png1 = LoadImage("source/yuka_huge.png");
+        Image png2 = LoadImage("source/reimu_huge2.png");
+        ImageResize(&png1, 400 - 10, 500);
+        ImageResize(&png2, 400 - 10, 500);
+        ImageResize(&png3, 400 - 10, 500);
+        t1 = LoadTextureFromImage(png1);
+        t2 = LoadTextureFromImage(png2);
+        t3 = LoadTextureFromImage(png3);
+        UnloadImage(png1);
+        UnloadImage(png2);
+        UnloadImage(png3);
+    }
+    {
+        Image pg3 = LoadImage("source/marisa.png");
+        Image pg1 = LoadImage("source/yuka.png");
+        Image pg2 = LoadImage("source/reimu.png");
+        ImageResize(&pg1, 70, 70);
+        ImageResize(&pg2, 70, 70);
+        ImageResize(&pg3, 70, 70);
+        h1 = LoadTextureFromImage(pg1);
+        h2 = LoadTextureFromImage(pg2);
+        h3 = LoadTextureFromImage(pg3);
+        Image png1 = LoadImage("source/inst.png");
+        ImageResize(&png1, 150, 700);
+        ky = LoadTextureFromImage(png1);
+        UnloadImage(png1);
+    }
+
+}
+
+void Img::Release() {
+    UnloadTexture(t1);
+    UnloadTexture(t2);
+    UnloadTexture(t3);
+    UnloadTexture(h1);
+    UnloadTexture(h2);
+    UnloadTexture(h3);
+    UnloadTexture(ky);
+}
 
 int LastPlayedMusic = -1;
 //*/
@@ -129,19 +179,7 @@ int checkEnemysHit(EnemyManager *enemyManager, BulletManager *playerBullets)
 
 int Init::choose(int screenWidth, int screenHeight)
 {
-    Image png3 = LoadImage("source/marisa_huge2.png");
-    Image png1 = LoadImage("source/yuka_huge.png");
-    Image png2 = LoadImage("source/reimu_huge2.png");
-    ImageResize(&png1, 400 - 10, 500);
-    ImageResize(&png2, 400 - 10, 500);
-    ImageResize(&png3, 400 - 10, 500);
-    Texture2D h1 = LoadTextureFromImage(png1);
-    Texture2D h2 = LoadTextureFromImage(png2);
-    Texture2D h3 = LoadTextureFromImage(png3);
-    UnloadImage(png1);
-    UnloadImage(png2);
-    UnloadImage(png3);
-    const char hint[50] = {"Choose your hero :"};
+    const char hint[50] = {"Choose your player :"};
     const char msg[4][50] = {"Yuka", "Reimu", "Marisa", "Back"};
     float Bott = screenHeight - 200;
     bool MouseOn[4];
@@ -164,9 +202,9 @@ int Init::choose(int screenWidth, int screenHeight)
             }
         BeginDrawing();
         //ImageDrawRectangle(&hero1, 0,0, 300,500, RAYWHITE);
-        DrawTexture(h1, 150, 100 , RAYWHITE);
-        DrawTexture(h2, 550, 100 , RAYWHITE);
-        DrawTexture(h3, 950, 100 , RAYWHITE);
+        DrawTexture(Img::t1, 150, 100 , RAYWHITE);
+        DrawTexture(Img::t2, 550, 100 , RAYWHITE);
+        DrawTexture(Img::t3, 950, 100 , RAYWHITE);
         DrawText(hint, 10, 10, 40, BLACK);
         for (int i = 0; i < 4; i++)
         {
@@ -415,20 +453,7 @@ int Inst::loop(int screenWidth, int screenHeight)
                                   {""}},
                                   {{"Launch a large bullet, it can clears the"},
                                    {"path and deal damage to the first enemy."}}};
-    Image pg3 = LoadImage("source/marisa.png");
-    Image pg1 = LoadImage("source/yuka.png");
-    Image pg2 = LoadImage("source/reimu.png");
-    ImageResize(&pg1, 70, 70);
-    ImageResize(&pg2, 70, 70);
-    ImageResize(&pg3, 70, 70);
-    Texture2D h1 = LoadTextureFromImage(pg1);
-    Texture2D h2 = LoadTextureFromImage(pg2);
-    Texture2D h3 = LoadTextureFromImage(pg3);
     
-    Image png1 = LoadImage("source/inst.png");
-    ImageResize(&png1, 150, 700);
-    Texture2D ky = LoadTextureFromImage(png1);
-    UnloadImage(png1);
     
     float Mid = screenWidth / 2.0f - 200;
     Rectangle msgBox = {1400, screenHeight / 2.0f + 400, 120, 25};
@@ -442,7 +467,7 @@ int Inst::loop(int screenWidth, int screenHeight)
         if (MouseOn && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             return 1;
         BeginDrawing();
-        DrawTexture(ky, 550, 150 , RAYWHITE);
+        DrawTexture(Img::ky, 550, 150 , RAYWHITE);
         DrawLine(800, 100, 800, 850, BLACK);
         DrawText(msg1, 200, 50, 60, BLACK);
         DrawText(msg2, 900, 50, 60, BLACK);
@@ -454,9 +479,9 @@ int Inst::loop(int screenWidth, int screenHeight)
             for (int j = 0; j < 2 ;j++)
                 DrawText(Skill[i][j], 950, 250 + 200 * i + 30*j, 30, PURPLE);
         }
-        DrawTexture(h1, 1200, 150 , RAYWHITE);
-        DrawTexture(h2, 1200, 350 , RAYWHITE);
-        DrawTexture(h3, 1200, 550 , RAYWHITE);
+        DrawTexture(Img::h1, 1200, 150 , RAYWHITE);
+        DrawTexture(Img::h2, 1200, 350 , RAYWHITE);
+        DrawTexture(Img::h3, 1200, 550 , RAYWHITE);
         EndDrawing();
     }
     return 0;
