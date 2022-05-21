@@ -31,6 +31,6 @@ public:
     void draw();
     bool isalive();
     void hit();
-    ~Enemy();
+    virtual ~Enemy();
 };
 #endif
